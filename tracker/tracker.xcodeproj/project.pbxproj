@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		1F4568592E55C9FE00ECDE24 /* Exceptions for "tracker" folder in "tracker" target */ = {
+		1F4568592E55C9FE00ECDE24 /* Exceptions for "Tracker" folder in "tracker" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -21,12 +21,12 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		1F4568492E55C9FD00ECDE24 /* tracker */ = {
+		1F4568492E55C9FD00ECDE24 /* Tracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				1F4568592E55C9FE00ECDE24 /* Exceptions for "tracker" folder in "tracker" target */,
+				1F4568592E55C9FE00ECDE24 /* Exceptions for "Tracker" folder in "tracker" target */,
 			);
-			path = tracker;
+			path = Tracker;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -45,7 +45,7 @@
 		1F45683E2E55C9FD00ECDE24 = {
 			isa = PBXGroup;
 			children = (
-				1F4568492E55C9FD00ECDE24 /* tracker */,
+				1F4568492E55C9FD00ECDE24 /* Tracker */,
 				1F4568482E55C9FD00ECDE24 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -74,7 +74,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				1F4568492E55C9FD00ECDE24 /* tracker */,
+				1F4568492E55C9FD00ECDE24 /* Tracker */,
 			);
 			name = tracker;
 			packageProductDependencies = (
