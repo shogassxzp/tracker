@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		1F4568472E55C9FD00ECDE24 /* tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F4568472E55C9FD00ECDE24 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		1F4568592E55C9FE00ECDE24 /* Exceptions for "Tracker" folder in "tracker" target */ = {
+		1F4568592E55C9FE00ECDE24 /* Exceptions for "Tracker" folder in "Tracker" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 1F4568462E55C9FD00ECDE24 /* tracker */;
+			target = 1F4568462E55C9FD00ECDE24 /* Tracker */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -24,7 +24,7 @@
 		1F4568492E55C9FD00ECDE24 /* Tracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				1F4568592E55C9FE00ECDE24 /* Exceptions for "Tracker" folder in "tracker" target */,
+				1F4568592E55C9FE00ECDE24 /* Exceptions for "Tracker" folder in "Tracker" target */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -53,7 +53,7 @@
 		1F4568482E55C9FD00ECDE24 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1F4568472E55C9FD00ECDE24 /* tracker.app */,
+				1F4568472E55C9FD00ECDE24 /* Tracker.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,9 +61,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1F4568462E55C9FD00ECDE24 /* tracker */ = {
+		1F4568462E55C9FD00ECDE24 /* Tracker */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1F45685A2E55C9FE00ECDE24 /* Build configuration list for PBXNativeTarget "tracker" */;
+			buildConfigurationList = 1F45685A2E55C9FE00ECDE24 /* Build configuration list for PBXNativeTarget "Tracker" */;
 			buildPhases = (
 				1F4568432E55C9FD00ECDE24 /* Sources */,
 				1F4568442E55C9FD00ECDE24 /* Frameworks */,
@@ -76,11 +76,11 @@
 			fileSystemSynchronizedGroups = (
 				1F4568492E55C9FD00ECDE24 /* Tracker */,
 			);
-			name = tracker;
+			name = Tracker;
 			packageProductDependencies = (
 			);
 			productName = tracker;
-			productReference = 1F4568472E55C9FD00ECDE24 /* tracker.app */;
+			productReference = 1F4568472E55C9FD00ECDE24 /* Tracker.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -98,7 +98,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1F4568422E55C9FD00ECDE24 /* Build configuration list for PBXProject "tracker" */;
+			buildConfigurationList = 1F4568422E55C9FD00ECDE24 /* Build configuration list for PBXProject "Tracker" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -112,7 +112,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1F4568462E55C9FD00ECDE24 /* tracker */,
+				1F4568462E55C9FD00ECDE24 /* Tracker */,
 			);
 		};
 /* End PBXProject section */
@@ -326,7 +326,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1F4568422E55C9FD00ECDE24 /* Build configuration list for PBXProject "tracker" */ = {
+		1F4568422E55C9FD00ECDE24 /* Build configuration list for PBXProject "Tracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1F45685D2E55C9FE00ECDE24 /* Debug */,
@@ -335,7 +335,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1F45685A2E55C9FE00ECDE24 /* Build configuration list for PBXNativeTarget "tracker" */ = {
+		1F45685A2E55C9FE00ECDE24 /* Build configuration list for PBXNativeTarget "Tracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1F45685B2E55C9FE00ECDE24 /* Debug */,
