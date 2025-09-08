@@ -28,15 +28,14 @@ final class TrackerViewController: UIViewController {
         trackerLabel.font = .systemFont(ofSize: 34, weight: .bold)
         trackerLabel.text = "Трекеры"
         trackerLabel.tintColor = .blackDay
-        
+
         datePickerButton.backgroundColor = .systemGray5
         datePickerButton.setTitle("\(Date.now.formattedDate())", for: .normal)
         datePickerButton.tintColor = .blackDay
         datePickerButton.layer.masksToBounds = true
         datePickerButton.layer.cornerRadius = 8
-        datePickerButton.titleLabel?.font = .systemFont(ofSize: 17,weight: .regular)
+        datePickerButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
         datePickerButton.contentMode = .center
-        
 
         searchBar.placeholder = "Поиск"
         searchBar.searchBarStyle = .minimal
@@ -49,7 +48,7 @@ final class TrackerViewController: UIViewController {
 
             trackerLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             trackerLabel.topAnchor.constraint(equalTo: newTrackerButton.bottomAnchor, constant: 1),
-            
+
             datePickerButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             datePickerButton.topAnchor.constraint(equalTo: newTrackerButton.topAnchor),
             datePickerButton.widthAnchor.constraint(equalToConstant: 77),
