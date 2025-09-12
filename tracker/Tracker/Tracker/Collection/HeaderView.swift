@@ -1,8 +1,21 @@
-//
-//  HeaderView.swift
-//  Tracker
-//
-//  Created by Игнат Рогачевич on 9/12/25.
-//
 
-import Foundation
+import UIKit
+
+final class HeaderView: UICollectionReusableView {
+    let titleLabel = UILabel()
+    
+    override init(frame:CGRect) {
+        super.init(frame: frame)
+        addSubview(titleLabel)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
+    required init?(coder:NSCoder) {
+        super.init(coder: coder)
+    }
+}

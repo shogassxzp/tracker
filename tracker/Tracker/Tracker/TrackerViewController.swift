@@ -5,9 +5,8 @@ final class TrackerViewController: UIViewController {
     private let trackerLabel = UILabel()
     private let searchBar = UISearchBar()
     private let datePicker = UIDatePicker()
-    private let habits = UICollectionView(
-        frame: CGRect(origin: CGPoint(x: 0, y: 0),
-        size: CGSize(width: 300, height: 600)),
+    private let habitsCollectionView = UICollectionView(
+        frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
     )
 
@@ -20,7 +19,7 @@ final class TrackerViewController: UIViewController {
     }
 
     private func addSubview() {
-        [habits, newTrackerButton, trackerLabel, searchBar,datePicker].forEach {
+        [habitsCollectionView, newTrackerButton, trackerLabel, searchBar, datePicker].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -61,18 +60,23 @@ final class TrackerViewController: UIViewController {
             searchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             searchBar.topAnchor.constraint(equalTo: trackerLabel.bottomAnchor, constant: 7),
 
-            habits.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 5),
-            habits.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            habits.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            habits.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-
         ])
     }
 
     private func setupCollection() {
-        habits.backgroundColor = .blackDay
-        habits.register(TrackerCell.self, forCellWithReuseIdentifier: TrackerCell.inedtifier)
-        habits.dataSource = self
+        habitsCollectionView.backgroundColor = .whiteDay
+        habitsCollectionView.register(TrackerCell.self, forCellWithReuseIdentifier: TrackerCell.identifier)
+        habitsCollectionView.dataSource = self
+        habitsCollectionView.delegate = self
+        habitsCollectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        habitsCollectionView.allowsSelection = false
+
+        NSLayoutConstraint.activate([
+            habitsCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 5),
+            habitsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            habitsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            habitsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+        ])
     }
 
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {

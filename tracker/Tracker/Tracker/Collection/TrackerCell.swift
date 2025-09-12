@@ -1,22 +1,20 @@
 import UIKit
 
 final class TrackerCell: UICollectionViewCell {
-    static let inedtifier = "habit"
+    static let identifier = "habit"
+    
     let titleLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        addSubview(titleLabel)
+        contentView.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-
+        
         NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
     }
-
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
