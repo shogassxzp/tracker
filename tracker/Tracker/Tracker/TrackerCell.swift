@@ -1,8 +1,13 @@
-//
-//  TrackerCell.swift
-//  Tracker
-//
-//  Created by Игнат Рогачевич on 9/12/25.
-//
+import UIKit
 
-import Foundation
+final class TrackerCell: UICollectionViewCell {
+    static let inedtifier = "habit"
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+}

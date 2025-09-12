@@ -1,20 +1,26 @@
 import UIKit
 
 final class TrackerViewController: UIViewController {
-    private var newTrackerButton = UIButton(type: .system)
-    private var trackerLabel = UILabel()
-    private var searchBar = UISearchBar()
-    private var datePickerButton = UIButton(type: .system)
+    private let newTrackerButton = UIButton(type: .system)
+    private let trackerLabel = UILabel()
+    private let searchBar = UISearchBar()
+    private let datePicker = UIDatePicker()
+    private let habits = UICollectionView(
+        frame: CGRect(origin: CGPoint(x: 0, y: 0),
+        size: CGSize(width: 300, height: 600)),
+        collectionViewLayout: UICollectionViewFlowLayout()
+    )
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .whiteDay
         addSubview()
         setupView()
+        setupCollection()
     }
 
     private func addSubview() {
-        [newTrackerButton, trackerLabel, searchBar, datePickerButton].forEach {
+        [habits, newTrackerButton, trackerLabel, searchBar,datePicker].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -29,16 +35,13 @@ final class TrackerViewController: UIViewController {
         trackerLabel.text = "Трекеры"
         trackerLabel.tintColor = .blackDay
 
-        datePickerButton.backgroundColor = .systemGray5
-        datePickerButton.setTitle("\(Date.now.formattedDate())", for: .normal)
-        datePickerButton.tintColor = .blackDay
-        datePickerButton.layer.masksToBounds = true
-        datePickerButton.layer.cornerRadius = 8
-        datePickerButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
-        datePickerButton.contentMode = .center
-
         searchBar.placeholder = "Поиск"
         searchBar.searchBarStyle = .minimal
+
+        datePicker.datePickerMode = .date
+        datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
 
         NSLayoutConstraint.activate([
             newTrackerButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 6),
@@ -49,15 +52,33 @@ final class TrackerViewController: UIViewController {
             trackerLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             trackerLabel.topAnchor.constraint(equalTo: newTrackerButton.bottomAnchor, constant: 1),
 
-            datePickerButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            datePickerButton.topAnchor.constraint(equalTo: newTrackerButton.topAnchor),
-            datePickerButton.widthAnchor.constraint(equalToConstant: 77),
-            datePickerButton.heightAnchor.constraint(equalToConstant: 34),
+            datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            datePicker.topAnchor.constraint(equalTo: newTrackerButton.topAnchor),
+            datePicker.widthAnchor.constraint(equalToConstant: 77),
+            datePicker.heightAnchor.constraint(equalToConstant: 34),
 
             searchBar.leadingAnchor.constraint(equalTo: trackerLabel.leadingAnchor, constant: -5),
             searchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             searchBar.topAnchor.constraint(equalTo: trackerLabel.bottomAnchor, constant: 7),
 
+            habits.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 5),
+            habits.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            habits.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            habits.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+
         ])
+    }
+
+    private func setupCollection() {
+        habits.backgroundColor = .blackDay
+        habits.register(TrackerCell.self, forCellWithReuseIdentifier: TrackerCell.inedtifier)
+        habits.dataSource = self
+    }
+
+    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
+        let selectedDate = sender.date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        let formattedDate = dateFormatter.string(from: selectedDate)
     }
 }
