@@ -31,15 +31,20 @@ final class newTrackerViewController: UIViewController {
     }
 
     private func setupView() {
+        let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 1))
+        
         newHabitLabel.text = "Новая привычка"
         newHabitLabel.font = .systemFont(ofSize: 16, weight: .medium)
 
-        nameTextField.placeholder = "  Введите название трекера"
+        nameTextField.placeholder = "Введите название трекера"
+        nameTextField.leftView = leftPaddingView
+        nameTextField.leftViewMode = .always
         nameTextField.textAlignment = .left
         nameTextField.font = .systemFont(ofSize: 17, weight: .regular)
         nameTextField.backgroundColor = .backgroundDay
         nameTextField.layer.masksToBounds = true
         nameTextField.layer.cornerRadius = 16
+        
 
         categoryButton.setTitle("  Категория", for: .normal)
         categoryButton.setTitleColor(.blackDay, for: .normal)
@@ -49,6 +54,7 @@ final class newTrackerViewController: UIViewController {
         scheludeButton.setTitle("  Расписание", for: .normal)
         scheludeButton.setTitleColor(.blackDay, for: .normal)
         scheludeButton.contentHorizontalAlignment = .left
+        scheludeButton.addTarget(self, action: #selector(scheludeTouchUp), for: .touchUpInside)
 
         delinceButton.setTitle("Отменить", for: .normal)
         delinceButton.setTitleColor(.systemRed, for: .normal)
@@ -56,6 +62,7 @@ final class newTrackerViewController: UIViewController {
         delinceButton.layer.borderWidth = 1.0
         delinceButton.layer.borderColor = UIColor.systemRed.cgColor
         delinceButton.layer.cornerRadius = 16
+        delinceButton.addTarget(self, action: #selector(delinceTouchUp), for: .touchUpInside)
 
         createButton.setTitle("Создать", for: .normal)
         createButton.setTitleColor(.whiteDay, for: .normal)
@@ -111,5 +118,16 @@ final class newTrackerViewController: UIViewController {
         buttonStackView.backgroundColor = .backgroundDay
 
         separator.backgroundColor = .separator
+    }
+
+    @objc private func delinceTouchUp() {
+        let viewController = self
+        viewController.dismiss(animated: true)
+    }
+
+    @objc private func scheludeTouchUp() {
+        let scheludeViewController = ScheludeViewController()
+        scheludeViewController.modalPresentationStyle = .popover
+        present(scheludeViewController, animated: true)
     }
 }
