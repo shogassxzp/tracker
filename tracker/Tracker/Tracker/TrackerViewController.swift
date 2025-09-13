@@ -81,7 +81,7 @@ final class TrackerViewController: UIViewController {
     }
     
   @objc private func newTracker() {
-        let newTrackerViewController = newTrackerViewController()
+        let newTrackerViewController = NewTrackerViewController()
         newTrackerViewController.modalPresentationStyle = .popover
         present(newTrackerViewController, animated: true)
     }
