@@ -29,6 +29,7 @@ final class TrackerViewController: UIViewController {
         newTrackerButton.setImage(UIImage(resource: .plus), for: .normal)
         newTrackerButton.tintColor = .blackDay
         newTrackerButton.contentHorizontalAlignment = .center
+        newTrackerButton.addTarget(self, action: #selector(newTracker), for: .touchUpInside)
 
         trackerLabel.font = .systemFont(ofSize: 34, weight: .bold)
         trackerLabel.text = "Трекеры"
@@ -38,7 +39,7 @@ final class TrackerViewController: UIViewController {
         searchBar.searchBarStyle = .minimal
 
         datePicker.datePickerMode = .date
-        datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.preferredDatePickerStyle = .compact
         datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
 
@@ -77,6 +78,12 @@ final class TrackerViewController: UIViewController {
             habitsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             habitsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
+    }
+    
+  @objc private func newTracker() {
+        let newTrackerViewController = newTrackerViewController()
+        newTrackerViewController.modalPresentationStyle = .popover
+        present(newTrackerViewController, animated: true)
     }
 
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
