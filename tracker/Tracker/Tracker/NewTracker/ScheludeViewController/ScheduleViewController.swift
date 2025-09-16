@@ -1,9 +1,8 @@
 import UIKit
 
 final class ScheduleViewController: UIViewController {
-    
     var onDaysSelected: (([Weekday]) -> Void)?
-    
+
     private let weekdays: [Weekday] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
     private let scheludeLabel = UILabel()
     private var switches: [UISwitch] = []

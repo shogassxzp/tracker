@@ -10,7 +10,7 @@ extension TrackerViewController: UICollectionViewDataSource {
         cell.configure(with: tracker)
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 15
-        
+
         return cell
     }
 

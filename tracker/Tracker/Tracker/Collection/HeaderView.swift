@@ -3,19 +3,20 @@ import UIKit
 
 final class HeaderView: UICollectionReusableView {
     let titleLabel = UILabel()
-    
-    override init(frame:CGRect) {
+
+    override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
-    required init?(coder:NSCoder) {
+
+    required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
 }

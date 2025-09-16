@@ -54,6 +54,8 @@ final class NewTrackerViewController: UIViewController {
         nameTextField.backgroundColor = .backgroundDay
         nameTextField.layer.masksToBounds = true
         nameTextField.layer.cornerRadius = 16
+        nameTextField.delegate = self
+        
 
         categoryButton.setTitle("Категория", for: .normal)
         categoryButton.setTitleColor(.blackDay, for: .normal)
@@ -64,7 +66,6 @@ final class NewTrackerViewController: UIViewController {
         categorySubtitleLabel.font = .systemFont(ofSize: 17, weight: .regular)
         categorySubtitleLabel.isHidden = true
 
-        // Настройка кнопки Расписание
         scheduleButton.setTitle("Расписание", for: .normal)
         scheduleButton.setTitleColor(.blackDay, for: .normal)
         scheduleButton.contentHorizontalAlignment = .left
@@ -226,14 +227,49 @@ final class NewTrackerViewController: UIViewController {
 
         dismiss(animated: true)
     }
-    
+
     @objc private func createButtonTapped() {
-           createTracker()
-       }
+        createTracker()
+    }
 
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
+    }
+}
+
+extension NewTrackerViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let currentText = textField.text ?? ""
+        let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        
+        if newText.count > 38 {
+            showCharacterLimitWarning()
+            return false
+        }
+        return true
+    }
+    
+    private func showCharacterLimitWarning() {
+        let warningLabel = UILabel()
+        warningLabel.text = "Ограничение 38 символов"
+        warningLabel.textColor = .systemRed
+        warningLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        warningLabel.textAlignment = .center
+        warningLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(warningLabel)
+        
+        NSLayoutConstraint.activate([
+            warningLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 4),
+            warningLabel.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor),
+            warningLabel.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor),
+        ])
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            warningLabel.removeFromSuperview()
+        }
     }
 }

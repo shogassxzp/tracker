@@ -2,7 +2,7 @@ import UIKit
 
 final class TrackerViewController: UIViewController {
     var trackers: [Tracker] = []
-    
+
     private let newTrackerButton = UIButton(type: .system)
     private let trackerLabel = UILabel()
     private let searchBar = UISearchBar()
@@ -83,12 +83,12 @@ final class TrackerViewController: UIViewController {
             habitsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
-    
+
     private func loadTrackers() {
         trackers = TrackerStore.shared.getAllTrackers()
         habitsCollectionView.reloadData()
     }
-    
+
     private func setupNotifications() {
         NotificationCenter.default.addObserver(
             self,
@@ -97,12 +97,12 @@ final class TrackerViewController: UIViewController {
             object: nil
         )
     }
-    
+
     @objc private func handleTrackerAdded() {
         loadTrackers()
     }
-    
-  @objc private func newTracker() {
+
+    @objc private func newTracker() {
         let newTrackerViewController = NewTrackerViewController()
         newTrackerViewController.modalPresentationStyle = .popover
         present(newTrackerViewController, animated: true)

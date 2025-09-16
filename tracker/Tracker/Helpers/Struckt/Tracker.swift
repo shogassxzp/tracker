@@ -3,7 +3,7 @@ import UIKit
 struct Tracker {
     let id: UUID
     let title: String
-    let color: UIColor 
+    let color: UIColor
     let emoji: Character
     let schedule: [Weekday]?
     let isHabit: Bool
@@ -17,7 +17,7 @@ enum Weekday: String, CaseIterable {
     case friday = "Пятница"
     case saturday = "Суббота"
     case sunday = "Воскресенье"
-    
+
     var shortName: String {
         switch self {
         case .monday: return "Пн"
@@ -30,8 +30,3 @@ enum Weekday: String, CaseIterable {
         }
     }
 }
-
-
-
-
-
