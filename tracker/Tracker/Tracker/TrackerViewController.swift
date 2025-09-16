@@ -2,7 +2,8 @@ import UIKit
 
 final class TrackerViewController: UIViewController {
     var trackers: [Tracker] = []
-
+    private var currentDate = Date()
+    
     private let newTrackerButton = UIButton(type: .system)
     private let trackerLabel = UILabel()
     private let searchBar = UISearchBar()
@@ -45,6 +46,7 @@ final class TrackerViewController: UIViewController {
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
         datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+        datePicker.date = currentDate
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
 
         NSLayoutConstraint.activate([
@@ -88,6 +90,13 @@ final class TrackerViewController: UIViewController {
         trackers = TrackerStore.shared.getAllTrackers()
         habitsCollectionView.reloadData()
     }
+    
+    private func loadTrackersForCurrentDate() {
+        trackers = TrackerStore.shared.getTrackers(for: currentDate)
+        habitsCollectionView.reloadData()
+        
+        //showEmptyStateIfNeeded()
+    }
 
     private func setupNotifications() {
         NotificationCenter.default.addObserver(
@@ -109,9 +118,7 @@ final class TrackerViewController: UIViewController {
     }
 
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
-        let selectedDate = sender.date
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        let formattedDate = dateFormatter.string(from: selectedDate)
+        currentDate = sender.date
+        loadTrackersForCurrentDate()
     }
 }

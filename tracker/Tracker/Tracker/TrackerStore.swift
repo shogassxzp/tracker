@@ -16,6 +16,16 @@ final class TrackerStore {
     }
 
     func getTrackers(for date: Date) -> [Tracker] {
-        return trackers
+        let weekday = date.weekday()
+
+        return trackers.filter { tracker in
+            guard tracker.isHabit else { return true }
+
+            if let schedule = tracker.schedule, let weekday = weekday {
+                return schedule.contains(weekday)
+            }
+
+            return false
+        }
     }
 }
