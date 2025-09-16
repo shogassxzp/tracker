@@ -2,9 +2,9 @@ import UIKit
 
 final class ScheduleViewController: UIViewController {
     
-    var onDaysSelected: (([String]) -> Void)?
+    var onDaysSelected: (([Weekday]) -> Void)?
     
-    private let weekdays = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    private let weekdays: [Weekday] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
     private let scheludeLabel = UILabel()
     private var switches: [UISwitch] = []
     private let stackView = UIStackView()
@@ -59,13 +59,14 @@ final class ScheduleViewController: UIViewController {
     }
 
     @objc private func saveButtonTouchUp() {
+        let selectedDays = getSelectedDays()
         onDaysSelected?(getSelectedDays())
         dismiss(animated: true)
     }
 
     private func setupDays() {
         for (index, day) in weekdays.enumerated() {
-            let dayView = createDayView(for: day, isLast: index == weekdays.count - 1)
+            let dayView = createDayView(for: day.rawValue, isLast: index == weekdays.count - 1)
             stackView.addArrangedSubview(dayView)
         }
     }
@@ -123,10 +124,9 @@ final class ScheduleViewController: UIViewController {
     @objc private func switchValueChanged(_ sender: UISwitch) {
         guard let index = switches.firstIndex(of: sender) else { return }
         let day = weekdays[index]
-        print("\(day): \(sender.isOn ? "включен" : "выключен")")
     }
 
-    func getSelectedDays() -> [String] {
+    func getSelectedDays() -> [Weekday] {
         return switches.enumerated().compactMap { index, switchControl in
             switchControl.isOn ? weekdays[index] : nil
         }

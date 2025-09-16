@@ -1,6 +1,8 @@
 import UIKit
 
 final class NewTrackerViewController: UIViewController {
+    private var selectedSchedule: [Weekday] = []
+
     private let newHabitLabel = UILabel()
     private let nameTextField = UITextField()
     private let categoryButton = UIButton()
@@ -39,7 +41,7 @@ final class NewTrackerViewController: UIViewController {
 
     private func setupView() {
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 1))
-        
+
         newHabitLabel.text = "Новая привычка"
         newHabitLabel.font = .systemFont(ofSize: 16, weight: .medium)
         newHabitLabel.textAlignment = .center
@@ -57,7 +59,7 @@ final class NewTrackerViewController: UIViewController {
         categoryButton.setTitleColor(.blackDay, for: .normal)
         categoryButton.contentHorizontalAlignment = .left
         categoryButton.titleEdgeInsets = UIEdgeInsets(top: 30, left: 16, bottom: 0, right: 0)
-        
+
         categorySubtitleLabel.textColor = .ypGray
         categorySubtitleLabel.font = .systemFont(ofSize: 17, weight: .regular)
         categorySubtitleLabel.isHidden = true
@@ -68,7 +70,7 @@ final class NewTrackerViewController: UIViewController {
         scheduleButton.contentHorizontalAlignment = .left
         scheduleButton.titleEdgeInsets = UIEdgeInsets(top: 30, left: 16, bottom: 0, right: 0)
         scheduleButton.addTarget(self, action: #selector(scheduleTapped), for: .touchUpInside)
-        
+
         scheduleSubtitleLabel.textColor = .ypGray
         scheduleSubtitleLabel.font = .systemFont(ofSize: 17, weight: .regular)
         scheduleSubtitleLabel.isHidden = true
@@ -88,6 +90,7 @@ final class NewTrackerViewController: UIViewController {
         createButton.setTitleColor(.whiteDay, for: .normal)
         createButton.backgroundColor = .ypGray
         createButton.layer.cornerRadius = 16
+        createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
 
         categoryContainer.backgroundColor = .backgroundDay
         scheduleContainer.backgroundColor = .backgroundDay
@@ -163,10 +166,10 @@ final class NewTrackerViewController: UIViewController {
         arrowImageView.tintColor = .gray
         arrowImageView.translatesAutoresizingMaskIntoConstraints = false
         button.addSubview(arrowImageView)
-        
+
         NSLayoutConstraint.activate([
             arrowImageView.centerYAnchor.constraint(equalTo: button.centerYAnchor),
-            arrowImageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -16)
+            arrowImageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -16),
         ])
     }
 
@@ -187,23 +190,50 @@ final class NewTrackerViewController: UIViewController {
     @objc private func scheduleTapped() {
         let scheduleViewController = ScheduleViewController()
         scheduleViewController.modalPresentationStyle = .popover
-        
-        scheduleViewController.onDaysSelected = { [weak self] (selectedDays: [String]) in
-            let shortDays = selectedDays.map { day in
-                switch day {
-                case "Понедельник": return "пн"
-                case "Вторник": return "вт"
-                case "Среда": return "ср"
-                case "Четверг": return "чт"
-                case "Пятница": return "пт"
-                case "Суббота": return "сб"
-                case "Воскресенье": return "вс"
-                default: return day
-                }
-            }
+
+        scheduleViewController.onDaysSelected = { [weak self] (selectedDays: [Weekday]) in
+            self?.selectedSchedule = selectedDays
+            let shortDays = selectedDays.map { $0.shortName }
             self?.updateScheduleSubtitle(shortDays.joined(separator: ", "))
         }
-        
+
         present(scheduleViewController, animated: true)
+    }
+
+    private func createTracker() {
+        guard let title = nameTextField.text, !title.isEmpty else {
+            showAlert(message: "Введите название трекера")
+            return
+        }
+
+        guard !selectedSchedule.isEmpty else {
+            showAlert(message: "Выберите дни недели")
+            return
+        }
+
+        let tracker = Tracker(
+            id: UUID(),
+            title: title,
+            color: .selectionBlue,
+            emoji: "🏃‍♂️",
+            schedule: selectedSchedule,
+            isHabit: true
+        )
+
+        TrackerStore.shared.addTracker(tracker)
+
+        NotificationCenter.default.post(name: NSNotification.Name("TrackerAdded"), object: nil)
+
+        dismiss(animated: true)
+    }
+    
+    @objc private func createButtonTapped() {
+           createTracker()
+       }
+
+    private func showAlert(message: String) {
+        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 }

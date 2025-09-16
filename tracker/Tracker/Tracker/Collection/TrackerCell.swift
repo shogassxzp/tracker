@@ -18,4 +18,10 @@ final class TrackerCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+    
+    func configure(with tracker: Tracker) {
+            titleLabel.text = tracker.title
+        contentView.backgroundColor = .ypLightGray //tracker.color 
+            
+        }
 }
