@@ -4,6 +4,10 @@ final class TrackerViewController: UIViewController {
     var trackers: [Tracker] = []
     private var currentDate = Date()
     
+    private let emptyStateView = UIView()
+    private let emptyStateLabel = UILabel()
+    private let emptyStateImage = UIImageView()
+    
     private let newTrackerButton = UIButton(type: .system)
     private let trackerLabel = UILabel()
     private let searchBar = UISearchBar()
@@ -18,13 +22,15 @@ final class TrackerViewController: UIViewController {
         view.backgroundColor = .whiteDay
         addSubview()
         setupView()
+        setUpEmptyState()
         setupCollection()
         loadTrackers()
         setupNotifications()
+        showEmptyStateIfNeeded()
     }
 
     private func addSubview() {
-        [habitsCollectionView, newTrackerButton, trackerLabel, searchBar, datePicker].forEach {
+        [emptyStateView, habitsCollectionView, newTrackerButton, trackerLabel, searchBar, datePicker].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -85,6 +91,38 @@ final class TrackerViewController: UIViewController {
             habitsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
+    
+    private func setUpEmptyState() {
+        emptyStateView.isHidden = true
+        
+        emptyStateImage.image = UIImage(resource: .collectionPlaceholder)
+        emptyStateImage.tintColor = .ypGray
+        
+        emptyStateLabel.text = "Что будем отслеживать?"
+        emptyStateLabel.textColor = .blackDay
+        emptyStateLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        emptyStateLabel.textAlignment = .center
+        
+        [emptyStateImage,emptyStateLabel].forEach{
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            emptyStateView.addSubview($0)
+        }
+        
+        NSLayoutConstraint.activate([
+            emptyStateView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyStateView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            emptyStateImage.centerXAnchor.constraint(equalTo: emptyStateView.centerXAnchor),
+            emptyStateImage.topAnchor.constraint(equalTo: emptyStateView.topAnchor, constant: 10),
+            emptyStateImage.widthAnchor.constraint(equalToConstant: 80),
+            emptyStateImage.heightAnchor.constraint(equalToConstant: 80),
+            
+            emptyStateLabel.topAnchor.constraint(equalTo: emptyStateImage.bottomAnchor, constant: 10),
+            emptyStateLabel.leadingAnchor.constraint(equalTo: emptyStateView.leadingAnchor),
+            emptyStateLabel.trailingAnchor.constraint(equalTo: emptyStateView.trailingAnchor),
+            emptyStateLabel.bottomAnchor.constraint(equalTo: emptyStateView.bottomAnchor)
+        ])
+    }
 
     private func loadTrackers() {
         trackers = TrackerStore.shared.getAllTrackers()
@@ -95,7 +133,7 @@ final class TrackerViewController: UIViewController {
         trackers = TrackerStore.shared.getTrackers(for: currentDate)
         habitsCollectionView.reloadData()
         
-        //showEmptyStateIfNeeded()
+        showEmptyStateIfNeeded()
     }
 
     private func setupNotifications() {
@@ -120,5 +158,23 @@ final class TrackerViewController: UIViewController {
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
         loadTrackersForCurrentDate()
+    }
+    
+    private func showEmptyState() {
+        emptyStateView.isHidden = false
+        habitsCollectionView.isHidden = true
+    }
+    
+    private func hideEmptyState() {
+        emptyStateView.isHidden = true
+        habitsCollectionView.isHidden = false
+    }
+    
+    private func showEmptyStateIfNeeded() {
+        if trackers.isEmpty {
+            showEmptyState()
+        } else {
+            hideEmptyState()
+        }
     }
 }
