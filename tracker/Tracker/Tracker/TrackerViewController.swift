@@ -126,9 +126,9 @@ final class TrackerViewController: UIViewController {
 
     private func loadTrackers() {
         trackers = TrackerStore.shared.getAllTrackers()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            self.habitsCollectionView.reloadData()
-        }
+        habitsCollectionView.reloadData()
+        showEmptyStateIfNeeded()
+        
     }
     
     private func loadTrackersForCurrentDate() {
@@ -149,7 +149,7 @@ final class TrackerViewController: UIViewController {
     }
 
     @objc private func handleTrackerAdded() {
-        loadTrackers()
+        loadTrackersForCurrentDate()
     }
     
     func handleTrackerCompletion(trackerId: String, date: Date, isCompleted: Bool) {

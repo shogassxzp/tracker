@@ -223,7 +223,10 @@ final class NewTrackerViewController: UIViewController {
 
         TrackerStore.shared.addTracker(tracker)
 
-        NotificationCenter.default.post(name: NSNotification.Name("TrackerAdded"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name("TrackerAdded"),
+                                        object: nil,
+                                        userInfo: ["tracker": tracker]
+        )
 
         dismiss(animated: true)
     }
