@@ -6,6 +6,7 @@ final class TrackerStore {
     private init() { }
 
     private var trackers: [Tracker] = []
+    private var trackerRecords: [TrackerRecord] = []
 
     func addTracker(_ tracker: Tracker) {
         trackers.append(tracker)
@@ -27,5 +28,23 @@ final class TrackerStore {
 
             return false
         }
+    }
+
+    func addRecord(_ record: TrackerRecord) {
+        trackerRecords.append(record)
+    }
+
+    func removeRecord(trackerId: String, date: Date) {
+        trackerRecords.removeAll { $0.trackerId == trackerId && Calendar.current.isDate($0.date, inSameDayAs: date)
+        }
+    }
+
+    func isCompleted(trackerId: String, date: Date) -> Bool {
+        return trackerRecords.contains{ $0.trackerId == trackerId && Calendar.current.isDate($0.date, inSameDayAs: date)
+        }
+    }
+    
+    func completionCount(trackerId: String) -> Int {
+        return trackerRecords.filter {$0.trackerId == trackerId }.count
     }
 }

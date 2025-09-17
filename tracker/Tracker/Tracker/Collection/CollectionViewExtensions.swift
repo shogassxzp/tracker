@@ -7,7 +7,18 @@ extension TrackerViewController: UICollectionViewDataSource {
         }
         cell.prepareForReuse()
         let tracker = trackers[indexPath.item]
-        cell.configure(with: tracker)
+        let isCompleted = TrackerStore.shared.isCompleted(trackerId: tracker.id.uuidString, date: currentDate)
+        let completionCount = TrackerStore.shared.completionCount(trackerId: tracker.id.uuidString)
+        
+        cell.configure(
+            with: tracker,
+            date: currentDate,
+            isCompleted: isCompleted,
+            completionCount: completionCount,
+            onCompletion: { [weak self] trackerId, date, isCompleted in
+                self?.handleTrackerCompletion(trackerId: trackerId, date: date, isCompleted: isCompleted)
+            }
+        )
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 15
 
@@ -45,7 +56,7 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let availibleWidth = collectionView.frame.width - 48
         let cellWidth = availibleWidth / 2
-        return CGSize(width: cellWidth, height: cellWidth * 2 / 3)
+        return CGSize(width: cellWidth, height: cellWidth * 3 / 4)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

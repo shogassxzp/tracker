@@ -2,7 +2,7 @@ import UIKit
 
 final class TrackerViewController: UIViewController {
     var trackers: [Tracker] = []
-    private var currentDate = Date()
+    var currentDate = Date()
     
     private let emptyStateView = UIView()
     private let emptyStateLabel = UILabel()
@@ -126,7 +126,9 @@ final class TrackerViewController: UIViewController {
 
     private func loadTrackers() {
         trackers = TrackerStore.shared.getAllTrackers()
-        habitsCollectionView.reloadData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            self.habitsCollectionView.reloadData()
+        }
     }
     
     private func loadTrackersForCurrentDate() {
@@ -142,12 +144,23 @@ final class TrackerViewController: UIViewController {
             selector: #selector(handleTrackerAdded),
             name: NSNotification.Name("TrackerAdded"),
             object: nil
+            
         )
     }
 
     @objc private func handleTrackerAdded() {
         loadTrackers()
     }
+    
+    func handleTrackerCompletion(trackerId: String, date: Date, isCompleted: Bool) {
+            if isCompleted {
+                let record = TrackerRecord(id: UUID().uuidString, trackerId: trackerId, date: date)
+                TrackerStore.shared.addRecord(record)
+            } else {
+                TrackerStore.shared.removeRecord(trackerId: trackerId, date: date)
+            }
+            habitsCollectionView.reloadData()
+        }
 
     @objc private func newTracker() {
         let newTrackerViewController = NewTrackerViewController()
