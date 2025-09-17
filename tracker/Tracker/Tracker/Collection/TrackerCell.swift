@@ -91,12 +91,9 @@ final class TrackerCell: UICollectionViewCell {
         titleLabel.textColor = .white
         emojiLabel.text = String(tracker.emoji) // it`s work
         
-        updateCompletionButton(isCompleted: isCompleted, color: tracker.color)
-
         footerContainer.backgroundColor = .whiteDay
         
         updateCompletionButton(isCompleted: isCompleted, color: tracker.color)
-        completionButton.tintColor = .selectionDarkBlue //tracker.color
 
         daysLabel.text = "\(completionCount) дней"
         daysLabel.textColor = .blackDay
@@ -109,7 +106,8 @@ final class TrackerCell: UICollectionViewCell {
         UIImage(systemName: "plus")
         
         completionButton.setImage(buttonImage, for: .normal)
-        completionButton.backgroundColor = .ypLightGray.withAlphaComponent(0.3) // tracker.color
+        completionButton.backgroundColor = isCompleted ? .selectionDarkBlue.withAlphaComponent(0.6) : .selectionDarkBlue
+        completionButton.tintColor = isCompleted ? .white.withAlphaComponent(0.6) : .white //tracker.color
     }
 
     @objc private func completionButtonTapped() {
