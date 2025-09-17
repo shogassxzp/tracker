@@ -1,10 +1,18 @@
 import UIKit
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+final class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        if TrackerStore.shared.getCategories().isEmpty {
+            let defaultCategory = TrackerCategory(
+                id: UUID().uuidString,
+                title: "Важное",
+                trackers: []
+            )
+            TrackerStore.shared.setCategories([defaultCategory])
+        }
         return true
     }
 

@@ -1,13 +1,14 @@
 import UIKit
 
 final class TrackerViewController: UIViewController {
-    var trackers: [Tracker] = []
+    var categories: [TrackerCategory] = []
+    var completedTrackers: Set<UUID> = []
     var currentDate = Date()
-    
+
     private let emptyStateView = UIView()
     private let emptyStateLabel = UILabel()
     private let emptyStateImage = UIImageView()
-    
+
     private let newTrackerButton = UIButton(type: .system)
     private let trackerLabel = UILabel()
     private let searchBar = UISearchBar()
@@ -24,9 +25,10 @@ final class TrackerViewController: UIViewController {
         setupView()
         setUpEmptyState()
         setupCollection()
-        loadTrackers()
         setupNotifications()
         showEmptyStateIfNeeded()
+        loadCategories()
+        loadCompletedTrackers()
     }
 
     private func addSubview() {
@@ -66,8 +68,6 @@ final class TrackerViewController: UIViewController {
 
             datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             datePicker.topAnchor.constraint(equalTo: newTrackerButton.topAnchor),
-            datePicker.widthAnchor.constraint(equalToConstant: 77),
-            datePicker.heightAnchor.constraint(equalToConstant: 34),
 
             searchBar.leadingAnchor.constraint(equalTo: trackerLabel.leadingAnchor, constant: -5),
             searchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
@@ -91,51 +91,96 @@ final class TrackerViewController: UIViewController {
             habitsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
-    
+
     private func setUpEmptyState() {
         emptyStateView.isHidden = true
-        
+
         emptyStateImage.image = UIImage(resource: .collectionPlaceholder)
         emptyStateImage.tintColor = .ypGray
-        
+
         emptyStateLabel.text = "Что будем отслеживать?"
         emptyStateLabel.textColor = .blackDay
         emptyStateLabel.font = .systemFont(ofSize: 12, weight: .medium)
         emptyStateLabel.textAlignment = .center
-        
-        [emptyStateImage,emptyStateLabel].forEach{
+
+        [emptyStateImage, emptyStateLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             emptyStateView.addSubview($0)
         }
-        
+
         NSLayoutConstraint.activate([
             emptyStateView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyStateView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
+
             emptyStateImage.centerXAnchor.constraint(equalTo: emptyStateView.centerXAnchor),
             emptyStateImage.topAnchor.constraint(equalTo: emptyStateView.topAnchor, constant: 10),
             emptyStateImage.widthAnchor.constraint(equalToConstant: 80),
             emptyStateImage.heightAnchor.constraint(equalToConstant: 80),
-            
+
             emptyStateLabel.topAnchor.constraint(equalTo: emptyStateImage.bottomAnchor, constant: 10),
             emptyStateLabel.leadingAnchor.constraint(equalTo: emptyStateView.leadingAnchor),
             emptyStateLabel.trailingAnchor.constraint(equalTo: emptyStateView.trailingAnchor),
-            emptyStateLabel.bottomAnchor.constraint(equalTo: emptyStateView.bottomAnchor)
+            emptyStateLabel.bottomAnchor.constraint(equalTo: emptyStateView.bottomAnchor),
         ])
     }
 
     private func loadTrackers() {
-        trackers = TrackerStore.shared.getAllTrackers()
-        habitsCollectionView.reloadData()
-        showEmptyStateIfNeeded()
+            let allCategories = TrackerStore.shared.getCategories()
         
-    }
-    
+            
+            let filteredCategories = allCategories.map { category in
+                let filteredTrackers = category.trackers.filter { tracker in
+                    guard tracker.isHabit else {
+                        return true
+                    }
+                    
+                    if let schedule = tracker.schedule, let weekday = currentDate.weekday() {
+                        let shouldShow = schedule.contains(weekday)
+                        return shouldShow
+                    }
+                    
+                    return false
+                }
+                return TrackerCategory(
+                    id: category.id,
+                    title: category.title,
+                    trackers: filteredTrackers
+                )
+            }.filter { !$0.trackers.isEmpty }
+            
+            categories = filteredCategories
+            
+            habitsCollectionView.reloadData()
+            showEmptyStateIfNeeded()
+        }
+
     private func loadTrackersForCurrentDate() {
-        trackers = TrackerStore.shared.getTrackers(for: currentDate)
         habitsCollectionView.reloadData()
-        
+
         showEmptyStateIfNeeded()
+    }
+
+    private func loadCategories() {
+        let allCategories = TrackerStore.shared.getCategories()
+        
+        if allCategories.isEmpty {
+            let defaultCategory = TrackerCategory(
+                id: UUID().uuidString,
+                title: "Домашний уют",
+                trackers: []
+            )
+            TrackerStore.shared.setCategories([defaultCategory])
+            categories = [defaultCategory]
+        } else {
+            categories = allCategories
+        }
+        
+        loadTrackers()
+    }
+
+    private func loadCompletedTrackers() {
+        let records = TrackerStore.shared.getAllRecords()
+        completedTrackers = Set(records.map { UUID(uuidString: $0.trackerId) ?? UUID() })
     }
 
     private func setupNotifications() {
@@ -144,23 +189,30 @@ final class TrackerViewController: UIViewController {
             selector: #selector(handleTrackerAdded),
             name: NSNotification.Name("TrackerAdded"),
             object: nil
-            
         )
     }
 
     @objc private func handleTrackerAdded() {
-        loadTrackersForCurrentDate()
+        loadCategories()
     }
-    
-    func handleTrackerCompletion(trackerId: String, date: Date, isCompleted: Bool) {
+
+    func handleTrackerCompletion(trackerId: UUID, date: Date, isCompleted: Bool) {
             if isCompleted {
-                let record = TrackerRecord(id: UUID().uuidString, trackerId: trackerId, date: date)
+                let record = TrackerRecord(
+                    id: UUID().uuidString,
+                    trackerId: trackerId.uuidString,
+                    date: date
+                )
                 TrackerStore.shared.addRecord(record)
+                completedTrackers.insert(trackerId)
             } else {
-                TrackerStore.shared.removeRecord(trackerId: trackerId, date: date)
+                TrackerStore.shared.removeRecord(trackerId: trackerId.uuidString, date: date)
+                completedTrackers.remove(trackerId)
             }
+            
             habitsCollectionView.reloadData()
         }
+
 
     @objc private func newTracker() {
         let newTrackerViewController = NewTrackerViewController()
@@ -170,24 +222,25 @@ final class TrackerViewController: UIViewController {
 
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
-        loadTrackersForCurrentDate()
-    }
-    
+           loadTrackers()
+       }
+
     private func showEmptyState() {
         emptyStateView.isHidden = false
         habitsCollectionView.isHidden = true
     }
-    
+
     private func hideEmptyState() {
         emptyStateView.isHidden = true
         habitsCollectionView.isHidden = false
     }
-    
+
     private func showEmptyStateIfNeeded() {
-        if trackers.isEmpty {
-            showEmptyState()
-        } else {
-            hideEmptyState()
-        }
+            let hasTrackers = categories.contains { !$0.trackers.isEmpty }
+            if hasTrackers {
+                hideEmptyState()
+            } else {
+                showEmptyState()
+            }
     }
 }

@@ -6,45 +6,51 @@ extension TrackerViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         cell.prepareForReuse()
-        let tracker = trackers[indexPath.item]
-        let isCompleted = TrackerStore.shared.isCompleted(trackerId: tracker.id.uuidString, date: currentDate)
+        let tracker = categories[indexPath.section].trackers[indexPath.item]
+        let isCompleted = completedTrackers.contains(tracker.id)
         let completionCount = TrackerStore.shared.completionCount(trackerId: tracker.id.uuidString)
-        
+
         cell.configure(
             with: tracker,
             date: currentDate,
             isCompleted: isCompleted,
             completionCount: completionCount,
             onCompletion: { [weak self] trackerId, date, isCompleted in
-                self?.handleTrackerCompletion(trackerId: trackerId, date: date, isCompleted: isCompleted)
+                self?.handleTrackerCompletion(
+                    trackerId: UUID(uuidString: trackerId) ?? UUID(),
+                    date: date,
+                    isCompleted: isCompleted
+                )
             }
         )
-        cell.layer.masksToBounds = true
-        cell.layer.cornerRadius = 15
 
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return trackers.count
+        let count = categories[section].trackers.count
+        return count
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        categories.count
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        var id: String
+        let categories = TrackerStore.shared.getCategories()
+        if kind == UICollectionView.elementKindSectionHeader {
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: "header",
+                for: indexPath
+            ) as! HeaderView
 
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            id = "header"
-        case UICollectionView.elementKindSectionFooter:
-            id = "footer"
-        default:
-            id = ""
+            header.titleLabel.text = categories[indexPath.section].title
+            header.titleLabel.font = .systemFont(ofSize: 19, weight: .bold)
+
+            return header
         }
-        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as! HeaderView
-        view.titleLabel.text = "Домашний уют"
-        view.titleLabel.font = .systemFont(ofSize: 19, weight: .bold)
-
-        return view
+        return UICollectionReusableView()
     }
 }
 

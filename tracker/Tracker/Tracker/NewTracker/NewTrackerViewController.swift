@@ -169,7 +169,7 @@ final class NewTrackerViewController: UIViewController {
         button.addSubview(arrowImageView)
 
         NSLayoutConstraint.activate([
-            arrowImageView.centerYAnchor.constraint(equalTo: button.centerYAnchor),
+            arrowImageView.topAnchor.constraint(equalTo: button.centerYAnchor,constant: 8),
             arrowImageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -16),
         ])
     }
@@ -221,7 +221,7 @@ final class NewTrackerViewController: UIViewController {
             isHabit: true
         )
 
-        TrackerStore.shared.addTracker(tracker)
+        TrackerStore.shared.addTracker(tracker, toCategoryTitle: "Домашний уют")
 
         NotificationCenter.default.post(name: NSNotification.Name("TrackerAdded"),
                                         object: nil,
