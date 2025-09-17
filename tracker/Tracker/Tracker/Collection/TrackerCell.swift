@@ -9,6 +9,7 @@ final class TrackerCell: UICollectionViewCell {
 
     private let titleLabel = UILabel()
     private let emojiLabel = UILabel()
+    private let emojiContainer = UIView()
 
     private let footerContainer = UIView()
     private let completionButton = UIButton()
@@ -29,7 +30,7 @@ final class TrackerCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
 
-        [contentContainer, titleLabel, emojiLabel, footerContainer].forEach {
+        [contentContainer, titleLabel, emojiContainer, emojiLabel, footerContainer].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
@@ -43,7 +44,9 @@ final class TrackerCell: UICollectionViewCell {
         footerContainer.layer.masksToBounds = true
         completionButton.layer.masksToBounds = true
         completionButton.layer.cornerRadius = 17
-        
+        emojiContainer.layer.masksToBounds = true
+        emojiContainer.layer.cornerRadius = 12
+        emojiContainer.backgroundColor = .white.withAlphaComponent(0.3)
         
         completionButton.addTarget(self, action: #selector(completionButtonTapped), for: .touchUpInside)
         
@@ -56,9 +59,14 @@ final class TrackerCell: UICollectionViewCell {
             titleLabel.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor, constant: -12),
             titleLabel.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: 12),
+            
+            emojiContainer.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 12),
+            emojiContainer.topAnchor.constraint(equalTo: contentContainer.topAnchor,constant: 12),
+            emojiContainer.heightAnchor.constraint(equalToConstant: 24),
+            emojiContainer.widthAnchor.constraint(equalToConstant: 24),
 
-            emojiLabel.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 12),
-            emojiLabel.topAnchor.constraint(equalTo: contentContainer.topAnchor, constant: 12),
+            emojiLabel.centerXAnchor.constraint(equalTo: emojiContainer.centerXAnchor),
+            emojiLabel.centerYAnchor.constraint(equalTo: emojiContainer.centerYAnchor),
 
             footerContainer.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
             footerContainer.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
@@ -88,8 +96,10 @@ final class TrackerCell: UICollectionViewCell {
         
         contentContainer.backgroundColor = .selectionDarkBlue //tracker.color
         titleLabel.text = tracker.title
+        titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
         titleLabel.textColor = .white
-        emojiLabel.text = String(tracker.emoji) // it`s work
+        emojiLabel.font = .systemFont(ofSize: 16,weight: .medium)
+        emojiLabel.text = String(tracker.emoji)
         
         footerContainer.backgroundColor = .whiteDay
         
