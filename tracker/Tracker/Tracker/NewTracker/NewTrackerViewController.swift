@@ -89,6 +89,7 @@ final class NewTrackerViewController: UIViewController {
 
         createButton.setTitle("Создать", for: .normal)
         createButton.setTitleColor(.whiteDay, for: .normal)
+        createButton.backgroundColor = .ypGray
         createButton.layer.cornerRadius = 16
         createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
 

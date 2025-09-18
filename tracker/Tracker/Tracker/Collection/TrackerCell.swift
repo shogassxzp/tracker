@@ -102,12 +102,16 @@ final class TrackerCell: UICollectionViewCell {
         emojiLabel.text = String(tracker.emoji)
         
         footerContainer.backgroundColor = .whiteDay
-        
-        updateCompletionButton(isCompleted: isCompleted, color: tracker.color)
 
         daysLabel.text = "\(completionCount) дней"
         daysLabel.textColor = .blackDay
         daysLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        
+        let actuallyCompleted = TrackerStore.shared.isCompleted(
+            trackerId: tracker.id.uuidString,
+            date: date)
+        
+        updateCompletionButton(isCompleted: actuallyCompleted, color: tracker.color)
     }
     
     private func updateCompletionButton(isCompleted: Bool, color: UIColor) {

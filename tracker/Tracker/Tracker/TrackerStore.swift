@@ -61,7 +61,9 @@ final class TrackerStore {
     }
 
     func isCompleted(trackerId: String, date: Date) -> Bool {
-        return trackerRecords.contains { $0.trackerId == trackerId && Calendar.current.isDate($0.date, inSameDayAs: date)
+        return trackerRecords.contains {
+            $0.trackerId == trackerId &&
+            Calendar.current.isDate($0.date, inSameDayAs: date)
         }
     }
 
