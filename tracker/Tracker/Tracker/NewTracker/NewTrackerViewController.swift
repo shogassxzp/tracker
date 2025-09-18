@@ -185,6 +185,18 @@ final class NewTrackerViewController: UIViewController {
         )
     }
     
+    private func setupKeyboardDissmis() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dissmisKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+        
+        nameTextField.returnKeyType = .done
+    }
+    
+    @objc private func dissmisKeyboard() {
+        view.endEditing(true)
+    }
+    
     @objc private func textFieldDidChange() {
         updateCreateButton()
     }
@@ -300,5 +312,14 @@ extension NewTrackerViewController: UITextFieldDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             warningLabel.removeFromSuperview()
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        updateCreateButton()
     }
 }
