@@ -89,7 +89,6 @@ final class NewTrackerViewController: UIViewController {
 
         createButton.setTitle("Создать", for: .normal)
         createButton.setTitleColor(.whiteDay, for: .normal)
-        createButton.backgroundColor = .ypGray
         createButton.layer.cornerRadius = 16
         createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
 
@@ -123,7 +122,7 @@ final class NewTrackerViewController: UIViewController {
             separator.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
             separator.heightAnchor.constraint(equalToConstant: 1),
 
-            scheduleContainer.topAnchor.constraint(equalTo: separator.bottomAnchor),
+            scheduleContainer.topAnchor.constraint(equalTo: separator.bottomAnchor,constant: 1),
             scheduleContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             scheduleContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             scheduleContainer.heightAnchor.constraint(equalToConstant: 75),
@@ -173,10 +172,36 @@ final class NewTrackerViewController: UIViewController {
             arrowImageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -16),
         ])
     }
+    
+    private func setupTextFieldObserver() {
+        nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(textFieldDidChange),
+            name: UITextField.textDidChangeNotification,
+            object: nameTextField
+        )
+    }
+    
+    @objc private func textFieldDidChange() {
+        updateCreateButton()
+    }
+    
+    private func updateCreateButton() {
+        let isNameEmpty = nameTextField.text?.isEmpty ?? true
+        let isScheduleEmpty = selectedSchedule.isEmpty
+        
+        let isEnabled = !isNameEmpty && !isScheduleEmpty
+        
+        createButton.isEnabled = isEnabled
+        createButton.backgroundColor = isEnabled ? .blackDay : .ypGray
+    }
 
     func updateScheduleSubtitle(_ text: String) {
         scheduleSubtitleLabel.text = text
         scheduleSubtitleLabel.isHidden = text.isEmpty
+        updateCreateButton()
     }
 
     func updateCategorySubtitle(_ text: String) {
@@ -215,8 +240,8 @@ final class NewTrackerViewController: UIViewController {
         let tracker = Tracker(
             id: UUID(),
             title: title,
-            color: .selectionBlue,
-            emoji: "🏃‍♂️",
+            color: .selectionDarkBlue,
+            emoji: "😇",
             schedule: selectedSchedule,
             isHabit: true
         )
