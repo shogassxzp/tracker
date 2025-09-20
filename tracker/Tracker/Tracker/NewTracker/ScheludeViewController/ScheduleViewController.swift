@@ -35,11 +35,11 @@ final class ScheduleViewController: UIViewController {
 
         NSLayoutConstraint.activate([
             scheludeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            scheludeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 15),
+            scheludeLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
 
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            stackView.topAnchor.constraint(equalTo: scheludeLabel.bottomAnchor, constant: 16),
+            stackView.topAnchor.constraint(equalTo: scheludeLabel.bottomAnchor, constant: -10),
             stackView.bottomAnchor.constraint(equalTo: saveButton.topAnchor, constant: -50),
 
             saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),

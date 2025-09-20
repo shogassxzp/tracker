@@ -2,6 +2,12 @@ import UIKit
 
 final class NewTrackerViewController: UIViewController {
     private var selectedSchedule: [Weekday] = []
+    
+    // Динамические констрейнты
+    private var scheduleButtonTopConstraint: NSLayoutConstraint!
+    private var scheduleButtonCenterYConstraint: NSLayoutConstraint!
+    private var categoryButtonTopConstraint: NSLayoutConstraint!
+    private var categoryButtonCenterYConstraint: NSLayoutConstraint!
 
     private let newHabitLabel = UILabel()
     private let nameTextField = UITextField()
@@ -20,6 +26,8 @@ final class NewTrackerViewController: UIViewController {
         view.backgroundColor = .whiteDay
         addSubviews()
         setupView()
+        setupTextFieldObserver()
+        setupKeyboardDismissal()
     }
 
     private func addSubviews() {
@@ -55,12 +63,11 @@ final class NewTrackerViewController: UIViewController {
         nameTextField.layer.masksToBounds = true
         nameTextField.layer.cornerRadius = 16
         nameTextField.delegate = self
-        
 
         categoryButton.setTitle("Категория", for: .normal)
         categoryButton.setTitleColor(.blackDay, for: .normal)
         categoryButton.contentHorizontalAlignment = .left
-        categoryButton.titleEdgeInsets = UIEdgeInsets(top: 30, left: 16, bottom: 0, right: 0)
+        categoryButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
 
         categorySubtitleLabel.textColor = .ypGray
         categorySubtitleLabel.font = .systemFont(ofSize: 17, weight: .regular)
@@ -69,15 +76,16 @@ final class NewTrackerViewController: UIViewController {
         scheduleButton.setTitle("Расписание", for: .normal)
         scheduleButton.setTitleColor(.blackDay, for: .normal)
         scheduleButton.contentHorizontalAlignment = .left
-        scheduleButton.titleEdgeInsets = UIEdgeInsets(top: 30, left: 16, bottom: 0, right: 0)
+        scheduleButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
         scheduleButton.addTarget(self, action: #selector(scheduleTapped), for: .touchUpInside)
 
         scheduleSubtitleLabel.textColor = .ypGray
         scheduleSubtitleLabel.font = .systemFont(ofSize: 17, weight: .regular)
         scheduleSubtitleLabel.isHidden = true
+        scheduleSubtitleLabel.numberOfLines = 2
 
-        addArrowToButton(categoryButton)
-        addArrowToButton(scheduleButton)
+        addArrowToContainer(categoryContainer)
+        addArrowToContainer(scheduleContainer)
 
         cancelButton.setTitle("Отменить", for: .normal)
         cancelButton.setTitleColor(.systemRed, for: .normal)
@@ -92,6 +100,7 @@ final class NewTrackerViewController: UIViewController {
         createButton.backgroundColor = .ypGray
         createButton.layer.cornerRadius = 16
         createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
+        createButton.isEnabled = false
 
         categoryContainer.backgroundColor = .backgroundDay
         scheduleContainer.backgroundColor = .backgroundDay
@@ -123,30 +132,27 @@ final class NewTrackerViewController: UIViewController {
             separator.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
             separator.heightAnchor.constraint(equalToConstant: 1),
 
-            scheduleContainer.topAnchor.constraint(equalTo: separator.bottomAnchor,constant: 1),
+            scheduleContainer.topAnchor.constraint(equalTo: separator.bottomAnchor, constant: 1),
             scheduleContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             scheduleContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             scheduleContainer.heightAnchor.constraint(equalToConstant: 75),
 
-            categoryButton.topAnchor.constraint(equalTo: categoryContainer.topAnchor),
-            categoryButton.leadingAnchor.constraint(equalTo: categoryContainer.leadingAnchor),
-            categoryButton.trailingAnchor.constraint(equalTo: categoryContainer.trailingAnchor),
-            categoryButton.heightAnchor.constraint(equalToConstant: 44),
+            // Category button constraints
+            categoryButton.leadingAnchor.constraint(equalTo: categoryContainer.leadingAnchor, constant: 16),
+            categoryButton.trailingAnchor.constraint(equalTo: categoryContainer.trailingAnchor, constant: -40),
 
             categorySubtitleLabel.topAnchor.constraint(equalTo: categoryButton.bottomAnchor, constant: 2),
             categorySubtitleLabel.leadingAnchor.constraint(equalTo: categoryContainer.leadingAnchor, constant: 16),
-            categorySubtitleLabel.trailingAnchor.constraint(equalTo: categoryContainer.trailingAnchor, constant: -16),
+            categorySubtitleLabel.trailingAnchor.constraint(equalTo: categoryContainer.trailingAnchor),
             categorySubtitleLabel.bottomAnchor.constraint(lessThanOrEqualTo: categoryContainer.bottomAnchor, constant: -10),
 
-            scheduleButton.topAnchor.constraint(equalTo: scheduleContainer.topAnchor),
-            scheduleButton.leadingAnchor.constraint(equalTo: scheduleContainer.leadingAnchor),
+            scheduleButton.leadingAnchor.constraint(equalTo: scheduleContainer.leadingAnchor, constant: 16),
             scheduleButton.trailingAnchor.constraint(equalTo: scheduleContainer.trailingAnchor),
-            scheduleButton.heightAnchor.constraint(equalToConstant: 44),
 
             scheduleSubtitleLabel.topAnchor.constraint(equalTo: scheduleButton.bottomAnchor, constant: 2),
-            scheduleSubtitleLabel.leadingAnchor.constraint(equalTo: scheduleContainer.leadingAnchor, constant: 16),
-            scheduleSubtitleLabel.trailingAnchor.constraint(equalTo: scheduleContainer.trailingAnchor, constant: -16),
-            scheduleSubtitleLabel.bottomAnchor.constraint(lessThanOrEqualTo: scheduleContainer.bottomAnchor, constant: -10),
+            scheduleSubtitleLabel.leadingAnchor.constraint(equalTo: scheduleButton.leadingAnchor, constant: 16),
+            scheduleSubtitleLabel.trailingAnchor.constraint(equalTo: scheduleContainer.trailingAnchor),
+            scheduleSubtitleLabel.bottomAnchor.constraint(equalTo: scheduleContainer.bottomAnchor, constant: -10),
 
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -160,40 +166,42 @@ final class NewTrackerViewController: UIViewController {
             createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             createButton.heightAnchor.constraint(equalToConstant: 60),
         ])
+        
+        scheduleButtonTopConstraint = scheduleButton.topAnchor.constraint(equalTo: scheduleContainer.topAnchor, constant: 10)
+        scheduleButtonCenterYConstraint = scheduleButton.centerYAnchor.constraint(equalTo: scheduleContainer.centerYAnchor)
+        
+        categoryButtonTopConstraint = categoryButton.topAnchor.constraint(equalTo: categoryContainer.topAnchor, constant: 10)
+        categoryButtonCenterYConstraint = categoryButton.centerYAnchor.constraint(equalTo: categoryContainer.centerYAnchor)
+        
+        updateScheduleButtonPosition()
+        updateCategoryButtonPosition()
     }
 
-    private func addArrowToButton(_ button: UIButton) {
+    private func addArrowToContainer(_ container: UIView) {
         let arrowImageView = UIImageView(image: UIImage(systemName: "chevron.right"))
         arrowImageView.tintColor = .gray
         arrowImageView.translatesAutoresizingMaskIntoConstraints = false
-        button.addSubview(arrowImageView)
+        container.addSubview(arrowImageView)
 
         NSLayoutConstraint.activate([
-            arrowImageView.topAnchor.constraint(equalTo: button.centerYAnchor,constant: 8),
-            arrowImageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -16),
+            arrowImageView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            arrowImageView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
         ])
     }
     
     private func setupTextFieldObserver() {
         nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(textFieldDidChange),
-            name: UITextField.textDidChangeNotification,
-            object: nameTextField
-        )
     }
     
-    private func setupKeyboardDissmis() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dissmisKeyboard))
+    private func setupKeyboardDismissal() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
         
         nameTextField.returnKeyType = .done
     }
     
-    @objc private func dissmisKeyboard() {
+    @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
     
@@ -210,16 +218,48 @@ final class NewTrackerViewController: UIViewController {
         createButton.isEnabled = isEnabled
         createButton.backgroundColor = isEnabled ? .blackDay : .ypGray
     }
+    
+    private func updateScheduleButtonPosition() {
+        scheduleButtonTopConstraint.isActive = false
+        scheduleButtonCenterYConstraint.isActive = false
+        
+        if scheduleSubtitleLabel.isHidden {
+            scheduleButtonCenterYConstraint.isActive = true
+        } else {
+            scheduleButtonTopConstraint.isActive = true
+        }
+        
+        UIView.animate(withDuration: 0.2) {
+            self.scheduleContainer.layoutIfNeeded()
+        }
+    }
+    
+    private func updateCategoryButtonPosition() {
+        categoryButtonTopConstraint.isActive = false
+        categoryButtonCenterYConstraint.isActive = false
+        
+        if categorySubtitleLabel.isHidden {
+            categoryButtonCenterYConstraint.isActive = true
+        } else {
+            categoryButtonTopConstraint.isActive = true
+        }
+        
+        UIView.animate(withDuration: 0.2) {
+            self.categoryContainer.layoutIfNeeded()
+        }
+    }
 
     func updateScheduleSubtitle(_ text: String) {
         scheduleSubtitleLabel.text = text
         scheduleSubtitleLabel.isHidden = text.isEmpty
+        updateScheduleButtonPosition()
         updateCreateButton()
     }
 
     func updateCategorySubtitle(_ text: String) {
         categorySubtitleLabel.text = text
         categorySubtitleLabel.isHidden = text.isEmpty
+        updateCategoryButtonPosition()
     }
 
     @objc private func cancelTapped() {
@@ -261,9 +301,9 @@ final class NewTrackerViewController: UIViewController {
 
         TrackerStore.shared.addTracker(tracker, toCategoryTitle: "Домашний уют")
 
-        NotificationCenter.default.post(name: NSNotification.Name("TrackerAdded"),
-                                        object: nil,
-                                        userInfo: ["tracker": tracker]
+        NotificationCenter.default.post(
+            name: NSNotification.Name("TrackerAdded"),
+            object: nil
         )
 
         dismiss(animated: true)
@@ -297,11 +337,11 @@ extension NewTrackerViewController: UITextFieldDelegate {
         let warningLabel = UILabel()
         warningLabel.text = "Ограничение 38 символов"
         warningLabel.textColor = .systemRed
-        warningLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        warningLabel.font = .systemFont(ofSize: 12, weight: .regular)
         warningLabel.textAlignment = .center
-        warningLabel.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(warningLabel)
+        warningLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             warningLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 4),
