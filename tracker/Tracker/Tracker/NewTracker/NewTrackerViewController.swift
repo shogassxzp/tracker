@@ -3,7 +3,6 @@ import UIKit
 final class NewTrackerViewController: UIViewController {
     private var selectedSchedule: [Weekday] = []
     
-    // Динамические констрейнты
     private var scheduleButtonTopConstraint: NSLayoutConstraint!
     private var scheduleButtonCenterYConstraint: NSLayoutConstraint!
     private var categoryButtonTopConstraint: NSLayoutConstraint!
@@ -137,7 +136,6 @@ final class NewTrackerViewController: UIViewController {
             scheduleContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             scheduleContainer.heightAnchor.constraint(equalToConstant: 75),
 
-            // Category button constraints
             categoryButton.leadingAnchor.constraint(equalTo: categoryContainer.leadingAnchor, constant: 16),
             categoryButton.trailingAnchor.constraint(equalTo: categoryContainer.trailingAnchor, constant: -40),
 
