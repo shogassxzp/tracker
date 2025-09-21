@@ -17,13 +17,13 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func showOnboarding() {
-        let onboardingVC = OnboardingViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        let onboardingViewController = OnboardingViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         
-        onboardingVC.onCompletion = { [weak self] in
+        onboardingViewController.onCompletion = { [weak self] in
             self?.completeOnboarding()
         }
         
-        window?.rootViewController = onboardingVC
+        window?.rootViewController = onboardingViewController
     }
     
     private func showMainScreen() {
