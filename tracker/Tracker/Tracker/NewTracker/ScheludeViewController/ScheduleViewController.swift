@@ -4,15 +4,39 @@ final class ScheduleViewController: UIViewController {
     var onDaysSelected: (([Weekday]) -> Void)?
 
     private let weekdays: [Weekday] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
-    private let scheludeLabel = UILabel()
+    private let scheludeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Расписание"
+        label.font = .systemFont(ofSize: 16, weight: .medium)
+        return label
+    }()
+
     private var switches: [UISwitch] = []
-    private let stackView = UIStackView()
-    private let saveButton = UIButton()
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 0
+        stackView.backgroundColor = .ypBackground
+        stackView.layer.cornerRadius = 16
+        stackView.clipsToBounds = true
+        return stackView
+    }()
+
+    private let saveButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Готово", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+        button.setTitleColor(.ypWhite, for: .normal)
+        button.backgroundColor = .ypBlack
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 16
+        button.addTarget(self, action: #selector(saveButtonTouchUp), for: .touchUpInside)
+        return button
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupStackView()
         setupDays()
     }
 
@@ -23,16 +47,6 @@ final class ScheduleViewController: UIViewController {
         }
 
         view.backgroundColor = .ypWhite
-        scheludeLabel.text = "Расписание"
-        scheludeLabel.font = .systemFont(ofSize: 16, weight: .medium)
-
-        saveButton.setTitle("Готово", for: .normal)
-        saveButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        saveButton.setTitleColor(.ypWhite, for: .normal)
-        saveButton.backgroundColor = .ypBlack
-        saveButton.layer.masksToBounds = true
-        saveButton.layer.cornerRadius = 16
-        saveButton.addTarget(self, action: #selector(saveButtonTouchUp), for: .touchUpInside)
 
         NSLayoutConstraint.activate([
             scheludeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -48,14 +62,6 @@ final class ScheduleViewController: UIViewController {
             saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             saveButton.heightAnchor.constraint(equalToConstant: 60),
         ])
-    }
-
-    private func setupStackView() {
-        stackView.axis = .vertical
-        stackView.spacing = 0
-        stackView.backgroundColor = .ypBackground
-        stackView.layer.cornerRadius = 16
-        stackView.clipsToBounds = true
     }
 
     @objc private func saveButtonTouchUp() {
