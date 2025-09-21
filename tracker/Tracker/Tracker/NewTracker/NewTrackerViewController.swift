@@ -22,7 +22,7 @@ final class NewTrackerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .whiteDay
+        view.backgroundColor = .ypWhite
         addSubviews()
         setupView()
         setupTextFieldObserver()
@@ -58,13 +58,13 @@ final class NewTrackerViewController: UIViewController {
         nameTextField.leftViewMode = .always
         nameTextField.textAlignment = .left
         nameTextField.font = .systemFont(ofSize: 17, weight: .regular)
-        nameTextField.backgroundColor = .backgroundDay
+        nameTextField.backgroundColor = .ypBackground
         nameTextField.layer.masksToBounds = true
         nameTextField.layer.cornerRadius = 16
         nameTextField.delegate = self
 
         categoryButton.setTitle("Категория", for: .normal)
-        categoryButton.setTitleColor(.blackDay, for: .normal)
+        categoryButton.setTitleColor(.ypBlack, for: .normal)
         categoryButton.contentHorizontalAlignment = .left
         categoryButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
 
@@ -73,7 +73,7 @@ final class NewTrackerViewController: UIViewController {
         categorySubtitleLabel.isHidden = true
 
         scheduleButton.setTitle("Расписание", for: .normal)
-        scheduleButton.setTitleColor(.blackDay, for: .normal)
+        scheduleButton.setTitleColor(.ypBlack, for: .normal)
         scheduleButton.contentHorizontalAlignment = .left
         scheduleButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
         scheduleButton.addTarget(self, action: #selector(scheduleTapped), for: .touchUpInside)
@@ -88,21 +88,21 @@ final class NewTrackerViewController: UIViewController {
 
         cancelButton.setTitle("Отменить", for: .normal)
         cancelButton.setTitleColor(.systemRed, for: .normal)
-        cancelButton.backgroundColor = .whiteDay
+        cancelButton.backgroundColor = .ypWhite
         cancelButton.layer.borderWidth = 1.0
         cancelButton.layer.borderColor = UIColor.systemRed.cgColor
         cancelButton.layer.cornerRadius = 16
         cancelButton.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside)
 
         createButton.setTitle("Создать", for: .normal)
-        createButton.setTitleColor(.whiteDay, for: .normal)
+        createButton.setTitleColor(.white, for: .normal)
         createButton.backgroundColor = .ypGray
         createButton.layer.cornerRadius = 16
         createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
         createButton.isEnabled = false
 
-        categoryContainer.backgroundColor = .backgroundDay
-        scheduleContainer.backgroundColor = .backgroundDay
+        categoryContainer.backgroundColor = .ypBackground
+        scheduleContainer.backgroundColor = .ypBackground
         categoryContainer.layer.cornerRadius = 16
         categoryContainer.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         scheduleContainer.layer.cornerRadius = 16
@@ -214,7 +214,7 @@ final class NewTrackerViewController: UIViewController {
         let isEnabled = !isNameEmpty && !isScheduleEmpty
         
         createButton.isEnabled = isEnabled
-        createButton.backgroundColor = isEnabled ? .blackDay : .ypGray
+        createButton.backgroundColor = isEnabled ? .ypBlack : .ypGray
     }
     
     private func updateScheduleButtonPosition() {

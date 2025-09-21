@@ -22,14 +22,14 @@ final class ScheduleViewController: UIViewController {
             view.addSubview($0)
         }
 
-        view.backgroundColor = .whiteDay
+        view.backgroundColor = .ypWhite
         scheludeLabel.text = "Расписание"
         scheludeLabel.font = .systemFont(ofSize: 16, weight: .medium)
 
         saveButton.setTitle("Готово", for: .normal)
         saveButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        saveButton.titleLabel?.textColor = .whiteDay
-        saveButton.backgroundColor = .blackDay
+        saveButton.setTitleColor(.ypWhite, for: .normal)
+        saveButton.backgroundColor = .ypBlack
         saveButton.layer.masksToBounds = true
         saveButton.layer.cornerRadius = 16
         saveButton.addTarget(self, action: #selector(saveButtonTouchUp), for: .touchUpInside)
@@ -53,7 +53,7 @@ final class ScheduleViewController: UIViewController {
     private func setupStackView() {
         stackView.axis = .vertical
         stackView.spacing = 0
-        stackView.backgroundColor = .backgroundDay
+        stackView.backgroundColor = .ypBackground
         stackView.layer.cornerRadius = 16
         stackView.clipsToBounds = true
     }
@@ -73,12 +73,12 @@ final class ScheduleViewController: UIViewController {
 
     private func createDayView(for day: String, isLast: Bool) -> UIView {
         let container = UIView()
-        container.backgroundColor = .backgroundDay
+        container.backgroundColor = .ypBackground
         container.heightAnchor.constraint(equalToConstant: 75).isActive = true
 
         let label = UILabel()
         label.text = day
-        label.textColor = .blackDay
+        label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 17, weight: .regular)
 
         let switchControl = UISwitch()

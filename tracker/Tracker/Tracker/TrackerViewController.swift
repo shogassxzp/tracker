@@ -20,7 +20,7 @@ final class TrackerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .whiteDay
+        view.backgroundColor = .ypWhite
         addSubview()
         setupView()
         setUpEmptyState()
@@ -40,13 +40,13 @@ final class TrackerViewController: UIViewController {
 
     private func setupView() {
         newTrackerButton.setImage(UIImage(resource: .plus), for: .normal)
-        newTrackerButton.tintColor = .blackDay
+        newTrackerButton.tintColor = .ypBlack
         newTrackerButton.contentHorizontalAlignment = .center
         newTrackerButton.addTarget(self, action: #selector(newTracker), for: .touchUpInside)
 
         trackerLabel.font = .systemFont(ofSize: 34, weight: .bold)
         trackerLabel.text = "Трекеры"
-        trackerLabel.tintColor = .blackDay
+        trackerLabel.tintColor = .ypBlack
 
         searchBar.placeholder = "Поиск"
         searchBar.searchBarStyle = .minimal
@@ -77,7 +77,7 @@ final class TrackerViewController: UIViewController {
     }
 
     private func setupCollection() {
-        habitsCollectionView.backgroundColor = .whiteDay
+        habitsCollectionView.backgroundColor = .ypWhite
         habitsCollectionView.register(TrackerCell.self, forCellWithReuseIdentifier: TrackerCell.identifier)
         habitsCollectionView.dataSource = self
         habitsCollectionView.delegate = self
@@ -99,7 +99,7 @@ final class TrackerViewController: UIViewController {
         emptyStateImage.tintColor = .ypGray
 
         emptyStateLabel.text = "Что будем отслеживать?"
-        emptyStateLabel.textColor = .blackDay
+        emptyStateLabel.textColor = .ypBlack
         emptyStateLabel.font = .systemFont(ofSize: 12, weight: .medium)
         emptyStateLabel.textAlignment = .center
 

@@ -9,7 +9,7 @@ final class OnboardingViewController: UIPageViewController {
         let control = UIPageControl()
         control.numberOfPages = 2
         control.currentPage = 0
-        control.currentPageIndicatorTintColor = .blackDay
+        control.currentPageIndicatorTintColor = .ypBlack
         control.pageIndicatorTintColor = .ypGray
         return control
     }()
@@ -18,8 +18,8 @@ final class OnboardingViewController: UIPageViewController {
         let button = UIButton(type: .system)
         button.setTitle("Вот это технологии!", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        button.backgroundColor = .blackDay
-        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .ypBlack
+        button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = 16
         button.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         return button
@@ -50,7 +50,7 @@ final class OnboardingViewController: UIPageViewController {
     }
     
     private func setupView() {
-        view.backgroundColor = .whiteDay
+        view.backgroundColor = .ypWhite
         
         view.addSubview(pageControl)
         view.addSubview(nextButton)
