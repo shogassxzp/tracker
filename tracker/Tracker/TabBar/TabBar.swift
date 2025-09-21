@@ -38,8 +38,8 @@ final class TabBarController: UITabBarController {
         
         tabBar.tintColor = .ypBlue
         tabBar.unselectedItemTintColor = .ypGray
-        tabBar.backgroundColor = .white
-        tabBar.barTintColor = .white
+        tabBar.backgroundColor = .whiteDay
+        tabBar.barTintColor = .whiteDay
         tabBar.isTranslucent = false
     }
 }

@@ -28,6 +28,7 @@ final class ScheduleViewController: UIViewController {
 
         saveButton.setTitle("Готово", for: .normal)
         saveButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+        saveButton.titleLabel?.textColor = .whiteDay
         saveButton.backgroundColor = .blackDay
         saveButton.layer.masksToBounds = true
         saveButton.layer.cornerRadius = 16
