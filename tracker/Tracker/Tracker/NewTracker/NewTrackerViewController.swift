@@ -29,11 +29,14 @@ final class NewTrackerViewController: UIViewController {
     }()
 
     private let categoryButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Категория", for: .normal)
-        button.setTitleColor(.ypBlack, for: .normal)
+        let button = UIButton(type: .system)
+        var config = UIButton.Configuration.plain()
+        config.title = "Категория"
+        config.baseForegroundColor = .ypBlack
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 0)
+        config.titleAlignment = .leading
+        button.configuration = config
         button.contentHorizontalAlignment = .left
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
         return button
     }()
 
@@ -46,11 +49,14 @@ final class NewTrackerViewController: UIViewController {
     }()
 
     private let scheduleButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Расписание", for: .normal)
-        button.setTitleColor(.ypBlack, for: .normal)
+        let button = UIButton(type: .system)
+        var config = UIButton.Configuration.plain()
+        config.title = "Расписание"
+        config.baseForegroundColor = .ypBlack
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 0)
+        config.titleAlignment = .leading
+        button.configuration = config
         button.contentHorizontalAlignment = .left
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
         button.addTarget(self, action: #selector(scheduleTapped), for: .touchUpInside)
         return button
     }()
@@ -76,13 +82,15 @@ final class NewTrackerViewController: UIViewController {
     }()
 
     private let cancelButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Отменить", for: .normal)
-        button.setTitleColor(.systemRed, for: .normal)
-        button.backgroundColor = .ypWhite
-        button.layer.borderWidth = 1.0
-        button.layer.borderColor = UIColor.systemRed.cgColor
-        button.layer.cornerRadius = 16
+        let button = UIButton(type: .system)
+        var config = UIButton.Configuration.plain()
+        config.title = "Отменить"
+        config.baseForegroundColor = .systemRed
+        config.background.backgroundColor = .ypWhite
+        config.background.strokeColor = .systemRed
+        config.background.strokeWidth = 1.0
+        config.background.cornerRadius = 16
+        button.configuration = config
         button.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside)
         return button
     }()
@@ -169,15 +177,15 @@ final class NewTrackerViewController: UIViewController {
             scheduleContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             scheduleContainer.heightAnchor.constraint(equalToConstant: 75),
 
-            categoryButton.leadingAnchor.constraint(equalTo: categoryContainer.leadingAnchor, constant: 16),
-            categoryButton.trailingAnchor.constraint(equalTo: categoryContainer.trailingAnchor, constant: -40),
+            categoryButton.leadingAnchor.constraint(equalTo: categoryContainer.leadingAnchor),
+            categoryButton.trailingAnchor.constraint(equalTo: categoryContainer.trailingAnchor),
 
             categorySubtitleLabel.topAnchor.constraint(equalTo: categoryButton.bottomAnchor, constant: 2),
             categorySubtitleLabel.leadingAnchor.constraint(equalTo: categoryContainer.leadingAnchor, constant: 16),
             categorySubtitleLabel.trailingAnchor.constraint(equalTo: categoryContainer.trailingAnchor),
             categorySubtitleLabel.bottomAnchor.constraint(lessThanOrEqualTo: categoryContainer.bottomAnchor, constant: -10),
 
-            scheduleButton.leadingAnchor.constraint(equalTo: scheduleContainer.leadingAnchor, constant: 16),
+            scheduleButton.leadingAnchor.constraint(equalTo: scheduleContainer.leadingAnchor),
             scheduleButton.trailingAnchor.constraint(equalTo: scheduleContainer.trailingAnchor),
 
             scheduleSubtitleLabel.topAnchor.constraint(equalTo: scheduleButton.bottomAnchor, constant: 2),
