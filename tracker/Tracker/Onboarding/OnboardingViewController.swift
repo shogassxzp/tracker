@@ -4,6 +4,7 @@ final class OnboardingViewController: UIPageViewController {
     
     private var pages: [UIViewController] = []
     private var currentPageIndex = 0
+    var onCompletion: (() -> Void)?
     
     private let pageControl: UIPageControl = {
         let control = UIPageControl()
@@ -70,21 +71,7 @@ final class OnboardingViewController: UIPageViewController {
     }
     
     @objc private func nextButtonTapped() {
-        completeOnboarding()
-            guard let window = UIApplication.shared.windows.first else {
-                assertionFailure("Неправильная настройка окна")
-                return
-            }
-            let tabBarController = TabBarController()
-
-            window.rootViewController = tabBarController
-    }
-    
-    private func completeOnboarding() {
-        UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
-        let tabBarController = TabBarController()
-        tabBarController.modalPresentationStyle = .fullScreen
-        present(tabBarController, animated: true)
+        onCompletion?()
     }
 }
 
