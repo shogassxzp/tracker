@@ -3,6 +3,11 @@ import UIKit
 final class NewTrackerViewController: UIViewController {
     private var selectedSchedule: [Weekday] = []
 
+    private var emojiCollection = EmojiCollection()
+    private var colorCollection = ColorCollection()
+    private var selectedEmoji: Character?
+    private var selectedColor: UIColor?
+
     private var scheduleButtonTopConstraint: NSLayoutConstraint!
     private var scheduleButtonCenterYConstraint: NSLayoutConstraint!
     private var categoryButtonTopConstraint: NSLayoutConstraint!
@@ -126,6 +131,7 @@ final class NewTrackerViewController: UIViewController {
         setupView()
         setupTextFieldObserver()
         setupKeyboardDismissal()
+        setupCollections()
     }
 
     private func addSubviews() {
@@ -214,6 +220,28 @@ final class NewTrackerViewController: UIViewController {
 
         updateScheduleButtonPosition()
         updateCategoryButtonPosition()
+    }
+
+    private func setupCollections() {
+        view.addSubview(colorCollection)
+        view.addSubview(emojiCollection)
+
+        colorCollection.onColorSelected = { [weak self] color in
+            self?.selectedColor = color
+            print("Selected color: \(color)")
+        }
+
+        NSLayoutConstraint.activate([
+            colorCollection.topAnchor.constraint(equalTo: scheduleContainer.bottomAnchor, constant: 16),
+            colorCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            colorCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            colorCollection.heightAnchor.constraint(equalToConstant: 200),
+
+            emojiCollection.topAnchor.constraint(equalTo: colorCollection.bottomAnchor, constant: 16),
+            emojiCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            emojiCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            emojiCollection.heightAnchor.constraint(equalToConstant: 200),
+        ])
     }
 
     private func addArrowToContainer(_ container: UIView) {
