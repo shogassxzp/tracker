@@ -41,7 +41,7 @@ final class TrackerViewController: UIViewController {
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
     )
-    
+
     private let emptyStateView = UIView()
     private let emptyStateLabel: UILabel = {
         let label = UILabel()
@@ -51,6 +51,7 @@ final class TrackerViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
+
     private let emptyStateImage = UIImageView()
 
     override func viewDidLoad() {

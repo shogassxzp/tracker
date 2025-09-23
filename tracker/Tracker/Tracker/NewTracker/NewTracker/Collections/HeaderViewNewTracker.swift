@@ -2,7 +2,7 @@ import UIKit
 
 final class HeaderViewNewTracker: UICollectionReusableView {
     let titleLabel = UILabel()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(titleLabel)
@@ -10,7 +10,7 @@ final class HeaderViewNewTracker: UICollectionReusableView {
 
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor,constant: -10),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: -10),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
@@ -19,4 +19,3 @@ final class HeaderViewNewTracker: UICollectionReusableView {
         super.init(coder: coder)
     }
 }
-

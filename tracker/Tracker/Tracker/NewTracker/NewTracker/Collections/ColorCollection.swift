@@ -71,7 +71,7 @@ extension ColorCollection: UICollectionViewDelegateFlowLayout, UICollectionViewD
                 withReuseIdentifier: "headerNewTracker",
                 for: indexPath
             ) as? HeaderViewNewTracker
-            
+
             header?.titleLabel.text = "Цвет"
             header?.titleLabel.font = .systemFont(ofSize: 19, weight: .bold)
 
@@ -79,10 +79,10 @@ extension ColorCollection: UICollectionViewDelegateFlowLayout, UICollectionViewD
         }
         return UICollectionReusableView()
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-            return CGSize(width: collectionView.bounds.width, height: 25) 
-        }
+        return CGSize(width: collectionView.bounds.width, height: 25)
+    }
 }
 
 final class ColorCell: UICollectionViewCell {

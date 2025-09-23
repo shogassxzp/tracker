@@ -376,27 +376,19 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
     @objc private func scheduleTapped() {
         let scheduleViewController = ScheduleViewController()
         scheduleViewController.modalPresentationStyle = .popover
+        scheduleViewController.selectedDays = selectedSchedule
 
         scheduleViewController.onDaysSelected = { [weak self] (selectedDays: [Weekday]) in
             self?.selectedSchedule = selectedDays
             let displayText = Weekday.displayText(for: selectedDays)
             self?.updateScheduleSubtitle(displayText)
+            self?.updateCreateButton()
         }
 
         present(scheduleViewController, animated: true)
     }
 
     private func createTracker() {
-        guard let title = nameTextField.text, !title.isEmpty else {
-            showAlert(message: "Введите название трекера")
-            return
-        }
-
-        guard !selectedSchedule.isEmpty else {
-            showAlert(message: "Выберите дни недели")
-            return
-        }
-
         let tracker = Tracker(
             id: UUID(),
             title: title,
@@ -418,12 +410,6 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
 
     @objc private func createButtonTapped() {
         createTracker()
-    }
-
-    private func showAlert(message: String) {
-        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
     }
 }
 

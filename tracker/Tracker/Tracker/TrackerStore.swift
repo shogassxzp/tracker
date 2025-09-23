@@ -4,7 +4,7 @@ final class TrackerStore {
     static let shared = TrackerStore()
 
     private init() { }
-    
+
     private var categories: [TrackerCategory] = []
     private var trackerRecords: [TrackerRecord] = []
 
@@ -29,27 +29,26 @@ final class TrackerStore {
             categories.append(newCategory)
         }
     }
-    
+
     func getTrackersCount() -> Int {
         return categories.flatMap { $0.trackers }.count
     }
-    
+
     func getCategoriesCount() -> Int {
         return categories.count
     }
-    
 
     func setCategories(_ newCategories: [TrackerCategory]) {
         categories = newCategories
     }
 
     func getCategories() -> [TrackerCategory] {
-            return categories
-        }
-    
+        return categories
+    }
+
     func getAllRecords() -> [TrackerRecord] {
-            return trackerRecords
-        }
+        return trackerRecords
+    }
 
     func addRecord(_ record: TrackerRecord) {
         trackerRecords.append(record)
@@ -63,14 +62,14 @@ final class TrackerStore {
     func isCompleted(trackerId: String, date: Date) -> Bool {
         return trackerRecords.contains {
             $0.trackerId == trackerId &&
-            Calendar.current.isDate($0.date, inSameDayAs: date)
+                Calendar.current.isDate($0.date, inSameDayAs: date)
         }
     }
 
     func completionCount(trackerId: String) -> Int {
         return trackerRecords.filter { $0.trackerId == trackerId }.count
     }
-    
+
     func clearAllData() {
         categories = []
         trackerRecords = []

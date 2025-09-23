@@ -4,7 +4,7 @@ extension Date {
     func weekday() -> Weekday? {
         let calendar = Calendar.current
         let weekdayNumber = calendar.component(.weekday, from: self)
-        
+
         switch weekdayNumber {
         case 2: return .monday
         case 3: return .tuesday
@@ -16,7 +16,7 @@ extension Date {
         default: return nil
         }
     }
-    
+
     func isFuture() -> Bool {
         return self > Date()
     }

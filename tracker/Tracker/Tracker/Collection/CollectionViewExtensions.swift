@@ -31,7 +31,7 @@ extension TrackerViewController: UICollectionViewDataSource {
         let count = categories[section].trackers.count
         return count
     }
-    
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         categories.count
     }
