@@ -116,6 +116,8 @@ final class ColorCell: UICollectionViewCell {
     private func setupView() {
         contentView.addSubview(colorView)
         contentView.addSubview(selectionView)
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
 
         NSLayoutConstraint.activate([
             colorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -125,7 +127,7 @@ final class ColorCell: UICollectionViewCell {
 
             selectionView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             selectionView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            selectionView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1.1),
+            selectionView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.95),
             selectionView.heightAnchor.constraint(equalTo: selectionView.widthAnchor),
         ])
     }
@@ -133,7 +135,6 @@ final class ColorCell: UICollectionViewCell {
     func configure(with color: UIColor, isSelected: Bool) {
         colorView.backgroundColor = color
         selectionView.isHidden = !isSelected
-        selectionView.layer.borderColor = color.cgColor
-        backgroundColor = isSelected ? color : .clear
+        selectionView.layer.borderColor = color.withAlphaComponent(0.6).cgColor
     }
 }
