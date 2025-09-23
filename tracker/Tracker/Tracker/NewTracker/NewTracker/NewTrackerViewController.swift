@@ -261,9 +261,11 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
     private func setupCollections() {
         colorCollection.onColorSelected = { [weak self] color in
             self?.selectedColor = color
+            self?.updateCreateButton()
         }
         emojiCollection.onEmojiSelected = { [weak self] emoji in
             self?.selectedEmoji = emoji
+            self?.updateCreateButton()
         }
 
         NSLayoutConstraint.activate([
@@ -315,8 +317,10 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
     private func updateCreateButton() {
         let isNameEmpty = nameTextField.text?.isEmpty ?? true
         let isScheduleEmpty = selectedSchedule.isEmpty
+        let isEmojiSelected = selectedEmoji != nil
+        let isColorSelected = selectedColor != nil
 
-        let isEnabled = !isNameEmpty && !isScheduleEmpty
+        let isEnabled = !isNameEmpty && !isScheduleEmpty && isEmojiSelected && isColorSelected
 
         createButton.isEnabled = isEnabled
         createButton.backgroundColor = isEnabled ? .ypBlack : .ypGray
