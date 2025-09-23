@@ -176,6 +176,10 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         nameTextField.leftView = leftPaddingView
         nameTextField.delegate = self
         scrollView.delegate = self
+        
+        scrollView.canCancelContentTouches = true
+        scrollView.delaysContentTouches = false
+        contentView.isUserInteractionEnabled = true
 
         addArrowToContainer(categoryContainer)
         addArrowToContainer(scheduleContainer)
@@ -264,11 +268,12 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
             emojiCollection.topAnchor.constraint(equalTo: scheduleContainer.bottomAnchor, constant: 32),
             emojiCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             emojiCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            emojiCollection.heightAnchor.constraint(equalToConstant: 200),
+            emojiCollection.heightAnchor.constraint(equalToConstant: 210),
             
             colorCollection.topAnchor.constraint(equalTo: emojiCollection.bottomAnchor, constant: 32),
             colorCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             colorCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            colorCollection.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -100),
             colorCollection.heightAnchor.constraint(equalToConstant: 200),
         ])
     }
