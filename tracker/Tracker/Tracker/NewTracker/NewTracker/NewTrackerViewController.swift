@@ -389,6 +389,9 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
     }
 
     private func createTracker() {
+        guard let title = nameTextField.text, !title.isEmpty else { return }
+        guard !selectedSchedule.isEmpty else { return }
+
         let tracker = Tracker(
             id: UUID(),
             title: title,
