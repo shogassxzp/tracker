@@ -21,3 +21,13 @@ extension Date {
         return self > Date()
     }
 }
+
+extension Weekday {
+    static func displayText(for days: [Weekday]) -> String {
+        if days.count == Weekday.allCases.count {
+            return "Каждый день"
+        } else {
+            return days.map { $0.shortName }.joined(separator: ", ")
+        }
+    }
+}

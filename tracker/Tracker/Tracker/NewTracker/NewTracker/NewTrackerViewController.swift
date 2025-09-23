@@ -176,7 +176,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         nameTextField.leftView = leftPaddingView
         nameTextField.delegate = self
         scrollView.delegate = self
-        
+
         scrollView.canCancelContentTouches = true
         scrollView.delaysContentTouches = false
         contentView.isUserInteractionEnabled = true
@@ -261,7 +261,9 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
     private func setupCollections() {
         colorCollection.onColorSelected = { [weak self] color in
             self?.selectedColor = color
-            print("Selected color: \(color)")
+        }
+        emojiCollection.onEmojiSelected = { [weak self] emoji in
+            self?.selectedEmoji = emoji
         }
 
         NSLayoutConstraint.activate([
@@ -269,7 +271,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
             emojiCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             emojiCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             emojiCollection.heightAnchor.constraint(equalToConstant: 210),
-            
+
             colorCollection.topAnchor.constraint(equalTo: emojiCollection.bottomAnchor, constant: 32),
             colorCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             colorCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -373,8 +375,8 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
 
         scheduleViewController.onDaysSelected = { [weak self] (selectedDays: [Weekday]) in
             self?.selectedSchedule = selectedDays
-            let shortDays = selectedDays.map { $0.shortName }
-            self?.updateScheduleSubtitle(shortDays.joined(separator: ", "))
+            let displayText = Weekday.displayText(for: selectedDays)
+            self?.updateScheduleSubtitle(displayText)
         }
 
         present(scheduleViewController, animated: true)
@@ -395,7 +397,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
             id: UUID(),
             title: title,
             color: selectedColor ?? .systemBlue,
-            emoji: "😇",
+            emoji: selectedEmoji ?? " ",
             schedule: selectedSchedule,
             isHabit: true
         )

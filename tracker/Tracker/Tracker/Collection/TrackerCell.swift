@@ -121,6 +121,7 @@ final class TrackerCell: UICollectionViewCell {
         
         completionButton.setImage(buttonImage, for: .normal)
         completionButton.backgroundColor = isCompleted ? color.withAlphaComponent(0.6) : color
+        completionButton.tintColor = isCompleted ? .white.withAlphaComponent(0.6) : .white
     }
 
     @objc private func completionButtonTapped() {
