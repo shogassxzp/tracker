@@ -1,7 +1,20 @@
 import UIKit
 
-final class NewTrackerViewController: UIViewController {
+final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
     private var selectedSchedule: [Weekday] = []
+
+    private var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.backgroundColor = .ypWhite
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+
+    private let contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
     private var emojiCollection = EmojiCollection()
     private var colorCollection = ColorCollection()
@@ -126,16 +139,23 @@ final class NewTrackerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
         view.backgroundColor = .ypWhite
-        addSubviews()
+        addSubviewsInScrollView()
         setupView()
         setupTextFieldObserver()
         setupKeyboardDismissal()
         setupCollections()
     }
 
-    private func addSubviews() {
-        [newHabitLabel, nameTextField, createButton, cancelButton, categoryContainer, separator, scheduleContainer].forEach {
+    private func addSubviewsInScrollView() {
+        [newHabitLabel, nameTextField, categoryContainer, separator, scheduleContainer, colorCollection, emojiCollection].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            contentView.addSubview($0)
+        }
+
+        [cancelButton, createButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -155,32 +175,44 @@ final class NewTrackerViewController: UIViewController {
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 1))
         nameTextField.leftView = leftPaddingView
         nameTextField.delegate = self
+        scrollView.delegate = self
 
         addArrowToContainer(categoryContainer)
         addArrowToContainer(scheduleContainer)
 
         NSLayoutConstraint.activate([
-            newHabitLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
-            newHabitLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+
+            newHabitLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            newHabitLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+
+            nameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            nameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             nameTextField.topAnchor.constraint(equalTo: newHabitLabel.bottomAnchor, constant: 24),
             nameTextField.heightAnchor.constraint(equalToConstant: 75),
 
             categoryContainer.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24),
-            categoryContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            categoryContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            categoryContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            categoryContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             categoryContainer.heightAnchor.constraint(equalToConstant: 75),
 
             separator.topAnchor.constraint(equalTo: categoryContainer.bottomAnchor),
-            separator.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            separator.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+            separator.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
+            separator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
             separator.heightAnchor.constraint(equalToConstant: 1),
 
             scheduleContainer.topAnchor.constraint(equalTo: separator.bottomAnchor, constant: 1),
-            scheduleContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            scheduleContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            scheduleContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            scheduleContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             scheduleContainer.heightAnchor.constraint(equalToConstant: 75),
 
             categoryButton.leadingAnchor.constraint(equalTo: categoryContainer.leadingAnchor),
@@ -223,23 +255,20 @@ final class NewTrackerViewController: UIViewController {
     }
 
     private func setupCollections() {
-        view.addSubview(colorCollection)
-        view.addSubview(emojiCollection)
-
         colorCollection.onColorSelected = { [weak self] color in
             self?.selectedColor = color
             print("Selected color: \(color)")
         }
 
         NSLayoutConstraint.activate([
-            colorCollection.topAnchor.constraint(equalTo: scheduleContainer.bottomAnchor, constant: 16),
-            colorCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            colorCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            colorCollection.topAnchor.constraint(equalTo: scheduleContainer.bottomAnchor, constant: 32),
+            colorCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            colorCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             colorCollection.heightAnchor.constraint(equalToConstant: 200),
 
-            emojiCollection.topAnchor.constraint(equalTo: colorCollection.bottomAnchor, constant: 16),
-            emojiCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            emojiCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            emojiCollection.topAnchor.constraint(equalTo: colorCollection.bottomAnchor, constant: 32),
+            emojiCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            emojiCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             emojiCollection.heightAnchor.constraint(equalToConstant: 200),
         ])
     }
