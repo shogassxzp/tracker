@@ -394,7 +394,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         let tracker = Tracker(
             id: UUID(),
             title: title,
-            color: .selectionDarkBlue,
+            color: selectedColor ?? .systemBlue,
             emoji: "😇",
             schedule: selectedSchedule,
             isHabit: true

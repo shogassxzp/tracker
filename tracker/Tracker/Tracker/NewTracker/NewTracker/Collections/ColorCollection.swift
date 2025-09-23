@@ -51,6 +51,7 @@ extension ColorCollection: UICollectionViewDelegateFlowLayout, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedIndexPath = indexPath
         let selectedColor = colors[indexPath.item]
+        onColorSelected?(selectedColor)
         collectionView.reloadData()
     }
 
@@ -124,7 +125,7 @@ final class ColorCell: UICollectionViewCell {
 
             selectionView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             selectionView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            selectionView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.95),
+            selectionView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1.1),
             selectionView.heightAnchor.constraint(equalTo: selectionView.widthAnchor),
         ])
     }
@@ -132,5 +133,7 @@ final class ColorCell: UICollectionViewCell {
     func configure(with color: UIColor, isSelected: Bool) {
         colorView.backgroundColor = color
         selectionView.isHidden = !isSelected
+        selectionView.layer.borderColor = color.cgColor
+        backgroundColor = isSelected ? color : .clear
     }
 }

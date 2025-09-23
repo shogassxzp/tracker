@@ -94,7 +94,7 @@ final class TrackerCell: UICollectionViewCell {
         self.currentDate = date
         self.onCompletion = onCompletion
         
-        contentContainer.backgroundColor = .selectionDarkBlue //tracker.color
+        contentContainer.backgroundColor = tracker.color
         titleLabel.text = tracker.title
         titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
         titleLabel.textColor = .ypWhite
@@ -120,8 +120,7 @@ final class TrackerCell: UICollectionViewCell {
         UIImage(systemName: "plus")
         
         completionButton.setImage(buttonImage, for: .normal)
-        completionButton.backgroundColor = isCompleted ? .selectionDarkBlue.withAlphaComponent(0.6) : .selectionDarkBlue
-        completionButton.tintColor = isCompleted ? .white.withAlphaComponent(0.6) : .white //tracker.color
+        completionButton.backgroundColor = isCompleted ? color.withAlphaComponent(0.6) : color
     }
 
     @objc private func completionButtonTapped() {
