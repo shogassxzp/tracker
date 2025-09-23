@@ -46,7 +46,7 @@ final class TrackerCell: UICollectionViewCell {
         completionButton.layer.cornerRadius = 17
         emojiContainer.layer.masksToBounds = true
         emojiContainer.layer.cornerRadius = 12
-        emojiContainer.backgroundColor = .white.withAlphaComponent(0.3)
+        emojiContainer.backgroundColor = .ypWhite.withAlphaComponent(0.3)
         
         completionButton.addTarget(self, action: #selector(completionButtonTapped), for: .touchUpInside)
         
@@ -97,14 +97,14 @@ final class TrackerCell: UICollectionViewCell {
         contentContainer.backgroundColor = .selectionDarkBlue //tracker.color
         titleLabel.text = tracker.title
         titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
-        titleLabel.textColor = .white
+        titleLabel.textColor = .ypWhite
         emojiLabel.font = .systemFont(ofSize: 16,weight: .medium)
         emojiLabel.text = String(tracker.emoji)
         
-        footerContainer.backgroundColor = .whiteDay
+        footerContainer.backgroundColor = .ypWhite
 
         daysLabel.text = "\(completionCount) дней"
-        daysLabel.textColor = .blackDay
+        daysLabel.textColor = .ypBlack
         daysLabel.font = .systemFont(ofSize: 12, weight: .medium)
         
         let actuallyCompleted = TrackerStore.shared.isCompleted(

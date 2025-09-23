@@ -10,7 +10,7 @@ final class OnboardingContentViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 32, weight: .bold)
-        label.textColor = .blackDay
+        label.textColor = .ypBlack
         label.textAlignment = .center
         label.numberOfLines = 2
         return label
@@ -32,7 +32,7 @@ final class OnboardingContentViewController: UIViewController {
     }
 
     private func setupView() {
-        view.backgroundColor = .whiteDay
+        view.backgroundColor = .ypWhite
         [imageView, titleLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)

@@ -43,12 +43,12 @@ extension TrackerViewController: UICollectionViewDataSource {
                 ofKind: kind,
                 withReuseIdentifier: "header",
                 for: indexPath
-            ) as! HeaderView
+            ) as? HeaderView
 
-            header.titleLabel.text = categories[indexPath.section].title
-            header.titleLabel.font = .systemFont(ofSize: 19, weight: .bold)
+            header?.titleLabel.text = categories[indexPath.section].title
+            header?.titleLabel.font = .systemFont(ofSize: 19, weight: .bold)
 
-            return header
+            return header ?? UICollectionReusableView()
         }
         return UICollectionReusableView()
     }

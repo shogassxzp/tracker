@@ -4,12 +4,13 @@ final class OnboardingViewController: UIPageViewController {
     
     private var pages: [UIViewController] = []
     private var currentPageIndex = 0
+    var onCompletion: (() -> Void)?
     
     private let pageControl: UIPageControl = {
         let control = UIPageControl()
         control.numberOfPages = 2
         control.currentPage = 0
-        control.currentPageIndicatorTintColor = .blackDay
+        control.currentPageIndicatorTintColor = .ypBlack
         control.pageIndicatorTintColor = .ypGray
         return control
     }()
@@ -18,8 +19,8 @@ final class OnboardingViewController: UIPageViewController {
         let button = UIButton(type: .system)
         button.setTitle("Вот это технологии!", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        button.backgroundColor = .blackDay
-        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .ypBlack
+        button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = 16
         button.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         return button
@@ -50,7 +51,7 @@ final class OnboardingViewController: UIPageViewController {
     }
     
     private func setupView() {
-        view.backgroundColor = .whiteDay
+        view.backgroundColor = .ypWhite
         
         view.addSubview(pageControl)
         view.addSubview(nextButton)
@@ -70,21 +71,7 @@ final class OnboardingViewController: UIPageViewController {
     }
     
     @objc private func nextButtonTapped() {
-        completeOnboarding()
-            guard let window = UIApplication.shared.windows.first else {
-                assertionFailure("Неправильная настройка окна")
-                return
-            }
-            let tabBarController = TabBarController()
-
-            window.rootViewController = tabBarController
-    }
-    
-    private func completeOnboarding() {
-        UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
-        let tabBarController = TabBarController()
-        tabBarController.modalPresentationStyle = .fullScreen
-        present(tabBarController, animated: true)
+        onCompletion?()
     }
 }
 
