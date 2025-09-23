@@ -261,15 +261,15 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         }
 
         NSLayoutConstraint.activate([
-            colorCollection.topAnchor.constraint(equalTo: scheduleContainer.bottomAnchor, constant: 32),
-            colorCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            colorCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            colorCollection.heightAnchor.constraint(equalToConstant: 200),
-
-            emojiCollection.topAnchor.constraint(equalTo: colorCollection.bottomAnchor, constant: 32),
+            emojiCollection.topAnchor.constraint(equalTo: scheduleContainer.bottomAnchor, constant: 32),
             emojiCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             emojiCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             emojiCollection.heightAnchor.constraint(equalToConstant: 200),
+            
+            colorCollection.topAnchor.constraint(equalTo: emojiCollection.bottomAnchor, constant: 32),
+            colorCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            colorCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            colorCollection.heightAnchor.constraint(equalToConstant: 200),
         ])
     }
 

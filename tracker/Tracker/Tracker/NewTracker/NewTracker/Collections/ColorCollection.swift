@@ -26,6 +26,7 @@ final class ColorCollection: UICollectionView {
         delegate = self
         dataSource = self
         register(ColorCell.self, forCellWithReuseIdentifier: "ColorCell")
+        register(HeaderViewNewTracker.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerNewTracker")
         allowsMultipleSelection = false
         translatesAutoresizingMaskIntoConstraints = false
     }
@@ -46,19 +47,40 @@ extension ColorCollection: UICollectionViewDelegateFlowLayout, UICollectionViewD
 
         return cell
     }
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            selectedIndexPath = indexPath
-            let selectedColor = colors[indexPath.item]
-            collectionView.reloadData()
-        }
-    
+        selectedIndexPath = indexPath
+        let selectedColor = colors[indexPath.item]
+        collectionView.reloadData()
+    }
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            let spacing: CGFloat = 5
-            let totalWidth = collectionView.bounds.width
-            let itemsPerRow: CGFloat = 6
-            let totalSpacing = spacing * (itemsPerRow - 1)
-            let itemWidth = (totalWidth - totalSpacing) / itemsPerRow
+        let spacing: CGFloat = 5
+        let totalWidth = collectionView.bounds.width
+        let itemsPerRow: CGFloat = 6
+        let totalSpacing = spacing * (itemsPerRow - 1)
+        let itemWidth = (totalWidth - totalSpacing) / itemsPerRow
         return CGSize(width: itemWidth, height: itemWidth / 1.25)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: "headerNewTracker",
+                for: indexPath
+            ) as? HeaderViewNewTracker
+            
+            header?.titleLabel.text = "Цвет"
+            header?.titleLabel.font = .systemFont(ofSize: 19, weight: .bold)
+
+            return header ?? UICollectionReusableView()
+        }
+        return UICollectionReusableView()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+            return CGSize(width: collectionView.bounds.width, height: 25) 
         }
 }
 
@@ -106,7 +128,7 @@ final class ColorCell: UICollectionViewCell {
             selectionView.heightAnchor.constraint(equalTo: selectionView.widthAnchor),
         ])
     }
-    
+
     func configure(with color: UIColor, isSelected: Bool) {
         colorView.backgroundColor = color
         selectionView.isHidden = !isSelected

@@ -29,6 +29,7 @@ final class EmojiCollection: UICollectionView {
         delegate = self
         dataSource = self
         register(EmojiCell.self, forCellWithReuseIdentifier: "EmojiCell")
+        register(HeaderViewNewTracker.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerNewTracker")
         backgroundColor = .clear
         allowsMultipleSelection = false
         translatesAutoresizingMaskIntoConstraints = false
@@ -50,6 +51,25 @@ extension EmojiCollection: UICollectionViewDataSource {
 
         return cell
     }
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: "headerNewTracker",
+                for: indexPath
+            ) as? HeaderViewNewTracker
+            
+            header?.titleLabel.text = "Эмодзи"
+            header?.titleLabel.font = .systemFont(ofSize: 19, weight: .bold)
+
+            return header ?? UICollectionReusableView()
+        }
+        return UICollectionReusableView()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+            return CGSize(width: collectionView.bounds.width, height: 25)
+        }
 }
 
 extension EmojiCollection: UICollectionViewDelegate {
