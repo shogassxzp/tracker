@@ -392,16 +392,18 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         guard let title = nameTextField.text, !title.isEmpty else { return }
         guard !selectedSchedule.isEmpty else { return }
 
+        let category = TrackerCategory(id: UUID(), title: "Домашний уют")
         let tracker = Tracker(
             id: UUID(),
             title: title,
             color: selectedColor ?? .systemBlue,
-            emoji: selectedEmoji ?? " ",
+            emoji: selectedEmoji.map { String($0) } ?? " ",
             schedule: selectedSchedule,
-            isHabit: true
+            isHabit: true,
+            category: category
         )
 
-        TrackerStore.shared.addTracker(tracker, toCategoryTitle: "Домашний уют")
+        TrackerStoree.shared.addTracker(tracker, toCategoryTitle: "Домашний уют")
 
         NotificationCenter.default.post(
             name: NSNotification.Name("TrackerAdded"),

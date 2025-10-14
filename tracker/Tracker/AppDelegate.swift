@@ -1,3 +1,4 @@
+import CoreData
 import UIKit
 
 @main
@@ -5,18 +6,18 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        if TrackerStore.shared.getCategories().isEmpty {
+        if TrackerStoree.shared.getCategories().isEmpty {
             let defaultCategory = TrackerCategory(
-                id: UUID().uuidString,
+                id: UUID(),
                 title: "Важное",
                 trackers: []
             )
-            TrackerStore.shared.setCategories([defaultCategory])
+            TrackerStoree.shared.setCategories([defaultCategory])
         }
+        _ = Dependencies.shared.coreDataStack
+
         return true
     }
-
-    // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         let sceneConfiguration = UISceneConfiguration(
@@ -25,5 +26,17 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         sceneConfiguration.delegateClass = SceneDelegate.self
         return sceneConfiguration
+    }
+
+    func saveContext() {
+        Dependencies.shared.coreDataStack.saveContex()
+    }
+
+    func applicationWillTerminate(_ application: UIApplication) {
+        saveContext()
+    }
+
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        saveContext()
     }
 }

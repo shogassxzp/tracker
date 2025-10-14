@@ -65,6 +65,12 @@ final class TrackerViewController: UIViewController {
         showEmptyStateIfNeeded()
         loadCategories()
         loadCompletedTrackers()
+        let context = Dependencies.shared.coreDataStack.viewContext
+            print("Core Data context is ready: \(context)")
+            
+            // Проверяем что Store Description загружены
+            let container = Dependencies.shared.coreDataStack.persistentContainer
+            print("Loaded stores: \(container.persistentStoreDescriptions)")
     }
 
     private func addSubview() {
@@ -141,20 +147,20 @@ final class TrackerViewController: UIViewController {
     }
 
     private func loadTrackers() {
-        let allCategories = TrackerStore.shared.getCategories()
+        let allCategories = TrackerStoree.shared.getCategories()
 
         let filteredCategories = allCategories.map { category in
             let filteredTrackers = category.trackers.filter { tracker in
-                guard tracker.isHabit else {
+                if tracker.isHabit {
+                    let schedule = tracker.schedule
+                    if let weekday = currentDate.weekday() {
+                        let shouldShow = schedule.contains(weekday)
+                        return shouldShow
+                    }
+                    return false
+                } else {
                     return true
                 }
-
-                if let schedule = tracker.schedule, let weekday = currentDate.weekday() {
-                    let shouldShow = schedule.contains(weekday)
-                    return shouldShow
-                }
-
-                return false
             }
             return TrackerCategory(
                 id: category.id,
@@ -176,15 +182,15 @@ final class TrackerViewController: UIViewController {
     }
 
     private func loadCategories() {
-        let allCategories = TrackerStore.shared.getCategories()
+        let allCategories = TrackerStoree.shared.getCategories()
 
         if allCategories.isEmpty {
             let defaultCategory = TrackerCategory(
-                id: UUID().uuidString,
+                id: UUID(),
                 title: "Домашний уют",
                 trackers: []
             )
-            TrackerStore.shared.setCategories([defaultCategory])
+            TrackerStoree.shared.setCategories([defaultCategory])
             categories = [defaultCategory]
         } else {
             categories = allCategories
@@ -194,8 +200,8 @@ final class TrackerViewController: UIViewController {
     }
 
     private func loadCompletedTrackers() {
-        let records = TrackerStore.shared.getAllRecords()
-        completedTrackers = Set(records.map { UUID(uuidString: $0.trackerId) ?? UUID() })
+        let records = TrackerStoree.shared.getAllRecords()
+        completedTrackers = Set(records.map { ($0.trackerId) })
     }
 
     private func setupNotifications() {
@@ -214,14 +220,14 @@ final class TrackerViewController: UIViewController {
     func handleTrackerCompletion(trackerId: UUID, date: Date, isCompleted: Bool) {
         if isCompleted {
             let record = TrackerRecord(
-                id: UUID().uuidString,
-                trackerId: trackerId.uuidString,
+                id: UUID(),
+                trackerId: trackerId,
                 date: date
             )
-            TrackerStore.shared.addRecord(record)
+            TrackerStoree.shared.addRecord(record)
             completedTrackers.insert(trackerId)
         } else {
-            TrackerStore.shared.removeRecord(trackerId: trackerId.uuidString, date: date)
+            TrackerStoree.shared.removeRecord(trackerId: trackerId, date: date)
             completedTrackers.remove(trackerId)
         }
 
@@ -258,3 +264,4 @@ final class TrackerViewController: UIViewController {
         }
     }
 }
+

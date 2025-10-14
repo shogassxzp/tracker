@@ -1,7 +1,7 @@
 import UIKit
 
-final class TrackerStore {
-    static let shared = TrackerStore()
+final class TrackerStoree {
+    static let shared = TrackerStoree()
 
     private init() { }
 
@@ -22,7 +22,7 @@ final class TrackerStore {
             categories = updatedCategories
         } else {
             let newCategory = TrackerCategory(
-                id: UUID().uuidString,
+                id: UUID(),
                 title: categoryTitle,
                 trackers: [tracker]
             )
@@ -54,19 +54,19 @@ final class TrackerStore {
         trackerRecords.append(record)
     }
 
-    func removeRecord(trackerId: String, date: Date) {
+    func removeRecord(trackerId: UUID, date: Date) {
         trackerRecords.removeAll { $0.trackerId == trackerId && Calendar.current.isDate($0.date, inSameDayAs: date)
         }
     }
 
-    func isCompleted(trackerId: String, date: Date) -> Bool {
+    func isCompleted(trackerId: UUID, date: Date) -> Bool {
         return trackerRecords.contains {
             $0.trackerId == trackerId &&
                 Calendar.current.isDate($0.date, inSameDayAs: date)
         }
     }
 
-    func completionCount(trackerId: String) -> Int {
+    func completionCount(trackerId: UUID) -> Int {
         return trackerRecords.filter { $0.trackerId == trackerId }.count
     }
 

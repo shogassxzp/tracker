@@ -8,7 +8,7 @@ extension TrackerViewController: UICollectionViewDataSource {
         cell.prepareForReuse()
         let tracker = categories[indexPath.section].trackers[indexPath.item]
         let isCompleted = completedTrackers.contains(tracker.id)
-        let completionCount = TrackerStore.shared.completionCount(trackerId: tracker.id.uuidString)
+        let completionCount = TrackerStoree.shared.completionCount(trackerId: tracker.id)
 
         cell.configure(
             with: tracker,
@@ -37,7 +37,7 @@ extension TrackerViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let categories = TrackerStore.shared.getCategories()
+        let categories = TrackerStoree.shared.getCategories()
         if kind == UICollectionView.elementKindSectionHeader {
             let header = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,

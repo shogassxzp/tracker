@@ -4,7 +4,7 @@ final class TrackerCell: UICollectionViewCell {
     static let identifier = "habit"
 
     private let contentContainer = UIView()
-    private var trackerId: String?
+    private var trackerId: UUID?
     private var currentDate: Date?
 
     private let titleLabel = UILabel()
@@ -90,7 +90,7 @@ final class TrackerCell: UICollectionViewCell {
                    completionCount: Int,
                    onCompletion: ((String, Date, Bool) -> Void)? = nil
     ) {
-        trackerId = tracker.id.uuidString
+        trackerId = tracker.id
         currentDate = date
         self.onCompletion = onCompletion
 
@@ -107,8 +107,8 @@ final class TrackerCell: UICollectionViewCell {
         daysLabel.textColor = .ypBlack
         daysLabel.font = .systemFont(ofSize: 12, weight: .medium)
 
-        let actuallyCompleted = TrackerStore.shared.isCompleted(
-            trackerId: tracker.id.uuidString,
+        let actuallyCompleted = TrackerStoree.shared.isCompleted(
+            trackerId: tracker.id,
             date: date)
 
         updateCompletionButton(isCompleted: actuallyCompleted, color: tracker.color)
@@ -132,7 +132,7 @@ final class TrackerCell: UICollectionViewCell {
             return
         }
 
-        let currentlyCompleted = TrackerStore.shared.isCompleted(trackerId: trackerId, date: date)
-        onCompletion?(trackerId, date, !currentlyCompleted)
+        let currentlyCompleted = TrackerStoree.shared.isCompleted(trackerId: trackerId, date: date)
+        onCompletion?(trackerId.uuidString, date, !currentlyCompleted)
     }
 }
