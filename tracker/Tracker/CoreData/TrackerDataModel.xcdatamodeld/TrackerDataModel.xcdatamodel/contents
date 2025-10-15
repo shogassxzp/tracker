@@ -3,7 +3,7 @@
     <entity name="TrackerCategoryEntity" representedClassName="TrackerCategoryEntity" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
-        <relationship name="trackers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerEntity" inverseName="categoryy" inverseEntity="TrackerEntity"/>
+        <relationship name="trackers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerEntity" inverseName="categoryr" inverseEntity="TrackerEntity"/>
     </entity>
     <entity name="TrackerEntity" representedClassName="TrackerEntity" syncable="YES" codeGenerationType="class">
         <attribute name="category" optional="YES" attributeType="String"/>
@@ -13,7 +13,7 @@
         <attribute name="isHabit" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="schedule" optional="YES" attributeType="Transformable"/>
         <attribute name="title" optional="YES" attributeType="String"/>
-        <relationship name="categoryy" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerCategoryEntity" inverseName="trackers" inverseEntity="TrackerCategoryEntity"/>
+        <relationship name="categoryr" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerCategoryEntity" inverseName="trackers" inverseEntity="TrackerCategoryEntity"/>
         <relationship name="records" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerRecordEntity" inverseName="trackers" inverseEntity="TrackerRecordEntity"/>
     </entity>
     <entity name="TrackerRecordEntity" representedClassName="TrackerRecordEntity" syncable="YES" codeGenerationType="class">

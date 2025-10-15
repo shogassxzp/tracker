@@ -389,21 +389,41 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
     }
 
     private func createTracker() {
-        guard let title = nameTextField.text, !title.isEmpty else { return }
-        guard !selectedSchedule.isEmpty else { return }
+        guard let title = nameTextField.text, !title.isEmpty else {
+            return
+        }
+        guard !selectedSchedule.isEmpty else {
+            return
+        }
+        guard let selectedColor = selectedColor else {
+            return
+        }
+        guard let selectedEmoji = selectedEmoji else {
+            return
+        }
 
         let category = TrackerCategory(id: UUID(), title: "Домашний уют")
         let tracker = Tracker(
             id: UUID(),
             title: title,
-            color: selectedColor ?? .systemBlue,
-            emoji: selectedEmoji.map { String($0) } ?? " ",
+            color: selectedColor,
+            emoji: String(selectedEmoji),
             schedule: selectedSchedule,
             isHabit: true,
             category: category
         )
 
-        TrackerStoree.shared.addTracker(tracker, toCategoryTitle: "Домашний уют")
+        do {
+            let trackerStore = Dependencies.shared.trackerStore
+            try trackerStore.addTracker(tracker, to: category)
+            print("Трекер создан через Core Data: \(title)")
+            
+            dismiss(animated: true)
+        } catch {
+            print("Oшибка создания трекера: \(error)")
+        }
+    
+        
 
         NotificationCenter.default.post(
             name: NSNotification.Name("TrackerAdded"),

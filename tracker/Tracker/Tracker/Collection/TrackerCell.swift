@@ -76,8 +76,8 @@ final class TrackerCell: UICollectionViewCell {
             daysLabel.leadingAnchor.constraint(equalTo: footerContainer.leadingAnchor, constant: 12),
             daysLabel.centerYAnchor.constraint(equalTo: footerContainer.centerYAnchor),
 
-            completionButton.widthAnchor.constraint(equalToConstant: 34),
-            completionButton.heightAnchor.constraint(equalToConstant: 34),
+            completionButton.widthAnchor.constraint(equalToConstant: 32),
+            completionButton.heightAnchor.constraint(equalToConstant: 32),
             completionButton.trailingAnchor.constraint(equalTo: footerContainer.trailingAnchor),
             completionButton.centerYAnchor.constraint(equalTo: footerContainer.centerYAnchor),
 
@@ -107,11 +107,7 @@ final class TrackerCell: UICollectionViewCell {
         daysLabel.textColor = .ypBlack
         daysLabel.font = .systemFont(ofSize: 12, weight: .medium)
 
-        let actuallyCompleted = TrackerStoree.shared.isCompleted(
-            trackerId: tracker.id,
-            date: date)
-
-        updateCompletionButton(isCompleted: actuallyCompleted, color: tracker.color)
+        updateCompletionButton(isCompleted: isCompleted, color: tracker.color)
     }
 
     private func updateCompletionButton(isCompleted: Bool, color: UIColor) {
@@ -132,7 +128,7 @@ final class TrackerCell: UICollectionViewCell {
             return
         }
 
-        let currentlyCompleted = TrackerStoree.shared.isCompleted(trackerId: trackerId, date: date)
-        onCompletion?(trackerId.uuidString, date, !currentlyCompleted)
+        let currentlyCompleted = completionButton.backgroundColor?.withAlphaComponent(0.6)
+        onCompletion?(trackerId.uuidString, date, (currentlyCompleted == nil))
     }
 }

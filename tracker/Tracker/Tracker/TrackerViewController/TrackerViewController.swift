@@ -66,11 +66,10 @@ final class TrackerViewController: UIViewController {
         loadCategories()
         loadCompletedTrackers()
         let context = Dependencies.shared.coreDataStack.viewContext
-            print("Core Data context is ready: \(context)")
-            
-            // Проверяем что Store Description загружены
-            let container = Dependencies.shared.coreDataStack.persistentContainer
-            print("Loaded stores: \(container.persistentStoreDescriptions)")
+        print("Core Data context is ready: \(context)")
+
+        let container = Dependencies.shared.coreDataStack.persistentContainer
+        print("Loaded stores: \(container.persistentStoreDescriptions)")
     }
 
     private func addSubview() {
@@ -147,10 +146,11 @@ final class TrackerViewController: UIViewController {
     }
 
     private func loadTrackers() {
-        let allCategories = TrackerStoree.shared.getCategories()
+        do {
+            let trackerStore = Dependencies.shared.trackerStore
+            let allTrackers = try trackerStore.fetchTrackers()
 
-        let filteredCategories = allCategories.map { category in
-            let filteredTrackers = category.trackers.filter { tracker in
+            let filteredTrackers = allTrackers.filter { tracker in
                 if tracker.isHabit {
                     let schedule = tracker.schedule
                     if let weekday = currentDate.weekday() {
@@ -162,15 +162,23 @@ final class TrackerViewController: UIViewController {
                     return true
                 }
             }
-            return TrackerCategory(
-                id: category.id,
-                title: category.title,
-                trackers: filteredTrackers
-            )
-        }.filter { !$0.trackers.isEmpty }
 
-        categories = filteredCategories
+            let groupedTrackers = Dictionary(grouping: filteredTrackers) { $0.category.title }
 
+            let filteredCategories = groupedTrackers.map { title, trackers in
+                let originalCategory = allTrackers.first { $0.category.title == title }?.category
+                return TrackerCategory(
+                    id: originalCategory?.id ?? UUID(),
+                    title: title,
+                    trackers: trackers
+                )
+            }.filter { !$0.trackers.isEmpty }
+
+            categories = filteredCategories
+        } catch {
+            print("Ошибка загрузки трекеров: \(error)")
+            categories = []
+        }
         habitsCollectionView.reloadData()
         showEmptyStateIfNeeded()
     }
@@ -182,27 +190,55 @@ final class TrackerViewController: UIViewController {
     }
 
     private func loadCategories() {
-        let allCategories = TrackerStoree.shared.getCategories()
+        do {
+            let trackerStore = Dependencies.shared.trackerStore
+            let allTrackers = try trackerStore.fetchTrackers()
+            let groupedTrackers = Dictionary(grouping: allTrackers) { $0.category.title }
 
-        if allCategories.isEmpty {
-            let defaultCategory = TrackerCategory(
-                id: UUID(),
-                title: "Домашний уют",
-                trackers: []
-            )
-            TrackerStoree.shared.setCategories([defaultCategory])
-            categories = [defaultCategory]
-        } else {
-            categories = allCategories
+            let newCategories = groupedTrackers.map { title, trackers in
+                let categoryId = trackers.first?.category.id ?? UUID()
+                return TrackerCategory(
+                    id: categoryId,
+                    title: title,
+                    trackers: trackers
+                )
+            }.sorted { $0.title < $1.title }
+
+            if newCategories.isEmpty {
+                let defaultCategory = TrackerCategory(
+                    id: UUID(),
+                    title: "Домашний уют",
+                    trackers: []
+                )
+                categories = [defaultCategory]
+            } else {
+                categories = newCategories
+            }
+            loadTrackers()
+        } catch {
+            print("Ошибка загрузки категорий: \(error)")
+            categories = [
+                TrackerCategory(
+                    id: UUID(),
+                    title: "Домашний уют",
+                    trackers: []
+                )
+            ]
+            loadTrackers()
         }
-
-        loadTrackers()
     }
 
     private func loadCompletedTrackers() {
-        let records = TrackerStoree.shared.getAllRecords()
-        completedTrackers = Set(records.map { ($0.trackerId) })
+        do {
+            let records = try Dependencies.shared.recordStore.fetchRecords()
+            completedTrackers = Set(records.map { $0.trackerId })
+        } catch {
+            print("Ошибка загрузки записей: \(error)")
+            completedTrackers = []
+        }
     }
+
+
 
     private func setupNotifications() {
         NotificationCenter.default.addObserver(
@@ -218,20 +254,40 @@ final class TrackerViewController: UIViewController {
     }
 
     func handleTrackerCompletion(trackerId: UUID, date: Date, isCompleted: Bool) {
-        if isCompleted {
-            let record = TrackerRecord(
-                id: UUID(),
-                trackerId: trackerId,
-                date: date
-            )
-            TrackerStoree.shared.addRecord(record)
-            completedTrackers.insert(trackerId)
-        } else {
-            TrackerStoree.shared.removeRecord(trackerId: trackerId, date: date)
-            completedTrackers.remove(trackerId)
-        }
+        do {
+            let recordStore = Dependencies.shared.recordStore
 
-        habitsCollectionView.reloadData()
+            if isCompleted {
+                let record = TrackerRecord(
+                    id: UUID(),
+                    trackerId: trackerId,
+                    date: date
+                )
+                try recordStore.addRecord(record)
+                completedTrackers.insert(trackerId)
+            } else {
+                let records = try recordStore.fetchRecords(for:
+                    Tracker(
+                        id: trackerId,
+                        title: "",
+                        color: .systemBlue,
+                        emoji: "",
+                        schedule: [],
+                        isHabit: true,
+                        category: TrackerCategory(
+                            id: UUID(),
+                            title: ""))
+                )
+                if let recordToDelete = records.first(where: { Calendar.current.isDate($0.date, inSameDayAs: date) }) {
+                    try recordStore.deleteRecord(recordToDelete)
+                }
+                completedTrackers.remove(trackerId)
+            }
+
+            habitsCollectionView.reloadData()
+        } catch {
+            print("Ошибка обновления записи: \(error)")
+        }
     }
 
     @objc private func newTracker() {
@@ -264,4 +320,10 @@ final class TrackerViewController: UIViewController {
         }
     }
 }
+
+// extension TrackerViewController: TrackerStoreDelegate {
+//    func didUpdateTrackers(_ trackers: [Tracker]) {
+//        print("trackers updated to \(trackers.count)")
+//    }
+// }
 
