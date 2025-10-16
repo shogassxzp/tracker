@@ -5,10 +5,19 @@ extension TrackerViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCell.identifier, for: indexPath) as? TrackerCell else {
             return UICollectionViewCell()
         }
+
         cell.prepareForReuse()
         let tracker = categories[indexPath.section].trackers[indexPath.item]
-        let isCompleted = completedTrackers.contains(tracker.id)
+        let isCompleted: Bool
+
+        do {
+            isCompleted = try Dependencies.shared.recordStore.isTrackerCompleted(tracker.id, on: currentDate)
+        } catch {
+            isCompleted = completedTrackers.contains(tracker.id)
+        }
+
         let completionCount: Int
+
         do {
             completionCount = try Dependencies.shared.recordStore.countRecords(for: tracker)
         } catch {

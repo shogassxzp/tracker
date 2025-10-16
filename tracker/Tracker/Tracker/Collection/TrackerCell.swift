@@ -43,7 +43,7 @@ final class TrackerCell: UICollectionViewCell {
         contentContainer.layer.cornerRadius = 16
         footerContainer.layer.masksToBounds = true
         completionButton.layer.masksToBounds = true
-        completionButton.layer.cornerRadius = 17
+        completionButton.layer.cornerRadius = 16
         emojiContainer.layer.masksToBounds = true
         emojiContainer.layer.cornerRadius = 12
         emojiContainer.backgroundColor = .ypWhite.withAlphaComponent(0.3)
@@ -70,16 +70,16 @@ final class TrackerCell: UICollectionViewCell {
 
             footerContainer.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
             footerContainer.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
-            footerContainer.heightAnchor.constraint(equalToConstant: 50),
+            footerContainer.heightAnchor.constraint(equalToConstant: 55),
             footerContainer.topAnchor.constraint(equalTo: contentContainer.bottomAnchor),
 
             daysLabel.leadingAnchor.constraint(equalTo: footerContainer.leadingAnchor, constant: 12),
-            daysLabel.centerYAnchor.constraint(equalTo: footerContainer.centerYAnchor),
+            daysLabel.centerYAnchor.constraint(equalTo: footerContainer.centerYAnchor,constant: -5),
 
             completionButton.widthAnchor.constraint(equalToConstant: 32),
             completionButton.heightAnchor.constraint(equalToConstant: 32),
-            completionButton.trailingAnchor.constraint(equalTo: footerContainer.trailingAnchor),
-            completionButton.centerYAnchor.constraint(equalTo: footerContainer.centerYAnchor),
+            completionButton.trailingAnchor.constraint(equalTo: footerContainer.trailingAnchor, constant: -5),
+            completionButton.centerYAnchor.constraint(equalTo: footerContainer.centerYAnchor, constant: -5),
 
         ])
     }
@@ -103,7 +103,7 @@ final class TrackerCell: UICollectionViewCell {
 
         footerContainer.backgroundColor = .ypWhite
 
-        daysLabel.text = "\(completionCount) дней"
+        daysLabel.text = formattedDaysText(completionCount)
         daysLabel.textColor = .ypBlack
         daysLabel.font = .systemFont(ofSize: 12, weight: .medium)
 
@@ -128,7 +128,23 @@ final class TrackerCell: UICollectionViewCell {
             return
         }
 
-        let currentlyCompleted = completionButton.backgroundColor?.withAlphaComponent(0.6)
-        onCompletion?(trackerId.uuidString, date, (currentlyCompleted == nil))
+        let isCurrentlyCompleted = completionButton.backgroundColor?.cgColor.alpha ?? 1.0 < 1.0
+            let newCompletionState = !isCurrentlyCompleted
+            onCompletion?(trackerId.uuidString, date, newCompletionState)
+        }
+    
+    private func formattedDaysText(_ count: Int) -> String {
+        let remainder = count % 10
+        let remainder100 = count % 100
+        
+        if remainder100 >= 11 && remainder100 <= 19 {
+            return "\(count) дней"
+        } else if remainder == 1 {
+            return "\(count) день"
+        } else if remainder >= 2 && remainder <= 4 {
+            return "\(count) дня"
+        } else {
+            return "\(count) дней"
+        }
     }
 }

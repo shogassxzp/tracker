@@ -416,21 +416,10 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         do {
             let trackerStore = Dependencies.shared.trackerStore
             try trackerStore.addTracker(tracker, to: category)
-            print("Трекер создан через Core Data: \(title)")
-            
             dismiss(animated: true)
         } catch {
-            print("Oшибка создания трекера: \(error)")
+            dismiss(animated: true)
         }
-    
-        
-
-        NotificationCenter.default.post(
-            name: NSNotification.Name("TrackerAdded"),
-            object: nil
-        )
-
-        dismiss(animated: true)
     }
 
     @objc private func createButtonTapped() {

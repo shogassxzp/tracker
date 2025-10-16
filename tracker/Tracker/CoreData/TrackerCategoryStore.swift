@@ -19,7 +19,7 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
         let categoryEntity = TrackerCategoryEntity(context: context)
         categoryEntity.id = category.id
         categoryEntity.title = category.title
-        try context.save()
+        Dependencies.shared.coreDataStack.saveContext()
     }
 
     func fetchCategories() throws -> [TrackerCategory] {
@@ -41,7 +41,7 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
 
         if let categoryEntity = try context.fetch(fetchRequest).first {
             categoryEntity.title = category.title
-            try context.save()
+            Dependencies.shared.coreDataStack.saveContext()
         }
     }
 
@@ -51,7 +51,7 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
 
         if let categoryEntity = try context.fetch(fetchRequest).first {
             context.delete(categoryEntity)
-            try context.save()
+            Dependencies.shared.coreDataStack.saveContext()
         }
     }
 }

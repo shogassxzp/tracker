@@ -23,7 +23,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func saveContext() {
-        Dependencies.shared.coreDataStack.saveContex()
+        Dependencies.shared.coreDataStack.saveContext()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

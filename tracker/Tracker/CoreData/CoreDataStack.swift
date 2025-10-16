@@ -25,20 +25,21 @@ final class CoreDataStack {
         self.modelName = modelName
     }
 
-    func saveContex() {
+    func saveContext() {
         let context = viewContext
 
         guard context.hasChanges else { return }
 
         do {
             try context.save()
-            print("context saved")
         } catch {
             context.rollback()
         }
     }
 
     func backgroundContext() -> NSManagedObjectContext {
-        return persistentContainer.newBackgroundContext()
+        let context = persistentContainer.newBackgroundContext()
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        return context
     }
 }

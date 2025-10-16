@@ -14,12 +14,12 @@
         <attribute name="schedule" optional="YES" attributeType="Transformable"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="categoryr" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerCategoryEntity" inverseName="trackers" inverseEntity="TrackerCategoryEntity"/>
-        <relationship name="records" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerRecordEntity" inverseName="trackers" inverseEntity="TrackerRecordEntity"/>
+        <relationship name="records" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TrackerRecordEntity" inverseName="trackers" inverseEntity="TrackerRecordEntity"/>
     </entity>
     <entity name="TrackerRecordEntity" representedClassName="TrackerRecordEntity" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="tracker" optional="YES" attributeType="Transformable"/>
+        <attribute name="trackerId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <relationship name="trackers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerEntity" inverseName="records" inverseEntity="TrackerEntity"/>
     </entity>
 </model>

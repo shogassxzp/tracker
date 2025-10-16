@@ -6,6 +6,7 @@ protocol TrackerRecordStoreProtocol {
     func fetchRecords(for tracker: Tracker) throws -> [TrackerRecord]
     func deleteRecord(_ record: TrackerRecord) throws
     func countRecords(for tracker: Tracker) throws -> Int
+    func isTrackerCompleted(_ trackerId: UUID, on date: Date) throws -> Bool
 }
 
 final class TrackerRecordStore: TrackerRecordStoreProtocol {
@@ -16,13 +17,17 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
     }
 
     func addRecord(_ record: TrackerRecord) throws {
+        let isCompleted = try isTrackerCompleted(record.trackerId, on: record.date)
+        if isCompleted {
+            return
+        }
+
         let recordEntity = TrackerRecordEntity(context: context)
         recordEntity.id = record.id
         recordEntity.date = record.date
+        recordEntity.trackerId = record.trackerId
 
-        recordEntity.setValue(record.trackerId as NSSecureCoding?, forKey: "tracker")
-
-        try context.save()
+        Dependencies.shared.coreDataStack.saveContext()
     }
 
     func fetchRecords() throws -> [TrackerRecord] {
@@ -36,7 +41,7 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
                 return nil
             }
 
-            let trackerId = entity.value(forKey: "tracker") as? UUID ?? UUID()
+            let trackerId = entity.value(forKey: "trackerId") as? UUID ?? UUID()
 
             return TrackerRecord(id: id, trackerId: trackerId, date: date)
         }
@@ -60,19 +65,47 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
     }
 
     func deleteRecord(_ record: TrackerRecord) throws {
+        let context = Dependencies.shared.coreDataStack.viewContext
         let fetchRequest = TrackerRecordEntity.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %@", record.id as CVarArg)
+        fetchRequest.predicate = NSPredicate(format: "trackerId == %@", record.trackerId as CVarArg)
 
-        if let recordEntity = try context.fetch(fetchRequest).first {
-            context.delete(recordEntity)
-            try context.save()
+        let allRecords = try context.fetch(fetchRequest)
+        let calendar = Calendar.current
+        var recordsToDelete: [TrackerRecordEntity] = []
+
+        for recordEntity in allRecords {
+            if let recordDate = recordEntity.date,
+               calendar.isDate(recordDate, inSameDayAs: record.date) {
+                recordsToDelete.append(recordEntity)
+            }
         }
+
+        for recordEntity in recordsToDelete {
+            context.delete(recordEntity)
+        }
+        Dependencies.shared.coreDataStack.saveContext()
     }
 
     func countRecords(for tracker: Tracker) throws -> Int {
         let fetchRequest = TrackerRecordEntity.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "tracker == %@", tracker.id as CVarArg)
+        fetchRequest.predicate = NSPredicate(format: "trackerId == %@", tracker.id as CVarArg)
 
-        return try context.count(for: fetchRequest)
+        let count = try context.count(for: fetchRequest)
+        return count
+    }
+
+    func isTrackerCompleted(_ trackerId: UUID, on date: Date) throws -> Bool {
+        let fetchRequest = TrackerRecordEntity.fetchRequest()
+
+        fetchRequest.predicate = NSPredicate(format: "trackerId == %@", trackerId as CVarArg)
+
+        let records = try context.fetch(fetchRequest)
+        let calendar = Calendar.current
+
+        let completed = records.contains { record in
+            guard let recordDate = record.date else { return false }
+            return calendar.isDate(recordDate, inSameDayAs: date)
+        }
+        return completed
     }
 }
