@@ -2,6 +2,7 @@ import UIKit
 
 final class ScheduleViewController: UIViewController {
     var onDaysSelected: (([Weekday]) -> Void)?
+    var selectedDays: [Weekday] = []
 
     private let weekdays: [Weekday] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
     private let scheludeLabel: UILabel = {
@@ -38,6 +39,7 @@ final class ScheduleViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupDays()
+        setupSwitchState()
     }
 
     private func setupView() {
@@ -125,6 +127,15 @@ final class ScheduleViewController: UIViewController {
         separator.backgroundColor = .separator
         separator.translatesAutoresizingMaskIntoConstraints = false
         return separator
+    }
+
+    private func setupSwitchState() {
+        for (index, weekday) in weekdays.enumerated() {
+            if index < switches.count {
+                let switchControl = switches[index]
+                switchControl.isOn = selectedDays.contains(weekday)
+            }
+        }
     }
 
     @objc private func switchValueChanged(_ sender: UISwitch) {

@@ -177,6 +177,10 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         nameTextField.delegate = self
         scrollView.delegate = self
 
+        scrollView.canCancelContentTouches = true
+        scrollView.delaysContentTouches = false
+        contentView.isUserInteractionEnabled = true
+
         addArrowToContainer(categoryContainer)
         addArrowToContainer(scheduleContainer)
 
@@ -257,19 +261,24 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
     private func setupCollections() {
         colorCollection.onColorSelected = { [weak self] color in
             self?.selectedColor = color
-            print("Selected color: \(color)")
+            self?.updateCreateButton()
+        }
+        emojiCollection.onEmojiSelected = { [weak self] emoji in
+            self?.selectedEmoji = emoji
+            self?.updateCreateButton()
         }
 
         NSLayoutConstraint.activate([
-            colorCollection.topAnchor.constraint(equalTo: scheduleContainer.bottomAnchor, constant: 32),
-            colorCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            colorCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            colorCollection.heightAnchor.constraint(equalToConstant: 200),
-
-            emojiCollection.topAnchor.constraint(equalTo: colorCollection.bottomAnchor, constant: 32),
+            emojiCollection.topAnchor.constraint(equalTo: scheduleContainer.bottomAnchor, constant: 32),
             emojiCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             emojiCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            emojiCollection.heightAnchor.constraint(equalToConstant: 200),
+            emojiCollection.heightAnchor.constraint(equalToConstant: 210),
+
+            colorCollection.topAnchor.constraint(equalTo: emojiCollection.bottomAnchor, constant: 32),
+            colorCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            colorCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            colorCollection.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -100),
+            colorCollection.heightAnchor.constraint(equalToConstant: 200),
         ])
     }
 
@@ -308,8 +317,10 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
     private func updateCreateButton() {
         let isNameEmpty = nameTextField.text?.isEmpty ?? true
         let isScheduleEmpty = selectedSchedule.isEmpty
+        let isEmojiSelected = selectedEmoji != nil
+        let isColorSelected = selectedColor != nil
 
-        let isEnabled = !isNameEmpty && !isScheduleEmpty
+        let isEnabled = !isNameEmpty && !isScheduleEmpty && isEmojiSelected && isColorSelected
 
         createButton.isEnabled = isEnabled
         createButton.backgroundColor = isEnabled ? .ypBlack : .ypGray
@@ -365,54 +376,50 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
     @objc private func scheduleTapped() {
         let scheduleViewController = ScheduleViewController()
         scheduleViewController.modalPresentationStyle = .popover
+        scheduleViewController.selectedDays = selectedSchedule
 
         scheduleViewController.onDaysSelected = { [weak self] (selectedDays: [Weekday]) in
             self?.selectedSchedule = selectedDays
-            let shortDays = selectedDays.map { $0.shortName }
-            self?.updateScheduleSubtitle(shortDays.joined(separator: ", "))
+            let displayText = Weekday.displayText(for: selectedDays)
+            self?.updateScheduleSubtitle(displayText)
+            self?.updateCreateButton()
         }
 
         present(scheduleViewController, animated: true)
     }
 
     private func createTracker() {
-        guard let title = nameTextField.text, !title.isEmpty else {
-            showAlert(message: "Введите название трекера")
+        guard let title = nameTextField.text,
+              !selectedSchedule.isEmpty,
+              !title.isEmpty,
+              let selectedColor = selectedColor,
+              let selectedEmoji = selectedEmoji
+        else {
             return
         }
 
-        guard !selectedSchedule.isEmpty else {
-            showAlert(message: "Выберите дни недели")
-            return
-        }
-
+        let category = TrackerCategory(id: UUID(), title: "Домашний уют")
         let tracker = Tracker(
             id: UUID(),
             title: title,
-            color: .selectionDarkBlue,
-            emoji: "😇",
+            color: selectedColor,
+            emoji: String(selectedEmoji),
             schedule: selectedSchedule,
-            isHabit: true
+            isHabit: true,
+            category: category
         )
 
-        TrackerStore.shared.addTracker(tracker, toCategoryTitle: "Домашний уют")
-
-        NotificationCenter.default.post(
-            name: NSNotification.Name("TrackerAdded"),
-            object: nil
-        )
-
-        dismiss(animated: true)
+        do {
+            let trackerStore = Dependencies.shared.trackerStore
+            try trackerStore.addTracker(tracker, to: category)
+            dismiss(animated: true)
+        } catch {
+            dismiss(animated: true)
+        }
     }
 
     @objc private func createButtonTapped() {
         createTracker()
-    }
-
-    private func showAlert(message: String) {
-        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
     }
 }
 

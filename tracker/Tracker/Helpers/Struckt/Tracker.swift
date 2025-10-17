@@ -4,9 +4,28 @@ struct Tracker {
     let id: UUID
     let title: String
     let color: UIColor
-    let emoji: Character
-    let schedule: [Weekday]?
+    let emoji: String
+    let schedule: [Weekday]
     let isHabit: Bool
+    let category: TrackerCategory
+
+    init(
+        id: UUID,
+        title: String,
+        color: UIColor,
+        emoji: String,
+        schedule: [Weekday],
+        isHabit: Bool,
+        category: TrackerCategory
+    ) {
+        self.id = id
+        self.title = title
+        self.color = color
+        self.emoji = emoji
+        self.schedule = schedule
+        self.isHabit = isHabit
+        self.category = category
+    }
 }
 
 enum Weekday: String, CaseIterable {

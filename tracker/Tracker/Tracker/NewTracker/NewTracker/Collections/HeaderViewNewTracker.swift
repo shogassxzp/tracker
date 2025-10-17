@@ -1,6 +1,6 @@
 import UIKit
 
-final class HeaderView: UICollectionReusableView {
+final class HeaderViewNewTracker: UICollectionReusableView {
     let titleLabel = UILabel()
 
     override init(frame: CGRect) {
@@ -9,8 +9,8 @@ final class HeaderView: UICollectionReusableView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: -10),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
