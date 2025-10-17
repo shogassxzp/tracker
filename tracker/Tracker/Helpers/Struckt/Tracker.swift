@@ -8,8 +8,16 @@ struct Tracker {
     let schedule: [Weekday]
     let isHabit: Bool
     let category: TrackerCategory
-    
-    init(id: UUID, title: String, color: UIColor, emoji: String, schedule: [Weekday], isHabit: Bool, category: TrackerCategory) {
+
+    init(
+        id: UUID,
+        title: String,
+        color: UIColor,
+        emoji: String,
+        schedule: [Weekday],
+        isHabit: Bool,
+        category: TrackerCategory
+    ) {
         self.id = id
         self.title = title
         self.color = color

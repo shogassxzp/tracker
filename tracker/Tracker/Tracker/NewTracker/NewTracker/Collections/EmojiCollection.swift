@@ -69,7 +69,7 @@ extension EmojiCollection: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: 25)
+        CGSize(width: collectionView.bounds.width, height: 25)
     }
 }
 

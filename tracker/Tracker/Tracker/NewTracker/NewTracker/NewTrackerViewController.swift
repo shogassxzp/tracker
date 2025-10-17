@@ -389,16 +389,12 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
     }
 
     private func createTracker() {
-        guard let title = nameTextField.text, !title.isEmpty else {
-            return
-        }
-        guard !selectedSchedule.isEmpty else {
-            return
-        }
-        guard let selectedColor = selectedColor else {
-            return
-        }
-        guard let selectedEmoji = selectedEmoji else {
+        guard let title = nameTextField.text,
+              !selectedSchedule.isEmpty,
+              !title.isEmpty,
+              let selectedColor = selectedColor,
+              let selectedEmoji = selectedEmoji
+        else {
             return
         }
 
