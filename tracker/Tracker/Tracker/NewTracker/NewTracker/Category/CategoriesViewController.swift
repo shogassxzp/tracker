@@ -48,18 +48,18 @@ final class CategoriesViewController: UIViewController {
 
     private let emptyStateLabel: UILabel = {
         let label = UILabel()
-        label.text = "Привычки и события можно объединить по смыслу"
+        label.text = "Привычки и события можно \n объединить по смыслу"
         label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center
-        label.numberOfLines = 0
+        label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     private let emptyStateImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "empty_categories")
+        imageView.image = UIImage(resource: .collectionPlaceholder)
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -108,7 +108,7 @@ final class CategoriesViewController: UIViewController {
             addButton.heightAnchor.constraint(equalToConstant: 60),
 
             emptyStateView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyStateView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyStateView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -20),
             emptyStateView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             emptyStateView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
 
@@ -167,27 +167,12 @@ final class CategoriesViewController: UIViewController {
     }
 
     private func showCreateCategoryAlert() {
-        let alert = UIAlertController(
-            title: "Новая категория",
-            message: "Введите название категории",
-            preferredStyle: .alert
-        )
+        let createViewController = NewCategoryViewController()
+        createViewController.modalPresentationStyle = .popover
+//        alert.addAction(createAction)
+//        alert.addAction(cancelAction)
 
-        alert.addTextField { textField in
-            textField.placeholder = "Название"
-        }
-
-        let createAction = UIAlertAction(title: "Создать", style: .default) { [weak self] _ in
-            guard let text = alert.textFields?.first?.text, !text.isEmpty else { return }
-            self?.viewModel.addNewCategory(text)
-        }
-
-        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
-
-        alert.addAction(createAction)
-        alert.addAction(cancelAction)
-
-        present(alert, animated: true)
+        present(createViewController, animated: true)
     }
 }
 
