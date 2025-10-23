@@ -401,6 +401,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
             onCategorySelect: { [weak self] selectedCategory in
                 self?.selectedCategory = selectedCategory
                 self?.updateCategorySubtitle(selectedCategory.title)
+                self?.updateCreateButton()
             }
         )
         categoriesViewController.modalPresentationStyle = .popover

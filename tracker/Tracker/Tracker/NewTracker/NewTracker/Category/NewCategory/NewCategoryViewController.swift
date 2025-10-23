@@ -1,6 +1,13 @@
 import UIKit
 
+protocol NewCategoryViewControllerDelegate: AnyObject {
+    func didCreateNewCategory(_ category: TrackerCategory)
+}
+
 final class NewCategoryViewController: UIViewController {
+    weak var delegate: NewCategoryViewControllerDelegate?
+    private let categoryStore: TrackerCategoryStoreProtocol
+
     private var label: UILabel = {
         let label = UILabel()
         label.text = "Новая категория"
@@ -28,10 +35,19 @@ final class NewCategoryViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 16
         button.isEnabled = false
-//        button.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+        button.addTarget(nil, action: #selector(createCategory), for: .touchUpInside)
 
         return button
     }()
+
+    init(categoryStore: TrackerCategoryStoreProtocol) {
+        self.categoryStore = categoryStore
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,10 +96,22 @@ final class NewCategoryViewController: UIViewController {
         button.isEnabled = isEnabled
         button.backgroundColor = isEnabled ? .ypBlack : .ypGray
     }
-    
+
     @objc private func createCategory() {
-        
-    }
+            guard let categoryName = textField.text, !categoryName.isEmpty else {
+                return
+            }
+            
+            let newCategory = TrackerCategory(id: UUID(), title: categoryName)
+            
+            do {
+                try categoryStore.addCategory(newCategory)
+                delegate?.didCreateNewCategory(newCategory)
+                dismiss(animated: true)
+            } catch {
+                return
+            }
+        }
 
     private func setupKeyboardDismissal() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))

@@ -138,12 +138,6 @@ final class CategoriesViewController: UIViewController {
                 self?.dismiss(animated: true)
             }
         }
-
-        viewModel.onError = { [weak self] message in
-            DispatchQueue.main.async {
-                self?.showErrorAlert(message: message)
-            }
-        }
     }
 
     private func updateEmptyState() {
@@ -152,31 +146,19 @@ final class CategoriesViewController: UIViewController {
         tableView.isHidden = isEmpty
     }
 
-    private func showErrorAlert(message: String) {
-        let alert = UIAlertController(
-            title: "Ошибка",
-            message: message,
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
-
     @objc private func addCategoryTapped() {
-        showCreateCategoryAlert()
-    }
-
-    private func showCreateCategoryAlert() {
-        let createViewController = NewCategoryViewController()
-        createViewController.modalPresentationStyle = .popover
-//        alert.addAction(createAction)
-//        alert.addAction(cancelAction)
-
-        present(createViewController, animated: true)
+        let newCategoryViewController = NewCategoryViewController(categoryStore: Dependencies.shared.categoryStore)
+        newCategoryViewController.delegate = self
+        newCategoryViewController.modalPresentationStyle = .popover
+        present(newCategoryViewController, animated: true)
     }
 }
 
-extension CategoriesViewController: UITableViewDataSource {
+extension CategoriesViewController: UITableViewDataSource, NewCategoryViewControllerDelegate {
+    func didCreateNewCategory(_ category: TrackerCategory) {
+        viewModel.loadCategories()
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfCategories
     }
@@ -205,13 +187,57 @@ extension CategoriesViewController: UITableViewDelegate {
         viewModel.selectCategory(at: indexPath)
     }
 
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(
+            identifier: nil,
+            previewProvider: nil
+        ) { [weak self] _ in
+            let deleteAction = UIAction(
+                title: "Удалить",
+                image: UIImage(systemName: "trash"),
+                attributes: .destructive
+            ) { _ in
+                self?.showDeleteConfirmation(for: indexPath)
+            }
+
+            return UIMenu(title: "", children: [deleteAction])
+        }
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            viewModel.deleteCategory(at: indexPath)
+    private func showDeleteConfirmation(for indexPath: IndexPath) {
+        let categoryName = viewModel.cellViewModel(at: indexPath).title
+
+        let alert = UIAlertController(
+            title: "Удалить категорию?",
+            message: "Категория \"\(categoryName)\" будет удалена. Это действие нельзя отменить.",
+            preferredStyle: .alert
+        )
+
+        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+            self?.viewModel.deleteCategory(at: indexPath)
+        }
+
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+
+        present(alert, animated: true)
+    }
+
+    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) {
+            UIView.animate(withDuration: 0.2) {
+                cell.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            }
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) {
+            UIView.animate(withDuration: 0.2) {
+                cell.transform = .identity
+            }
         }
     }
 
