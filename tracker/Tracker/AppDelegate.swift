@@ -38,7 +38,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let categoryStore = Dependencies.shared.categoryStore
         
         do {
-            let categories = try categoryStore.fetchCategories()
+            let categories = try categoryStore.fetchAllCategories()
             if categories.isEmpty {
                 let defaultCategory = TrackerCategory(
                     id: UUID(),

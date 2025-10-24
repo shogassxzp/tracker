@@ -2,6 +2,7 @@ import UIKit
 
 final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
     private var selectedSchedule: [Weekday] = []
+    private var selectedCategory: TrackerCategory?
 
     private var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -55,6 +56,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         config.titleAlignment = .leading
         button.configuration = config
         button.contentHorizontalAlignment = .left
+        button.addTarget(self, action: #selector(categoryTapped), for: .touchUpInside)
         return button
     }()
 
@@ -319,8 +321,9 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         let isScheduleEmpty = selectedSchedule.isEmpty
         let isEmojiSelected = selectedEmoji != nil
         let isColorSelected = selectedColor != nil
+        let isCategorySelected = selectedCategory != nil
 
-        let isEnabled = !isNameEmpty && !isScheduleEmpty && isEmojiSelected && isColorSelected
+        let isEnabled = !isNameEmpty && !isScheduleEmpty && isEmojiSelected && isColorSelected && isCategorySelected
 
         createButton.isEnabled = isEnabled
         createButton.backgroundColor = isEnabled ? .ypBlack : .ypGray
@@ -388,17 +391,34 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         present(scheduleViewController, animated: true)
     }
 
+    @objc private func createButtonTapped() {
+        createTracker()
+    }
+    
+    @objc private func categoryTapped() {
+        let categoriesViewController = CategoriesViewController(
+            categoryStore: Dependencies.shared.categoryStore,
+            onCategorySelect: { [weak self] selectedCategory in
+                self?.selectedCategory = selectedCategory
+                self?.updateCategorySubtitle(selectedCategory.title)
+                self?.updateCreateButton()
+            }
+        )
+        categoriesViewController.modalPresentationStyle = .popover
+        present(categoriesViewController, animated: true)
+    }
+
     private func createTracker() {
         guard let title = nameTextField.text,
-              !selectedSchedule.isEmpty,
               !title.isEmpty,
+              !selectedSchedule.isEmpty,
               let selectedColor = selectedColor,
-              let selectedEmoji = selectedEmoji
+              let selectedEmoji = selectedEmoji,
+              let selectedCategory = selectedCategory
         else {
             return
         }
 
-        let category = TrackerCategory(id: UUID(), title: "Домашний уют")
         let tracker = Tracker(
             id: UUID(),
             title: title,
@@ -406,20 +426,16 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
             emoji: String(selectedEmoji),
             schedule: selectedSchedule,
             isHabit: true,
-            category: category
+            category: selectedCategory
         )
 
         do {
             let trackerStore = Dependencies.shared.trackerStore
-            try trackerStore.addTracker(tracker, to: category)
+            try trackerStore.addTracker(tracker, to: selectedCategory)
             dismiss(animated: true)
         } catch {
             dismiss(animated: true)
         }
-    }
-
-    @objc private func createButtonTapped() {
-        createTracker()
     }
 }
 
@@ -465,3 +481,4 @@ extension NewTrackerViewController: UITextFieldDelegate {
         updateCreateButton()
     }
 }
+
