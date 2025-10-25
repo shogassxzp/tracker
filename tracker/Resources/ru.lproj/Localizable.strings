@@ -88,3 +88,8 @@
 // Tracker types
 "habit" = "Привычка";
 "event" = "Событие";
+
+
+"search" = "Поиск";
+"empty_tracker" = "Что мы будем отслеживать?";
+"no_trackers_found" = "Ничего не найдено";

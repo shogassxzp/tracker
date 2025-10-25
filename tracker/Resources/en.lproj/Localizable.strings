@@ -74,3 +74,9 @@
 
 "important" = "Important";
 "statistic" = "Statistic";
+
+
+
+"search" = "Search";
+"empty_tracker" = "What will we track?";
+"no_trackers_found" = "Nothing found";

@@ -71,4 +71,6 @@ enum Localizable {
     
     static let imortant = NSLocalizedString("important", comment: "important")
     static let statistic = NSLocalizedString("statistic", comment: "Statistic")
+    
+    static let noTrackersFound = NSLocalizedString("no_trackers_found", comment: "noTrackersFound")
 }

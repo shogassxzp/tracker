@@ -324,9 +324,10 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         let isCategorySelected = selectedCategory != nil
 
         let isEnabled = !isNameEmpty && !isScheduleEmpty && isEmojiSelected && isColorSelected && isCategorySelected
-
+        let isActiveColor: UIColor = isEnabled ? .ypWhite : .ypBlack
         createButton.isEnabled = isEnabled
         createButton.backgroundColor = isEnabled ? .ypBlack : .ypGray
+        createButton.setTitleColor(isActiveColor, for: .normal)
     }
 
     private func updateScheduleButtonPosition() {

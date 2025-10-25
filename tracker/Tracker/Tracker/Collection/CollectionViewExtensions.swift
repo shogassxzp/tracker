@@ -7,7 +7,7 @@ extension TrackerViewController: UICollectionViewDataSource {
         }
 
         cell.prepareForReuse()
-        let tracker = categories[indexPath.section].trackers[indexPath.item]
+        let tracker = visibleCategories[indexPath.section].trackers[indexPath.item]
         let isCompleted: Bool
 
         do {
@@ -42,12 +42,12 @@ extension TrackerViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let count = categories[section].trackers.count
+        let count = visibleCategories[section].trackers.count
         return count
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        categories.count
+        visibleCategories.count
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -58,7 +58,7 @@ extension TrackerViewController: UICollectionViewDataSource {
                 for: indexPath
             ) as? HeaderView
 
-            header?.titleLabel.text = categories[indexPath.section].title
+            header?.titleLabel.text = visibleCategories[indexPath.section].title
             header?.titleLabel.font = .systemFont(ofSize: 19, weight: .bold)
 
             return header ?? UICollectionReusableView()
