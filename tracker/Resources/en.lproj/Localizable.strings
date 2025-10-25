@@ -1,0 +1,76 @@
+// Common
+"trackers" = "Trackers";
+"search" = "Search";
+"cancel" = "Cancel";
+"create" = "Create";
+"done" = "Done";
+"delete" = "Delete";
+"edit" = "Edit";
+"save" = "Save";
+"error" = "Error";
+
+// Tracker screens
+"new_habit" = "New Habit";
+"irregular_event" = "Irregular Event";
+"enter_tracker_name" = "Enter tracker name";
+"category" = "Category";
+"schedule" = "Schedule";
+"emoji" = "Emoji";
+"color" = "Color";
+
+// Category screens
+"categories" = "Categories";
+"new_category" = "New Category";
+"enter_category_name" = "Enter category name";
+"habits_can_be_grouped" = "Habits and events can be grouped by meaning";
+"add_category" = "Add Category";
+"whatTrack" = "What we will track?";
+
+// Schedule
+"monday" = "Monday";
+"tuesday" = "Tuesday";
+"wednesday" = "Wednesday";
+"thursday" = "Thursday";
+"friday" = "Friday";
+"saturday" = "Saturday";
+"sunday" = "Sunday";
+
+"mon" = "Mon";
+"tue" = "Tue";
+"wed" = "Wed";
+"thu" = "Thu";
+"fri" = "Fri";
+"sat" = "Sat";
+"sun" = "Sun";
+
+// Onboarding
+"track_only_what_you_want" = "Track only what you want";
+"even_if_not_water_and_yoga" = "Even if it's not liters of water and yoga";
+"that_is_technology" = "That's technology!";
+
+// Days count
+"days_count" = "%d days";
+
+// Errors
+"failed_to_create_tracker" = "Failed to create tracker";
+"failed_to_load_categories" = "Failed to load categories";
+"failed_to_create_category" = "Failed to create category";
+"failed_to_delete_category" = "Failed to delete category";
+"character_limit" = "Limit 38 characters";
+
+// Delete confirmations
+"delete_category_confirmation" = "Delete category?";
+
+// Schedule display
+"every_day" = "Every day";
+"every_day_short" = "Every day";
+
+// Date related
+"future_date" = "Future date";
+"today" = "Today";
+"tomorrow" = "Tomorrow";
+"yesterday" = "Yesterday";
+
+
+"important" = "Important";
+"statistic" = "Statistic";

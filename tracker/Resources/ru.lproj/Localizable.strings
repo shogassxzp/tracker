@@ -1,76 +1,90 @@
+
 // Common
-"trackers" = "Trackers";
-"search" = "Search";
-"cancel" = "Cancel";
-"create" = "Create";
-"done" = "Done";
-"delete" = "Delete";
-"edit" = "Edit";
-"save" = "Save";
-"error" = "Error";
+"trackers" = "Трекеры";
+"search" = "Поиск";
+"cancel" = "Отменить";
+"create" = "Создать";
+"done" = "Готово";
+"delete" = "Удалить";
+"edit" = "Редактировать";
+"save" = "Сохранить";
+"error" = "Ошибка";
+"statistic" = "Статистика";
 
 // Tracker screens
-"new_habit" = "New Habit";
-"irregular_event" = "Irregular Event";
-"enter_tracker_name" = "Enter tracker name";
-"category" = "Category";
-"schedule" = "Schedule";
-"emoji" = "Emoji";
-"color" = "Color";
+"new_habit" = "Новая привычка";
+"irregular_event" = "Нерегулярное событие";
+"enter_tracker_name" = "Введите название трекера";
+"category" = "Категория";
+"schedule" = "Расписание";
+"emoji" = "Эмодзи";
+"color" = "Цвет";
+"whatTrack" = "Что будем отслеживать?";
 
 // Category screens
-"categories" = "Categories";
-"new_category" = "New Category";
-"enter_category_name" = "Enter category name";
-"habits_can_be_grouped" = "Habits and events can be grouped by meaning";
-"add_category" = "Add Category";
+"categories" = "Категории";
+"new_category" = "Новая категория";
+"enter_category_name" = "Введите название категории";
+"habits_can_be_grouped" = "Привычки и события можно объединить по смыслу";
+"add_category" = "Добавить категорию";
 
 // Schedule
-"monday" = "Monday";
-"tuesday" = "Tuesday";
-"wednesday" = "Wednesday";
-"thursday" = "Thursday";
-"friday" = "Friday";
-"saturday" = "Saturday";
-"sunday" = "Sunday";
+"monday" = "Понедельник";
+"tuesday" = "Вторник";
+"wednesday" = "Среда";
+"thursday" = "Четверг";
+"friday" = "Пятница";
+"saturday" = "Суббота";
+"sunday" = "Воскресенье";
 
-"mon" = "Mon";
-"tue" = "Tue";
-"wed" = "Wed";
-"thu" = "Thu";
-"fri" = "Fri";
-"sat" = "Sat";
-"sun" = "Sun";
+// Weekday short names
+"mon" = "Пн";
+"tue" = "Вт";
+"wed" = "Ср";
+"thu" = "Чт";
+"fri" = "Пт";
+"sat" = "Сб";
+"sun" = "Вс";
 
 // Onboarding
-"track_only_what_you_want" = "Track only what you want";
-"even_if_not_water_and_yoga" = "Even if it's not liters of water and yoga";
-"that_is_technology" = "That's technology!";
-
-// Days count
-"days_count" = "%d days";
-
-// Errors
-"failed_to_create_tracker" = "Failed to create tracker";
-"failed_to_load_categories" = "Failed to load categories";
-"failed_to_create_category" = "Failed to create category";
-"failed_to_delete_category" = "Failed to delete category";
-"character_limit" = "Limit 38 characters";
-
-// Delete confirmations
-"delete_category_confirmation" = "Delete category?";
+"track_only_what_you_want" = "Отслеживайте только то, что хотите";
+"even_if_not_water_and_yoga" = "Даже если это не литры воды и йога";
+"that_is_technology" = "Вот это технологии!";
 
 // Schedule display
-"every_day" = "Every day";
-"every_day_short" = "Every day";
+"every_day" = "Каждый день";
+"every_day_short" = "Каждый день";
+
+// Days count - fallback
+"days_count" = "%d дней";
+
+// Empty states
+"empty_tracker" = "Что будем отслеживать?";
+"no_trackers_found" = "Ничего не найдено";
+"no_categories" = "Привычки и события можно объединить по смыслу";
+
+// Errors
+"failed_to_create_tracker" = "Не удалось создать трекер";
+"failed_to_load_categories" = "Не удалось загрузить категории";
+"failed_to_create_category" = "Не удалось создать категорию";
+"failed_to_delete_category" = "Не удалось удалить категорию";
+"character_limit" = "Ограничение 38 символов";
+
+// Delete confirmations
+"delete_category_confirmation" = "Удалить категорию?";
+"category_will_be_deleted" = "Категория \"%@\" будет удалена. Это действие нельзя отменить.";
 
 // Date related
-"future_date" = "Future date";
-"today" = "Today";
-"tomorrow" = "Tomorrow";
-"yesterday" = "Yesterday";
+"future_date" = "Нельзя отмечать будущие даты";
+"today" = "Сегодня";
+"tomorrow" = "Завтра";
+"yesterday" = "Вчера";
 
+// Actions
+"confirm" = "Подтвердить";
+"skip" = "Пропустить";
+"continue" = "Продолжить";
 
-"important" = "Important";
-"statictic" = "Statistic";
-
+// Tracker types
+"habit" = "Привычка";
+"event" = "Событие";

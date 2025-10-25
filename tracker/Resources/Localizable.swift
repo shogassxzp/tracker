@@ -10,7 +10,7 @@ enum Localizable {
     static let edit = NSLocalizedString("edit", comment: "Edit action")
     static let save = NSLocalizedString("save", comment: "Save button")
     static let error = NSLocalizedString("error", comment: "Error title")
-    static let emptyTracker = NSLocalizedString("What we will track?", comment: "Tracker empty state")
+    static let emptyTracker = NSLocalizedString("whatTrack", comment: "whatTrack")
 
     // Tracker screens
     static let newHabit = NSLocalizedString("new_habit", comment: "New habit title")
@@ -69,6 +69,6 @@ enum Localizable {
     static let everyDay = NSLocalizedString("every_day", comment: "Every day in schedule")
     static let everyDayShort = NSLocalizedString("every_day_short", comment: "Every day short version")
     
-    static let imortant = NSLocalizedString("Important", comment: "important")
-    static let statistic = NSLocalizedString("Statistic", comment: "statistic")
+    static let imortant = NSLocalizedString("important", comment: "important")
+    static let statistic = NSLocalizedString("statistic", comment: "Statistic")
 }
