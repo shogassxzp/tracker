@@ -10,7 +10,7 @@ final class NewCategoryViewController: UIViewController {
 
     private var label: UILabel = {
         let label = UILabel()
-        label.text = "Новая категория"
+        label.text = Localizable.newCategory
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .ypBlack
         return label
@@ -20,7 +20,7 @@ final class NewCategoryViewController: UIViewController {
     private var textField: UITextField = {
         let field = UITextField()
         field.backgroundColor = .ypBackground
-        field.placeholder = "Введите название категории"
+        field.placeholder = Localizable.enterCategoryName
         field.layer.cornerRadius = 16
         field.font = .systemFont(ofSize: 17, weight: .regular)
 
@@ -29,7 +29,7 @@ final class NewCategoryViewController: UIViewController {
 
     private var button: UIButton = {
         let button = UIButton()
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(Localizable.done, for: .normal)
         button.backgroundColor = .ypGray
         button.tintColor = .ypWhite
         button.setTitleColor(.white, for: .normal)
@@ -148,7 +148,7 @@ extension NewCategoryViewController: UITextFieldDelegate {
 
     private func showCharacterLimitWarning() {
         let warningLabel = UILabel()
-        warningLabel.text = "Ограничение 38 символов"
+        warningLabel.text = Localizable.characterLimit
         warningLabel.textColor = .systemRed
         warningLabel.font = .systemFont(ofSize: 12, weight: .regular)
         warningLabel.textAlignment = .center

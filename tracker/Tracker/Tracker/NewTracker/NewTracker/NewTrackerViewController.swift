@@ -29,7 +29,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
 
     private var newHabitLabel: UILabel = {
         let label = UILabel()
-        label.text = "Новая привычка"
+        label.text = Localizable.newHabit
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .center
         return label
@@ -37,7 +37,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
 
     private let nameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = Localizable.enterTrackerName
         textField.leftViewMode = .always
         textField.textAlignment = .left
         textField.font = .systemFont(ofSize: 17, weight: .regular)
@@ -50,7 +50,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
     private let categoryButton: UIButton = {
         let button = UIButton(type: .system)
         var config = UIButton.Configuration.plain()
-        config.title = "Категория"
+        config.title = Localizable.category
         config.baseForegroundColor = .ypBlack
         config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 0)
         config.titleAlignment = .leading
@@ -71,7 +71,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
     private let scheduleButton: UIButton = {
         let button = UIButton(type: .system)
         var config = UIButton.Configuration.plain()
-        config.title = "Расписание"
+        config.title = Localizable.schedule
         config.baseForegroundColor = .ypBlack
         config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 0)
         config.titleAlignment = .leading
@@ -92,7 +92,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
 
     private let createButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(Localizable.create, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .ypGray
         button.layer.cornerRadius = 16
@@ -104,7 +104,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
     private let cancelButton: UIButton = {
         let button = UIButton(type: .system)
         var config = UIButton.Configuration.plain()
-        config.title = "Отменить"
+        config.title = Localizable.cancel
         config.baseForegroundColor = .systemRed
         config.background.backgroundColor = .ypWhite
         config.background.strokeColor = .systemRed
@@ -453,7 +453,7 @@ extension NewTrackerViewController: UITextFieldDelegate {
 
     private func showCharacterLimitWarning() {
         let warningLabel = UILabel()
-        warningLabel.text = "Ограничение 38 символов"
+        warningLabel.text = Localizable.characterLimit
         warningLabel.textColor = .systemRed
         warningLabel.font = .systemFont(ofSize: 12, weight: .regular)
         warningLabel.textAlignment = .center

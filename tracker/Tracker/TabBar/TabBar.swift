@@ -12,13 +12,13 @@ final class TabBarController: UITabBarController {
 
     private func setupBar() {
         trackerController.tabBarItem = UITabBarItem(
-            title: "Трекеры",
+            title: Localizable.trackers,
             image: UIImage(resource: .trackerLogo),
             tag: 1,
         )
 
         statsController.tabBarItem = UITabBarItem(
-            title: "Статисткиа",
+            title: Localizable.statistic,
             image: UIImage(resource: .statsLogo),
             tag: 2
         )

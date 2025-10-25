@@ -6,7 +6,7 @@ final class CategoriesViewController: UIViewController {
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Категория"
+        label.text = Localizable.category
         label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -15,7 +15,7 @@ final class CategoriesViewController: UIViewController {
 
     private lazy var addButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(Localizable.addCategory, for: .normal)
         button.setTitleColor(.ypWhite, for: .normal)
         button.backgroundColor = .ypBlack
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
@@ -48,7 +48,7 @@ final class CategoriesViewController: UIViewController {
 
     private let emptyStateLabel: UILabel = {
         let label = UILabel()
-        label.text = "Привычки и события можно \n объединить по смыслу"
+        label.text = "\(Localizable.habitsCanBeGrouped)"
         label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center
@@ -193,7 +193,7 @@ extension CategoriesViewController: UITableViewDelegate {
             previewProvider: nil
         ) { [weak self] _ in
             let deleteAction = UIAction(
-                title: "Удалить",
+                title: Localizable.delete,
                 image: UIImage(systemName: "trash"),
                 attributes: .destructive
             ) { _ in
@@ -207,16 +207,16 @@ extension CategoriesViewController: UITableViewDelegate {
     private func showDeleteConfirmation(for indexPath: IndexPath) {
 
         let alert = UIAlertController(
-            title: "Эта категория точно не нужна?",
+            title: Localizable.deleteCategoryConfirmation,
             message: nil,
             preferredStyle: .actionSheet
         )
 
-        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        let deleteAction = UIAlertAction(title: Localizable.delete, style: .destructive) { [weak self] _ in
             self?.viewModel.deleteCategory(at: indexPath)
         }
 
-        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+        let cancelAction = UIAlertAction(title: Localizable.cancel, style: .cancel)
 
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)

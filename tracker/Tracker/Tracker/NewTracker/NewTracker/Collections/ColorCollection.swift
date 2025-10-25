@@ -72,7 +72,7 @@ extension ColorCollection: UICollectionViewDelegateFlowLayout, UICollectionViewD
                 for: indexPath
             ) as? HeaderViewNewTracker
 
-            header?.titleLabel.text = "Цвет"
+            header?.titleLabel.text = Localizable.color
             header?.titleLabel.font = .systemFont(ofSize: 19, weight: .bold)
 
             return header ?? UICollectionReusableView()

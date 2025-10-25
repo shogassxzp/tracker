@@ -42,15 +42,13 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             if categories.isEmpty {
                 let defaultCategory = TrackerCategory(
                     id: UUID(),
-                    title: "Важное"
+                    title: Localizable.imortant
                 )
                 try categoryStore.addCategory(defaultCategory)
-                print("Создана дефолтная категория")
             } else {
-                print("Категории существуют")
             }
         } catch {
-            print("Ошибка создания дефолтоной категории")
+            return
         }
     }
 }

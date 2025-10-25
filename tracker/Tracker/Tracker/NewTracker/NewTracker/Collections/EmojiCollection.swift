@@ -60,7 +60,7 @@ extension EmojiCollection: UICollectionViewDataSource {
                 for: indexPath
             ) as? HeaderViewNewTracker
 
-            header?.titleLabel.text = "Эмодзи"
+            header?.titleLabel.text = Localizable.emoji
             header?.titleLabel.font = .systemFont(ofSize: 19, weight: .bold)
 
             return header ?? UICollectionReusableView()

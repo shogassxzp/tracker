@@ -25,7 +25,7 @@ extension Date {
 extension Weekday {
     static func displayText(for days: [Weekday]) -> String {
         if days.count == Weekday.allCases.count {
-            return "Каждый день"
+            return Localizable.everyDay
         } else {
             return days.map { $0.shortName }.joined(separator: ", ")
         }

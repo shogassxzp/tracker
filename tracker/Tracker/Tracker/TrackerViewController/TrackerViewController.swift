@@ -17,14 +17,14 @@ final class TrackerViewController: UIViewController {
     private let trackerLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 34, weight: .bold)
-        label.text = "Трекеры"
+        label.text = Localizable.trackers
         label.tintColor = .ypBlack
         return label
     }()
 
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = "Поиск"
+        searchBar.placeholder = Localizable.search
         searchBar.searchBarStyle = .minimal
         return searchBar
     }()
@@ -33,6 +33,7 @@ final class TrackerViewController: UIViewController {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
+        datePicker.locale = Locale.current
         datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
         return datePicker
     }()
@@ -45,7 +46,7 @@ final class TrackerViewController: UIViewController {
     private let emptyStateView = UIView()
     private let emptyStateLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = Localizable.emptyTracker
         label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center

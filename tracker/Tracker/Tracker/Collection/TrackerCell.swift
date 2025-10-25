@@ -123,28 +123,12 @@ final class TrackerCell: UICollectionViewCell {
     @objc private func completionButtonTapped() {
         guard let trackerId = trackerId, let date = currentDate else { return }
 
-        if date > Date() {
-            print("Нельзя отмечать будущие даты")
-            return
-        }
-
         let isCurrentlyCompleted = completionButton.backgroundColor?.cgColor.alpha ?? 1.0 < 1.0
             let newCompletionState = !isCurrentlyCompleted
             onCompletion?(trackerId.uuidString, date, newCompletionState)
         }
     
     private func formattedDaysText(_ count: Int) -> String {
-        let remainder = count % 10
-        let remainder100 = count % 100
-        
-        if remainder100 >= 11 && remainder100 <= 19 {
-            return "\(count) дней"
-        } else if remainder == 1 {
-            return "\(count) день"
-        } else if remainder >= 2 && remainder <= 4 {
-            return "\(count) дня"
-        } else {
-            return "\(count) дней"
-        }
+        return Localizable.daysCount(count)
     }
 }

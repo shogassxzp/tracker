@@ -7,7 +7,7 @@ final class ScheduleViewController: UIViewController {
     private let weekdays: [Weekday] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
     private let scheludeLabel: UILabel = {
         let label = UILabel()
-        label.text = "Расписание"
+        label.text = Localizable.schedule
         label.font = .systemFont(ofSize: 16, weight: .medium)
         return label
     }()
@@ -25,7 +25,7 @@ final class ScheduleViewController: UIViewController {
 
     private let saveButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(Localizable.done, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.ypWhite, for: .normal)
         button.backgroundColor = .ypBlack
@@ -73,11 +73,11 @@ final class ScheduleViewController: UIViewController {
     }
 
     private func setupDays() {
-        for (index, day) in weekdays.enumerated() {
-            let dayView = createDayView(for: day.rawValue, isLast: index == weekdays.count - 1)
-            stackView.addArrangedSubview(dayView)
+            for (index, day) in weekdays.enumerated() {
+                let dayView = createDayView(for: day.localizedName, isLast: index == weekdays.count - 1)
+                stackView.addArrangedSubview(dayView)
+            }
         }
-    }
 
     private func createDayView(for day: String, isLast: Bool) -> UIView {
         let container = UIView()
