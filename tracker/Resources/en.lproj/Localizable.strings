@@ -80,3 +80,12 @@
 "search" = "Search";
 "empty_tracker" = "What will we track?";
 "no_trackers_found" = "Nothing found";
+
+"statisticLabel" = "Statistic";
+"empty_stat" = "There is nothing to analyze yet";
+
+"best_period" = "Best period";
+"perfect_days" = "Perfect days";
+"completed_trackers" = "Trackers completed";
+"average_value" = "Average value";
+

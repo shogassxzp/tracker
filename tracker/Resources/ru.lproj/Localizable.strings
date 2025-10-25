@@ -93,3 +93,12 @@
 "search" = "Поиск";
 "empty_tracker" = "Что мы будем отслеживать?";
 "no_trackers_found" = "Ничего не найдено";
+
+"statisticLabel" = "Статистика";
+"empty_stat" = "Анализировать пока нечего";
+
+"best_period" = "Лучший период";
+"perfect_days" = "Идеальные дни";
+"completed_trackers" = "Трекеров завершено";
+"average_value" = "Среднее значение";
+

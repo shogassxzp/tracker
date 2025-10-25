@@ -73,4 +73,10 @@ enum Localizable {
     static let statistic = NSLocalizedString("statistic", comment: "Statistic")
     
     static let noTrackersFound = NSLocalizedString("no_trackers_found", comment: "noTrackersFound")
+    static let bestPeriod = NSLocalizedString("best_period", comment: "Best period stats")
+    static let emptyStatLabel = NSLocalizedString("empty_stat", comment: "Empty statistic label")
+    static let perfectDays = NSLocalizedString("perfect_days", comment: "Perfect Days Stats")
+    static let completedTrackers = NSLocalizedString("completed_trackers", comment: "Completed trackers stats")
+    static let averageValue = NSLocalizedString("average_value", comment: "average value stats")
+    static let statisticLabel = NSLocalizedString("statisticLabel", comment: "statistic label")
 }
