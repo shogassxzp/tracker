@@ -7,8 +7,7 @@ final class TrackerViewController: UIViewController {
 
     private let newTrackerButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(resource: .plus), for: .normal)
-        button.tintColor = .ypBlack
+        button.setImage(UIImage(resource: .plus).withTintColor(.ypBlack), for: .normal)
         button.contentHorizontalAlignment = .center
         button.addTarget(self, action: #selector(newTracker), for: .touchUpInside)
         return button
