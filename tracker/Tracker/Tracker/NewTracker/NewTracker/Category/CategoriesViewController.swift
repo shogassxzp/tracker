@@ -205,12 +205,11 @@ extension CategoriesViewController: UITableViewDelegate {
     }
 
     private func showDeleteConfirmation(for indexPath: IndexPath) {
-        let categoryName = viewModel.cellViewModel(at: indexPath).title
 
         let alert = UIAlertController(
-            title: "Удалить категорию?",
-            message: "Категория \"\(categoryName)\" будет удалена. Это действие нельзя отменить.",
-            preferredStyle: .alert
+            title: "Эта категория точно не нужна?",
+            message: nil,
+            preferredStyle: .actionSheet
         )
 
         let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
