@@ -35,8 +35,8 @@ enum Weekday: String, CaseIterable {
     case thursday
     case friday
     case saturday
-    case sunday 
-    
+    case sunday
+
     var localizedName: String {
         switch self {
         case .monday: return Localizable.monday

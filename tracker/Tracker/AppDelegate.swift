@@ -1,3 +1,4 @@
+import AppMetricaCore
 import CoreData
 import UIKit
 
@@ -6,10 +7,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        let configuration = AppMetricaConfiguration(apiKey: "enter_your_api_key")
+        configuration?.areLogsEnabled = true
+        AppMetrica.activate(with: configuration!)
+
         _ = Dependencies.shared.coreDataStack
-        
+
         createDefaultCategoryIfNeeded()
-        
+
         return true
     }
 
@@ -33,10 +38,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         saveContext()
     }
-    
+
     private func createDefaultCategoryIfNeeded() {
         let categoryStore = Dependencies.shared.categoryStore
-        
+
         do {
             let categories = try categoryStore.fetchAllCategories()
             if categories.isEmpty {

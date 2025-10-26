@@ -98,20 +98,20 @@ final class NewCategoryViewController: UIViewController {
     }
 
     @objc private func createCategory() {
-            guard let categoryName = textField.text, !categoryName.isEmpty else {
-                return
-            }
-            
-            let newCategory = TrackerCategory(id: UUID(), title: categoryName)
-            
-            do {
-                try categoryStore.addCategory(newCategory)
-                delegate?.didCreateNewCategory(newCategory)
-                dismiss(animated: true)
-            } catch {
-                return
-            }
+        guard let categoryName = textField.text, !categoryName.isEmpty else {
+            return
         }
+
+        let newCategory = TrackerCategory(id: UUID(), title: categoryName)
+
+        do {
+            try categoryStore.addCategory(newCategory)
+            delegate?.didCreateNewCategory(newCategory)
+            dismiss(animated: true)
+        } catch {
+            return
+        }
+    }
 
     private func setupKeyboardDismissal() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))

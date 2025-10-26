@@ -103,6 +103,7 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
             title: Localizable.edit,
             image: UIImage(systemName: "pencil")
         ) { [weak self] _ in
+            self?.reportAnalytics(event: "click", item: "edit")
             self?.editTracker(tracker)
         }
 
@@ -111,6 +112,7 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
             image: UIImage(systemName: "trash"),
             attributes: .destructive
         ) { [weak self] _ in
+            self?.reportAnalytics(event: "click", item: "delete")
             self?.deleteTracker(tracker)
         }
 

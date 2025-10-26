@@ -1,3 +1,4 @@
+import AppMetricaCore
 import UIKit
 
 final class TrackerViewController: UIViewController {
@@ -72,6 +73,15 @@ final class TrackerViewController: UIViewController {
     }()
 
     private let emptyStateImage = UIImageView()
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        reportAnalytics(event: "open", item: nil)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        reportAnalytics(event: "close", item: nil)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -170,6 +180,7 @@ final class TrackerViewController: UIViewController {
     }
 
     @objc private func filtersButtonTapped() {
+        reportAnalytics(event: "click", item: "filter")
         let filtersVC = FiltersViewController(selectedFilter: currentFilter)
         filtersVC.delegate = self
         filtersVC.modalPresentationStyle = .popover
@@ -392,6 +403,7 @@ final class TrackerViewController: UIViewController {
             let recordStore = Dependencies.shared.recordStore
 
             if isCompleted {
+                reportAnalytics(event: "click", item: "track")
                 let record = TrackerRecord(
                     id: UUID(),
                     trackerId: trackerId,
@@ -433,6 +445,7 @@ final class TrackerViewController: UIViewController {
     }
 
     @objc private func newTracker() {
+        reportAnalytics(event: "click", item: "add_track")
         let newTrackerViewController = NewTrackerViewController()
         newTrackerViewController.modalPresentationStyle = .popover
         present(newTrackerViewController, animated: true)
@@ -485,6 +498,25 @@ final class TrackerViewController: UIViewController {
 
         emptyStateView.isHidden = hasVisibleTrackers
         habitsCollectionView.isHidden = !hasVisibleTrackers
+    }
+
+    func reportAnalytics(event: String, item: String?) {
+        var parameters: [AnyHashable: Any] = [
+            "event": event,
+            "screen": "Main",
+        ]
+
+        if let item = item {
+            parameters["item"] = item
+        }
+
+        AppMetrica.reportEvent(
+            name: "event",
+            parameters: parameters,
+            onFailure: { error in
+                print("REPORT ERROR: %@", error.localizedDescription)
+            }
+        )
     }
 }
 

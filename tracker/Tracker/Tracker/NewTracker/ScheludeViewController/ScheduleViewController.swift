@@ -73,11 +73,11 @@ final class ScheduleViewController: UIViewController {
     }
 
     private func setupDays() {
-            for (index, day) in weekdays.enumerated() {
-                let dayView = createDayView(for: day.localizedName, isLast: index == weekdays.count - 1)
-                stackView.addArrangedSubview(dayView)
-            }
+        for (index, day) in weekdays.enumerated() {
+            let dayView = createDayView(for: day.localizedName, isLast: index == weekdays.count - 1)
+            stackView.addArrangedSubview(dayView)
         }
+    }
 
     private func createDayView(for day: String, isLast: Bool) -> UIView {
         let container = UIView()

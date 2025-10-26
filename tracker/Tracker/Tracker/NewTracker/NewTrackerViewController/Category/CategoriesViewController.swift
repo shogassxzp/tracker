@@ -205,7 +205,6 @@ extension CategoriesViewController: UITableViewDelegate {
     }
 
     private func showDeleteConfirmation(for indexPath: IndexPath) {
-
         let alert = UIAlertController(
             title: Localizable.deleteCategoryConfirmation,
             message: nil,
