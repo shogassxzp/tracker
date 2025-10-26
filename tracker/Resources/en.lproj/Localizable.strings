@@ -89,3 +89,6 @@
 "completed_trackers" = "Trackers completed";
 "average_value" = "Average value";
 
+"edit_tracker" = "Changing a habit";
+"delete_tracker_confirmation" = "Are you sure you want to delete the tracker?";
+

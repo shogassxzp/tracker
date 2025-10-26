@@ -79,4 +79,6 @@ enum Localizable {
     static let completedTrackers = NSLocalizedString("completed_trackers", comment: "Completed trackers stats")
     static let averageValue = NSLocalizedString("average_value", comment: "average value stats")
     static let statisticLabel = NSLocalizedString("statisticLabel", comment: "statistic label")
+    static let editTracker = NSLocalizedString("edit_tracker", comment: "Changing a habit")
+    static let deleteTrackerConfirm = NSLocalizedString("delete_tracker_confirmation", comment: "tracker delete confirm")
 }

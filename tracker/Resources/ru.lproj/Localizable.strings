@@ -102,3 +102,6 @@
 "completed_trackers" = "Трекеров завершено";
 "average_value" = "Среднее значение";
 
+"edit_tracker" = "Изменение привычки";
+"delete_tracker_confirmation" = "Уверены, что хотите удалить трекер?";
+

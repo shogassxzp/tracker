@@ -100,14 +100,14 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
 
     private func createContextMenu(for tracker: Tracker) -> UIMenu {
         let editAction = UIAction(
-            title: "Редактировать",
+            title: Localizable.edit,
             image: UIImage(systemName: "pencil")
         ) { [weak self] _ in
             self?.editTracker(tracker)
         }
 
         let deleteAction = UIAction(
-            title: "Удалить",
+            title: Localizable.delete,
             image: UIImage(systemName: "trash"),
             attributes: .destructive
         ) { [weak self] _ in
@@ -133,11 +133,11 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     private func deleteTracker(_ tracker: Tracker) {
         let alert = UIAlertController(
             title: nil,
-            message: "Уверены, что хотите удалить трекер?",
+            message: Localizable.deleteTrackerConfirm,
             preferredStyle: .actionSheet
         )
 
-        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        let deleteAction = UIAlertAction(title: Localizable.delete, style: .destructive) { [weak self] _ in
             do {
                 try Dependencies.shared.trackerStore.deleteTracker(tracker)
                 self?.loadCategories()
@@ -146,7 +146,7 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
             }
         }
 
-        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+        let cancelAction = UIAlertAction(title: Localizable.cancel, style: .cancel)
 
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)

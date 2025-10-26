@@ -29,11 +29,11 @@ final class EditTrackerViewController: NewTrackerViewController {
     }
 
     private func setupEditMode() {
-        newHabitLabel.text = "Редактирование привычки"
+        newHabitLabel.text = Localizable.editTracker
 
         setupDaysCountLabel()
 
-        createButton.setTitle("Сохранить", for: .normal)
+        createButton.setTitle(Localizable.save, for: .normal)
     }
 
     private func setupDaysCountLabel() {
