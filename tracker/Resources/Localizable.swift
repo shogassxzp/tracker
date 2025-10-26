@@ -68,10 +68,10 @@ enum Localizable {
     // Date
     static let everyDay = NSLocalizedString("every_day", comment: "Every day in schedule")
     static let everyDayShort = NSLocalizedString("every_day_short", comment: "Every day short version")
-    
+
     static let imortant = NSLocalizedString("important", comment: "important")
     static let statistic = NSLocalizedString("statistic", comment: "Statistic")
-    
+
     static let noTrackersFound = NSLocalizedString("no_trackers_found", comment: "noTrackersFound")
     static let bestPeriod = NSLocalizedString("best_period", comment: "Best period stats")
     static let emptyStatLabel = NSLocalizedString("empty_stat", comment: "Empty statistic label")
@@ -81,4 +81,9 @@ enum Localizable {
     static let statisticLabel = NSLocalizedString("statisticLabel", comment: "statistic label")
     static let editTracker = NSLocalizedString("edit_tracker", comment: "Changing a habit")
     static let deleteTrackerConfirm = NSLocalizedString("delete_tracker_confirmation", comment: "tracker delete confirm")
+    static let filterAll = NSLocalizedString("filter_all", comment: "filter all")
+    static let filterToday = NSLocalizedString("filter_today_trackers", comment: "filter today")
+    static let filterCompleted = NSLocalizedString("filter_complete", comment: "filter completed")
+    static let filterNotCompleted = NSLocalizedString("filter_uncomplete", comment: "filter not completed")
+    static let filterLabel = NSLocalizedString("filter_title", comment: "filter label")
 }

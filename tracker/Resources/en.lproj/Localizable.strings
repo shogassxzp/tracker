@@ -92,3 +92,9 @@
 "edit_tracker" = "Changing a habit";
 "delete_tracker_confirmation" = "Are you sure you want to delete the tracker?";
 
+"filter_title" = "Filters";
+
+"filter_all" = "All trackers";
+"filter_today_trackers" = "Today trackers";
+"filter_complete" = "Completed";
+"filter_uncomplete" = "Not completed";

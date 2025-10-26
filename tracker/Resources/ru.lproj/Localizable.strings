@@ -105,3 +105,8 @@
 "edit_tracker" = "Изменение привычки";
 "delete_tracker_confirmation" = "Уверены, что хотите удалить трекер?";
 
+"filter_title" = "Фильтры";
+"filter_all" = "Все трекеры";
+"filter_today_trackers" = "Трекеры на сегодня";
+"filter_complete" = "Завершённые";
+"filter_uncomplete" = "Не завершённые";
