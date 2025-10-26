@@ -5,7 +5,7 @@ final class TrackerViewController: UIViewController {
     var completedTrackers: Set<UUID> = []
     var currentDate = Date()
 
-     var visibleCategories: [TrackerCategory] = []
+    var visibleCategories: [TrackerCategory] = []
     private var isSearching = false
 
     private let newTrackerButton: UIButton = {
@@ -149,7 +149,7 @@ final class TrackerViewController: UIViewController {
 
     @objc private func searchTextChanged(_ searchField: UISearchTextField) {
         guard let searchText = searchField.text?.lowercased() else { return }
-        
+
         if searchText.isEmpty {
             isSearching = false
             loadCategories()
@@ -162,11 +162,11 @@ final class TrackerViewController: UIViewController {
     private func filterTrackers(with searchText: String) {
         do {
             let allTrackers = try Dependencies.shared.trackerStore.fetchTrackers()
-            
+
             let filteredTrackers = allTrackers.filter { tracker in
-                return tracker.title.lowercased().contains(searchText)
+                tracker.title.lowercased().contains(searchText)
             }
-            
+
             let groupedTrackers = Dictionary(grouping: filteredTrackers) { $0.category.title }
             visibleCategories = groupedTrackers.map { title, trackers in
                 let originalCategory = allTrackers.first { $0.category.title == title }?.category
@@ -176,11 +176,11 @@ final class TrackerViewController: UIViewController {
                     trackers: trackers
                 )
             }.sorted { $0.title < $1.title }
-            
+
         } catch {
             visibleCategories = []
         }
-        
+
         habitsCollectionView.reloadData()
         updateEmptyStateForSearch()
     }
@@ -228,7 +228,7 @@ final class TrackerViewController: UIViewController {
         showEmptyStateIfNeeded()
     }
 
-    private func loadCategories() {
+    func loadCategories() {
         do {
             let allTrackers = try Dependencies.shared.trackerStore.fetchTrackers()
             let filteredTrackers = allTrackers.filter { tracker in
@@ -241,7 +241,7 @@ final class TrackerViewController: UIViewController {
                     return true
                 }
             }
-            
+
             let groupedTrackers = Dictionary(grouping: filteredTrackers) { $0.category.title }
             let filteredCategories = groupedTrackers.map { title, trackers in
                 let originalCategory = allTrackers.first { $0.category.title == title }?.category
@@ -251,15 +251,15 @@ final class TrackerViewController: UIViewController {
                     trackers: trackers
                 )
             }.sorted { $0.title < $1.title }
-            
+
             categories = filteredCategories
             visibleCategories = filteredCategories
-            
+
         } catch {
             categories = []
             visibleCategories = []
         }
-        
+
         habitsCollectionView.reloadData()
         showEmptyStateIfNeeded()
     }
@@ -337,7 +337,7 @@ final class TrackerViewController: UIViewController {
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
         loadCompletedTrackers()
-        
+
         if let searchText = searchBar.text, !searchText.isEmpty, isSearching {
         } else {
             loadCategories()
@@ -356,18 +356,19 @@ final class TrackerViewController: UIViewController {
 
     private func showEmptyStateIfNeeded() {
         let hasTrackers = visibleCategories.contains { !$0.trackers.isEmpty }
-        
+
         if hasTrackers {
             hideEmptyState()
         } else {
             showEmptyState()
         }
-        
+
         updateEmptyStateForSearch()
     }
+
     private func updateEmptyStateForSearch() {
         let hasVisibleTrackers = visibleCategories.contains { !$0.trackers.isEmpty }
-        
+
         if isSearching {
             emptyStateLabel.text = Localizable.noTrackersFound
             emptyStateImage.image = UIImage(resource: .findError)
@@ -375,7 +376,7 @@ final class TrackerViewController: UIViewController {
             emptyStateLabel.text = Localizable.emptyTracker
             emptyStateImage.image = UIImage(resource: .collectionPlaceholder)
         }
-        
+
         emptyStateView.isHidden = hasVisibleTrackers
         habitsCollectionView.isHidden = !hasVisibleTrackers
     }

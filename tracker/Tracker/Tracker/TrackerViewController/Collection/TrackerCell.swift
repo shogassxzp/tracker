@@ -74,7 +74,7 @@ final class TrackerCell: UICollectionViewCell {
             footerContainer.topAnchor.constraint(equalTo: contentContainer.bottomAnchor),
 
             daysLabel.leadingAnchor.constraint(equalTo: footerContainer.leadingAnchor, constant: 12),
-            daysLabel.centerYAnchor.constraint(equalTo: footerContainer.centerYAnchor,constant: -5),
+            daysLabel.centerYAnchor.constraint(equalTo: footerContainer.centerYAnchor, constant: -5),
 
             completionButton.widthAnchor.constraint(equalToConstant: 32),
             completionButton.heightAnchor.constraint(equalToConstant: 32),
@@ -124,10 +124,10 @@ final class TrackerCell: UICollectionViewCell {
         guard let trackerId = trackerId, let date = currentDate else { return }
 
         let isCurrentlyCompleted = completionButton.backgroundColor?.cgColor.alpha ?? 1.0 < 1.0
-            let newCompletionState = !isCurrentlyCompleted
-            onCompletion?(trackerId.uuidString, date, newCompletionState)
-        }
-    
+        let newCompletionState = !isCurrentlyCompleted
+        onCompletion?(trackerId.uuidString, date, newCompletionState)
+    }
+
     private func formattedDaysText(_ count: Int) -> String {
         return Localizable.daysCount(count)
     }

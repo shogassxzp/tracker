@@ -89,4 +89,68 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 12, left: 16, bottom: 10, right: 16)
     }
+
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let tracker = visibleCategories[indexPath.section].trackers[indexPath.item]
+
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
+            self?.createContextMenu(for: tracker)
+        }
+    }
+
+    private func createContextMenu(for tracker: Tracker) -> UIMenu {
+        let editAction = UIAction(
+            title: "Редактировать",
+            image: UIImage(systemName: "pencil")
+        ) { [weak self] _ in
+            self?.editTracker(tracker)
+        }
+
+        let deleteAction = UIAction(
+            title: "Удалить",
+            image: UIImage(systemName: "trash"),
+            attributes: .destructive
+        ) { [weak self] _ in
+            self?.deleteTracker(tracker)
+        }
+
+        return UIMenu(title: "", children: [editAction, deleteAction])
+    }
+
+    private func editTracker(_ tracker: Tracker) {
+        let completionCount: Int
+        do {
+            completionCount = try Dependencies.shared.recordStore.countRecords(for: tracker)
+        } catch {
+            completionCount = 0
+        }
+
+        let editVC = EditTrackerViewController(tracker: tracker, completionCount: completionCount)
+        editVC.modalPresentationStyle = .popover
+        present(editVC, animated: true)
+    }
+
+    private func deleteTracker(_ tracker: Tracker) {
+        let alert = UIAlertController(
+            title: nil,
+            message: "Уверены, что хотите удалить трекер?",
+            preferredStyle: .actionSheet
+        )
+
+        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+            do {
+                try Dependencies.shared.trackerStore.deleteTracker(tracker)
+                self?.loadCategories()
+            } catch {
+                return
+            }
+        }
+
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+
+        present(alert, animated: true)
+    }
 }
