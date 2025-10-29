@@ -74,7 +74,7 @@ final class TrackerCell: UICollectionViewCell {
             footerContainer.topAnchor.constraint(equalTo: contentContainer.bottomAnchor),
 
             daysLabel.leadingAnchor.constraint(equalTo: footerContainer.leadingAnchor, constant: 12),
-            daysLabel.centerYAnchor.constraint(equalTo: footerContainer.centerYAnchor,constant: -5),
+            daysLabel.centerYAnchor.constraint(equalTo: footerContainer.centerYAnchor, constant: -5),
 
             completionButton.widthAnchor.constraint(equalToConstant: 32),
             completionButton.heightAnchor.constraint(equalToConstant: 32),
@@ -97,7 +97,7 @@ final class TrackerCell: UICollectionViewCell {
         contentContainer.backgroundColor = tracker.color
         titleLabel.text = tracker.title
         titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
-        titleLabel.textColor = .ypWhite
+        titleLabel.textColor = .white
         emojiLabel.font = .systemFont(ofSize: 16, weight: .medium)
         emojiLabel.text = String(tracker.emoji)
 
@@ -117,34 +117,25 @@ final class TrackerCell: UICollectionViewCell {
 
         completionButton.setImage(buttonImage, for: .normal)
         completionButton.backgroundColor = isCompleted ? color.withAlphaComponent(0.6) : color
-        completionButton.tintColor = isCompleted ? .white.withAlphaComponent(0.6) : .white
+        completionButton.tintColor = isCompleted ? .ypWhite.withAlphaComponent(0.6) : .ypWhite
     }
 
     @objc private func completionButtonTapped() {
         guard let trackerId = trackerId, let date = currentDate else { return }
 
-        if date > Date() {
-            print("Нельзя отмечать будущие даты")
+        let calendar = Calendar.current
+        let today = Date()
+        
+        if calendar.compare(date, to: today, toGranularity: .day) == .orderedDescending {
             return
         }
 
         let isCurrentlyCompleted = completionButton.backgroundColor?.cgColor.alpha ?? 1.0 < 1.0
-            let newCompletionState = !isCurrentlyCompleted
-            onCompletion?(trackerId.uuidString, date, newCompletionState)
-        }
-    
+        let newCompletionState = !isCurrentlyCompleted
+        onCompletion?(trackerId.uuidString, date, newCompletionState)
+    }
+
     private func formattedDaysText(_ count: Int) -> String {
-        let remainder = count % 10
-        let remainder100 = count % 100
-        
-        if remainder100 >= 11 && remainder100 <= 19 {
-            return "\(count) дней"
-        } else if remainder == 1 {
-            return "\(count) день"
-        } else if remainder >= 2 && remainder <= 4 {
-            return "\(count) дня"
-        } else {
-            return "\(count) дней"
-        }
+        return Localizable.daysCount(count)
     }
 }

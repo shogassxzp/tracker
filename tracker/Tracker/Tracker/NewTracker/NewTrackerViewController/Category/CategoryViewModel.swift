@@ -37,7 +37,7 @@ final class CategoriesViewModel {
 
             onCategoriesUpdate?()
         } catch {
-            onError?("Не удалось загрузить категории: \(error.localizedDescription)")
+            onError?("\(Localizable.failedToLoadCategories) \(error.localizedDescription)")
         }
     }
 
@@ -55,9 +55,7 @@ final class CategoriesViewModel {
 
     func selectCategory(at indexPath: IndexPath) {
         let category = categories[indexPath.row]
-        selectedCategory = category
         onCategorySelect?(category)
-        onCategoriesUpdate?()
     }
 
     func addNewCategory(_ title: String) {
@@ -69,7 +67,7 @@ final class CategoriesViewModel {
             trackersCountByCategory[newCategory.id] = 0
             onCategoriesUpdate?()
         } catch {
-            onError?("Не удалось создать категорию: \(error.localizedDescription)")
+            onError?("\(Localizable.failedToDeleteCategory) \(error.localizedDescription)")
         }
     }
 
@@ -87,7 +85,7 @@ final class CategoriesViewModel {
 
             onCategoriesUpdate?()
         } catch {
-            onError?("Не удалось удалить категорию: \(error.localizedDescription)")
+            onError?("\(Localizable.failedToDeleteCategory) \(error.localizedDescription)")
         }
     }
 

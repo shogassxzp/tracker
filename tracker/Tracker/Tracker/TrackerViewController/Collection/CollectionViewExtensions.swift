@@ -7,7 +7,7 @@ extension TrackerViewController: UICollectionViewDataSource {
         }
 
         cell.prepareForReuse()
-        let tracker = categories[indexPath.section].trackers[indexPath.item]
+        let tracker = visibleCategories[indexPath.section].trackers[indexPath.item]
         let isCompleted: Bool
 
         do {
@@ -42,12 +42,12 @@ extension TrackerViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let count = categories[section].trackers.count
+        let count = visibleCategories[section].trackers.count
         return count
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        categories.count
+        visibleCategories.count
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -58,7 +58,7 @@ extension TrackerViewController: UICollectionViewDataSource {
                 for: indexPath
             ) as? HeaderView
 
-            header?.titleLabel.text = categories[indexPath.section].title
+            header?.titleLabel.text = visibleCategories[indexPath.section].title
             header?.titleLabel.font = .systemFont(ofSize: 19, weight: .bold)
 
             return header ?? UICollectionReusableView()
@@ -88,5 +88,71 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 12, left: 16, bottom: 10, right: 16)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let tracker = visibleCategories[indexPath.section].trackers[indexPath.item]
+
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
+            self?.createContextMenu(for: tracker)
+        }
+    }
+
+    private func createContextMenu(for tracker: Tracker) -> UIMenu {
+        let editAction = UIAction(
+            title: Localizable.edit,
+            image: UIImage(systemName: "pencil")
+        ) { [weak self] _ in
+            self?.reportAnalytics(event: "click", item: "edit")
+            self?.editTracker(tracker)
+        }
+
+        let deleteAction = UIAction(
+            title: Localizable.delete,
+            image: UIImage(systemName: "trash"),
+            attributes: .destructive
+        ) { [weak self] _ in
+            self?.reportAnalytics(event: "click", item: "delete")
+            self?.deleteTracker(tracker)
+        }
+
+        return UIMenu(title: "", children: [editAction, deleteAction])
+    }
+
+    private func editTracker(_ tracker: Tracker) {
+        let completionCount: Int
+        do {
+            completionCount = try Dependencies.shared.recordStore.countRecords(for: tracker)
+        } catch {
+            completionCount = 0
+        }
+
+        let editVC = EditTrackerViewController(tracker: tracker, completionCount: completionCount)
+        editVC.modalPresentationStyle = .popover
+        present(editVC, animated: true)
+    }
+
+    private func deleteTracker(_ tracker: Tracker) {
+        let alert = UIAlertController(
+            title: nil,
+            message: Localizable.deleteTrackerConfirm,
+            preferredStyle: .actionSheet
+        )
+
+        let deleteAction = UIAlertAction(title: Localizable.delete, style: .destructive) { [weak self] _ in
+            do {
+                try Dependencies.shared.trackerStore.deleteTracker(tracker)
+                self?.loadCategories()
+            } catch {
+                return
+            }
+        }
+
+        let cancelAction = UIAlertAction(title: Localizable.cancel, style: .cancel)
+
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+
+        present(alert, animated: true)
     }
 }

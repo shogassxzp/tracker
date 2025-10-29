@@ -29,23 +29,35 @@ struct Tracker {
 }
 
 enum Weekday: String, CaseIterable {
-    case monday = "Понедельник"
-    case tuesday = "Вторник"
-    case wednesday = "Среда"
-    case thursday = "Четверг"
-    case friday = "Пятница"
-    case saturday = "Суббота"
-    case sunday = "Воскресенье"
+    case monday
+    case tuesday
+    case wednesday
+    case thursday
+    case friday
+    case saturday
+    case sunday
+
+    var localizedName: String {
+        switch self {
+        case .monday: return Localizable.monday
+        case .tuesday: return Localizable.tuesday
+        case .wednesday: return Localizable.wednesday
+        case .thursday: return Localizable.thursday
+        case .friday: return Localizable.friday
+        case .saturday: return Localizable.saturday
+        case .sunday: return Localizable.sunday
+        }
+    }
 
     var shortName: String {
         switch self {
-        case .monday: return "Пн"
-        case .tuesday: return "Вт"
-        case .wednesday: return "Ср"
-        case .thursday: return "Чт"
-        case .friday: return "Пт"
-        case .saturday: return "Сб"
-        case .sunday: return "Вс"
+        case .monday: return Localizable.mon
+        case .tuesday: return Localizable.tue
+        case .wednesday: return Localizable.wed
+        case .thursday: return Localizable.thu
+        case .friday: return Localizable.fri
+        case .saturday: return Localizable.sat
+        case .sunday: return Localizable.sun
         }
     }
 }

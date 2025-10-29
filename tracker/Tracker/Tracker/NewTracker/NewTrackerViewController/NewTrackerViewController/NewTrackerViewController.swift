@@ -1,43 +1,43 @@
 import UIKit
 
-final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
-    private var selectedSchedule: [Weekday] = []
-    private var selectedCategory: TrackerCategory?
+class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
+    var selectedSchedule: [Weekday] = []
+    var selectedCategory: TrackerCategory?
 
-    private var scrollView: UIScrollView = {
+    var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .ypWhite
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
 
-    private let contentView: UIView = {
+    let contentView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
-    private var emojiCollection = EmojiCollection()
-    private var colorCollection = ColorCollection()
-    private var selectedEmoji: Character?
-    private var selectedColor: UIColor?
+    var emojiCollection = EmojiCollection()
+    var colorCollection = ColorCollection()
+    var selectedEmoji: Character?
+    var selectedColor: UIColor?
 
-    private var scheduleButtonTopConstraint: NSLayoutConstraint!
-    private var scheduleButtonCenterYConstraint: NSLayoutConstraint!
-    private var categoryButtonTopConstraint: NSLayoutConstraint!
-    private var categoryButtonCenterYConstraint: NSLayoutConstraint!
+    var scheduleTitleTopConstraint: NSLayoutConstraint!
+    var scheduleTitleCenterYConstraint: NSLayoutConstraint!
+    var categoryTitleTopConstraint: NSLayoutConstraint!
+    var categoryTitleCenterYConstraint: NSLayoutConstraint!
 
-    private var newHabitLabel: UILabel = {
+    var newHabitLabel: UILabel = {
         let label = UILabel()
-        label.text = "Новая привычка"
+        label.text = Localizable.newHabit
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .center
         return label
     }()
 
-    private let nameTextField: UITextField = {
+    let nameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = Localizable.enterTrackerName
         textField.leftViewMode = .always
         textField.textAlignment = .left
         textField.font = .systemFont(ofSize: 17, weight: .regular)
@@ -47,20 +47,29 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         return textField
     }()
 
-    private let categoryButton: UIButton = {
-        let button = UIButton(type: .system)
-        var config = UIButton.Configuration.plain()
-        config.title = "Категория"
-        config.baseForegroundColor = .ypBlack
-        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 0)
-        config.titleAlignment = .leading
-        button.configuration = config
-        button.contentHorizontalAlignment = .left
+    let categoryContainerButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.backgroundColor = .clear
         button.addTarget(self, action: #selector(categoryTapped), for: .touchUpInside)
         return button
     }()
 
-    private let categorySubtitleLabel: UILabel = {
+    let scheduleContainerButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(scheduleTapped), for: .touchUpInside)
+        return button
+    }()
+
+    let categoryTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = Localizable.category
+        label.textColor = .ypBlack
+        label.font = .systemFont(ofSize: 17, weight: .regular)
+        return label
+    }()
+
+    let categorySubtitleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .ypGray
         label.font = .systemFont(ofSize: 17, weight: .regular)
@@ -68,20 +77,15 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         return label
     }()
 
-    private let scheduleButton: UIButton = {
-        let button = UIButton(type: .system)
-        var config = UIButton.Configuration.plain()
-        config.title = "Расписание"
-        config.baseForegroundColor = .ypBlack
-        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 0)
-        config.titleAlignment = .leading
-        button.configuration = config
-        button.contentHorizontalAlignment = .left
-        button.addTarget(self, action: #selector(scheduleTapped), for: .touchUpInside)
-        return button
+    let scheduleTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = Localizable.schedule
+        label.textColor = .ypBlack
+        label.font = .systemFont(ofSize: 17, weight: .regular)
+        return label
     }()
 
-    private let scheduleSubtitleLabel: UILabel = {
+    let scheduleSubtitleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .ypGray
         label.font = .systemFont(ofSize: 17, weight: .regular)
@@ -90,9 +94,9 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         return label
     }()
 
-    private let createButton: UIButton = {
+    let createButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(Localizable.create, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .ypGray
         button.layer.cornerRadius = 16
@@ -101,10 +105,10 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         return button
     }()
 
-    private let cancelButton: UIButton = {
+    let cancelButton: UIButton = {
         let button = UIButton(type: .system)
         var config = UIButton.Configuration.plain()
-        config.title = "Отменить"
+        config.title = Localizable.cancel
         config.baseForegroundColor = .systemRed
         config.background.backgroundColor = .ypWhite
         config.background.strokeColor = .systemRed
@@ -115,7 +119,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         return button
     }()
 
-    private let categoryContainer: UIView = {
+    let categoryContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .ypBackground
         view.layer.cornerRadius = 16
@@ -124,7 +128,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         return view
     }()
 
-    private let scheduleContainer: UIView = {
+    let scheduleContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .ypBackground
         view.layer.cornerRadius = 16
@@ -133,7 +137,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         return view
     }()
 
-    private let separator: UIView = {
+    let separator: UIView = {
         let view = UIView()
         view.backgroundColor = .separator
         return view
@@ -151,7 +155,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         setupCollections()
     }
 
-    private func addSubviewsInScrollView() {
+    func addSubviewsInScrollView() {
         [newHabitLabel, nameTextField, categoryContainer, separator, scheduleContainer, colorCollection, emojiCollection].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
@@ -162,18 +166,18 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
             view.addSubview($0)
         }
 
-        [categoryButton, categorySubtitleLabel].forEach {
+        [categoryContainerButton, categoryTitleLabel, categorySubtitleLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             categoryContainer.addSubview($0)
         }
 
-        [scheduleButton, scheduleSubtitleLabel].forEach {
+        [scheduleContainerButton, scheduleTitleLabel, scheduleSubtitleLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             scheduleContainer.addSubview($0)
         }
     }
 
-    private func setupView() {
+    func setupView() {
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 1))
         nameTextField.leftView = leftPaddingView
         nameTextField.delegate = self
@@ -221,20 +225,30 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
             scheduleContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             scheduleContainer.heightAnchor.constraint(equalToConstant: 75),
 
-            categoryButton.leadingAnchor.constraint(equalTo: categoryContainer.leadingAnchor),
-            categoryButton.trailingAnchor.constraint(equalTo: categoryContainer.trailingAnchor),
+            categoryContainerButton.leadingAnchor.constraint(equalTo: categoryContainer.leadingAnchor),
+            categoryContainerButton.trailingAnchor.constraint(equalTo: categoryContainer.trailingAnchor),
+            categoryContainerButton.topAnchor.constraint(equalTo: categoryContainer.topAnchor),
+            categoryContainerButton.bottomAnchor.constraint(equalTo: categoryContainer.bottomAnchor),
 
-            categorySubtitleLabel.topAnchor.constraint(equalTo: categoryButton.bottomAnchor, constant: 2),
+            scheduleContainerButton.leadingAnchor.constraint(equalTo: scheduleContainer.leadingAnchor),
+            scheduleContainerButton.trailingAnchor.constraint(equalTo: scheduleContainer.trailingAnchor),
+            scheduleContainerButton.topAnchor.constraint(equalTo: scheduleContainer.topAnchor),
+            scheduleContainerButton.bottomAnchor.constraint(equalTo: scheduleContainer.bottomAnchor),
+
+            categoryTitleLabel.leadingAnchor.constraint(equalTo: categoryContainer.leadingAnchor, constant: 16),
+            categoryTitleLabel.trailingAnchor.constraint(equalTo: categoryContainer.trailingAnchor, constant: -40),
+
             categorySubtitleLabel.leadingAnchor.constraint(equalTo: categoryContainer.leadingAnchor, constant: 16),
-            categorySubtitleLabel.trailingAnchor.constraint(equalTo: categoryContainer.trailingAnchor),
+            categorySubtitleLabel.trailingAnchor.constraint(equalTo: categoryContainer.trailingAnchor, constant: -40),
+            categorySubtitleLabel.topAnchor.constraint(equalTo: categoryTitleLabel.bottomAnchor, constant: 2),
             categorySubtitleLabel.bottomAnchor.constraint(lessThanOrEqualTo: categoryContainer.bottomAnchor, constant: -10),
 
-            scheduleButton.leadingAnchor.constraint(equalTo: scheduleContainer.leadingAnchor),
-            scheduleButton.trailingAnchor.constraint(equalTo: scheduleContainer.trailingAnchor),
+            scheduleTitleLabel.leadingAnchor.constraint(equalTo: scheduleContainer.leadingAnchor, constant: 16),
+            scheduleTitleLabel.trailingAnchor.constraint(equalTo: scheduleContainer.trailingAnchor, constant: -40),
 
-            scheduleSubtitleLabel.topAnchor.constraint(equalTo: scheduleButton.bottomAnchor, constant: 2),
-            scheduleSubtitleLabel.leadingAnchor.constraint(equalTo: scheduleButton.leadingAnchor, constant: 16),
-            scheduleSubtitleLabel.trailingAnchor.constraint(equalTo: scheduleContainer.trailingAnchor),
+            scheduleSubtitleLabel.leadingAnchor.constraint(equalTo: scheduleContainer.leadingAnchor, constant: 16),
+            scheduleSubtitleLabel.trailingAnchor.constraint(equalTo: scheduleContainer.trailingAnchor, constant: -40),
+            scheduleSubtitleLabel.topAnchor.constraint(equalTo: scheduleTitleLabel.bottomAnchor, constant: 2),
             scheduleSubtitleLabel.bottomAnchor.constraint(equalTo: scheduleContainer.bottomAnchor, constant: -10),
 
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -250,17 +264,18 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
             createButton.heightAnchor.constraint(equalToConstant: 60),
         ])
 
-        scheduleButtonTopConstraint = scheduleButton.topAnchor.constraint(equalTo: scheduleContainer.topAnchor, constant: 10)
-        scheduleButtonCenterYConstraint = scheduleButton.centerYAnchor.constraint(equalTo: scheduleContainer.centerYAnchor)
+        
+        categoryTitleTopConstraint = categoryTitleLabel.topAnchor.constraint(equalTo: categoryContainer.topAnchor, constant: 15)
+        categoryTitleCenterYConstraint = categoryTitleLabel.centerYAnchor.constraint(equalTo: categoryContainer.centerYAnchor)
 
-        categoryButtonTopConstraint = categoryButton.topAnchor.constraint(equalTo: categoryContainer.topAnchor, constant: 10)
-        categoryButtonCenterYConstraint = categoryButton.centerYAnchor.constraint(equalTo: categoryContainer.centerYAnchor)
+        scheduleTitleTopConstraint = scheduleTitleLabel.topAnchor.constraint(equalTo: scheduleContainer.topAnchor, constant: 15)
+        scheduleTitleCenterYConstraint = scheduleTitleLabel.centerYAnchor.constraint(equalTo: scheduleContainer.centerYAnchor)
 
-        updateScheduleButtonPosition()
-        updateCategoryButtonPosition()
+        updateCategoryTitlePosition()
+        updateScheduleTitlePosition()
     }
 
-    private func setupCollections() {
+    func setupCollections() {
         colorCollection.onColorSelected = { [weak self] color in
             self?.selectedColor = color
             self?.updateCreateButton()
@@ -284,7 +299,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         ])
     }
 
-    private func addArrowToContainer(_ container: UIView) {
+    func addArrowToContainer(_ container: UIView) {
         let arrowImageView = UIImageView(image: UIImage(systemName: "chevron.right"))
         arrowImageView.tintColor = .gray
         arrowImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -296,62 +311,14 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         ])
     }
 
-    private func setupTextFieldObserver() {
-        nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-    }
-
-    private func setupKeyboardDismissal() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
-
-        nameTextField.returnKeyType = .done
-    }
-
-    @objc private func dismissKeyboard() {
-        view.endEditing(true)
-    }
-
-    @objc private func textFieldDidChange() {
-        updateCreateButton()
-    }
-
-    private func updateCreateButton() {
-        let isNameEmpty = nameTextField.text?.isEmpty ?? true
-        let isScheduleEmpty = selectedSchedule.isEmpty
-        let isEmojiSelected = selectedEmoji != nil
-        let isColorSelected = selectedColor != nil
-        let isCategorySelected = selectedCategory != nil
-
-        let isEnabled = !isNameEmpty && !isScheduleEmpty && isEmojiSelected && isColorSelected && isCategorySelected
-
-        createButton.isEnabled = isEnabled
-        createButton.backgroundColor = isEnabled ? .ypBlack : .ypGray
-    }
-
-    private func updateScheduleButtonPosition() {
-        scheduleButtonTopConstraint.isActive = false
-        scheduleButtonCenterYConstraint.isActive = false
-
-        if scheduleSubtitleLabel.isHidden {
-            scheduleButtonCenterYConstraint.isActive = true
-        } else {
-            scheduleButtonTopConstraint.isActive = true
-        }
-
-        UIView.animate(withDuration: 0.2) {
-            self.scheduleContainer.layoutIfNeeded()
-        }
-    }
-
-    private func updateCategoryButtonPosition() {
-        categoryButtonTopConstraint.isActive = false
-        categoryButtonCenterYConstraint.isActive = false
+    func updateCategoryTitlePosition() {
+        categoryTitleTopConstraint.isActive = false
+        categoryTitleCenterYConstraint.isActive = false
 
         if categorySubtitleLabel.isHidden {
-            categoryButtonCenterYConstraint.isActive = true
+            categoryTitleCenterYConstraint.isActive = true
         } else {
-            categoryButtonTopConstraint.isActive = true
+            categoryTitleTopConstraint.isActive = true
         }
 
         UIView.animate(withDuration: 0.2) {
@@ -359,24 +326,73 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         }
     }
 
+    func updateScheduleTitlePosition() {
+        scheduleTitleTopConstraint.isActive = false
+        scheduleTitleCenterYConstraint.isActive = false
+
+        if scheduleSubtitleLabel.isHidden {
+            scheduleTitleCenterYConstraint.isActive = true
+        } else {
+            scheduleTitleTopConstraint.isActive = true
+        }
+
+        UIView.animate(withDuration: 0.2) {
+            self.scheduleContainer.layoutIfNeeded()
+        }
+    }
+
+    func setupTextFieldObserver() {
+        nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+    }
+
+    func setupKeyboardDismissal() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+
+        nameTextField.returnKeyType = .done
+    }
+
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+
+    @objc func textFieldDidChange() {
+        updateCreateButton()
+    }
+
+    func updateCreateButton() {
+        let isNameEmpty = nameTextField.text?.isEmpty ?? true
+        let isScheduleEmpty = selectedSchedule.isEmpty
+        let isEmojiSelected = selectedEmoji != nil
+        let isColorSelected = selectedColor != nil
+        let isCategorySelected = selectedCategory != nil
+
+        let isEnabled = !isNameEmpty && !isScheduleEmpty && isEmojiSelected && isColorSelected && isCategorySelected
+        let isActiveColor: UIColor = isEnabled ? .ypWhite : .ypBlack
+        createButton.isEnabled = isEnabled
+        createButton.backgroundColor = isEnabled ? .ypBlack : .ypGray
+        createButton.setTitleColor(isActiveColor, for: .normal)
+    }
+
     func updateScheduleSubtitle(_ text: String) {
         scheduleSubtitleLabel.text = text
         scheduleSubtitleLabel.isHidden = text.isEmpty
-        updateScheduleButtonPosition()
+        updateScheduleTitlePosition()
         updateCreateButton()
     }
 
     func updateCategorySubtitle(_ text: String) {
         categorySubtitleLabel.text = text
         categorySubtitleLabel.isHidden = text.isEmpty
-        updateCategoryButtonPosition()
+        updateCategoryTitlePosition()
     }
 
-    @objc private func cancelTapped() {
+    @objc func cancelTapped() {
         dismiss(animated: true)
     }
 
-    @objc private func scheduleTapped() {
+    @objc func scheduleTapped() {
         let scheduleViewController = ScheduleViewController()
         scheduleViewController.modalPresentationStyle = .popover
         scheduleViewController.selectedDays = selectedSchedule
@@ -391,11 +407,11 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         present(scheduleViewController, animated: true)
     }
 
-    @objc private func createButtonTapped() {
+    @objc func createButtonTapped() {
         createTracker()
     }
-    
-    @objc private func categoryTapped() {
+
+    @objc func categoryTapped() {
         let categoriesViewController = CategoriesViewController(
             categoryStore: Dependencies.shared.categoryStore,
             onCategorySelect: { [weak self] selectedCategory in
@@ -408,7 +424,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         present(categoriesViewController, animated: true)
     }
 
-    private func createTracker() {
+    func createTracker() {
         guard let title = nameTextField.text,
               !title.isEmpty,
               !selectedSchedule.isEmpty,
@@ -430,8 +446,7 @@ final class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         )
 
         do {
-            let trackerStore = Dependencies.shared.trackerStore
-            try trackerStore.addTracker(tracker, to: selectedCategory)
+            try Dependencies.shared.trackerStore.addTracker(tracker, to: selectedCategory)
             dismiss(animated: true)
         } catch {
             dismiss(animated: true)
@@ -453,7 +468,7 @@ extension NewTrackerViewController: UITextFieldDelegate {
 
     private func showCharacterLimitWarning() {
         let warningLabel = UILabel()
-        warningLabel.text = "Ограничение 38 символов"
+        warningLabel.text = Localizable.characterLimit
         warningLabel.textColor = .systemRed
         warningLabel.font = .systemFont(ofSize: 12, weight: .regular)
         warningLabel.textAlignment = .center
@@ -481,4 +496,3 @@ extension NewTrackerViewController: UITextFieldDelegate {
         updateCreateButton()
     }
 }
-

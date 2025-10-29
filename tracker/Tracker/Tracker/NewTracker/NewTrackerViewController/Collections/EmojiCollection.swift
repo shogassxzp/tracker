@@ -34,6 +34,19 @@ final class EmojiCollection: UICollectionView {
         allowsMultipleSelection = false
         translatesAutoresizingMaskIntoConstraints = false
     }
+
+    func selectEmoji(_ emoji: String) {
+        guard let emojiChar = emoji.first else { return }
+
+        if let index = emojis.firstIndex(of: emojiChar) {
+            let indexPath = IndexPath(item: index, section: 0)
+            selectItem(at: indexPath, animated: false, scrollPosition: [])
+
+            selectedIndexPath = indexPath
+            onEmojiSelected?(emojiChar)
+            reloadData()
+        }
+    }
 }
 
 extension EmojiCollection: UICollectionViewDataSource {
@@ -60,7 +73,7 @@ extension EmojiCollection: UICollectionViewDataSource {
                 for: indexPath
             ) as? HeaderViewNewTracker
 
-            header?.titleLabel.text = "Эмодзи"
+            header?.titleLabel.text = Localizable.emoji
             header?.titleLabel.font = .systemFont(ofSize: 19, weight: .bold)
 
             return header ?? UICollectionReusableView()
