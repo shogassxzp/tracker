@@ -7,7 +7,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let configuration = AppMetricaConfiguration(apiKey: "enter_your_api_key")
+        let configuration = AppMetricaConfiguration(apiKey: "8c016d6c-f1cf-41dd-ba22-d82ede0e4a63")
         configuration?.areLogsEnabled = true
         AppMetrica.activate(with: configuration!)
 

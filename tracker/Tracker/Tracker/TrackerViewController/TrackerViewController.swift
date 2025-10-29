@@ -15,7 +15,7 @@ final class TrackerViewController: UIViewController {
     private lazy var filtersButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(Localizable.filterLabel, for: .normal)
-        button.setTitleColor(.ypWhite, for: .normal)
+        button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .ypBlue
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
         button.layer.cornerRadius = 16
