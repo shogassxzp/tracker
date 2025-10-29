@@ -97,7 +97,7 @@ final class TrackerCell: UICollectionViewCell {
         contentContainer.backgroundColor = tracker.color
         titleLabel.text = tracker.title
         titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
-        titleLabel.textColor = .ypWhite
+        titleLabel.textColor = .white
         emojiLabel.font = .systemFont(ofSize: 16, weight: .medium)
         emojiLabel.text = String(tracker.emoji)
 
@@ -117,7 +117,7 @@ final class TrackerCell: UICollectionViewCell {
 
         completionButton.setImage(buttonImage, for: .normal)
         completionButton.backgroundColor = isCompleted ? color.withAlphaComponent(0.6) : color
-        completionButton.tintColor = isCompleted ? .white.withAlphaComponent(0.6) : .white
+        completionButton.tintColor = isCompleted ? .ypWhite.withAlphaComponent(0.6) : .ypWhite
     }
 
     @objc private func completionButtonTapped() {
