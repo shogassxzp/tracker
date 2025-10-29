@@ -123,6 +123,13 @@ final class TrackerCell: UICollectionViewCell {
     @objc private func completionButtonTapped() {
         guard let trackerId = trackerId, let date = currentDate else { return }
 
+        let calendar = Calendar.current
+        let today = Date()
+        
+        if calendar.compare(date, to: today, toGranularity: .day) == .orderedDescending {
+            return
+        }
+
         let isCurrentlyCompleted = completionButton.backgroundColor?.cgColor.alpha ?? 1.0 < 1.0
         let newCompletionState = !isCurrentlyCompleted
         onCompletion?(trackerId.uuidString, date, newCompletionState)
