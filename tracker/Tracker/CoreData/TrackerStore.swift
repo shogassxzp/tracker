@@ -31,12 +31,19 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
             throw NSError(domain: "TrackerStore", code: -1, userInfo: [NSLocalizedDescriptionKey: "Wrong context"])
         }
 
-        let trackerEntity = TrackerEntity(context: context)
+        let categoryFetchRequest = TrackerCategoryEntity.fetchRequest()
+        categoryFetchRequest.predicate = NSPredicate(format: "id == %@", category.id as CVarArg)
 
-        guard !tracker.title.isEmpty else {
-            context.delete(trackerEntity)
-            throw NSError(domain: "TrackerStore", code: -1, userInfo: [NSLocalizedDescriptionKey: "Empty tracker title"])
+        let categoryEntity: TrackerCategoryEntity
+        if let existingCategory = try context.fetch(categoryFetchRequest).first {
+            categoryEntity = existingCategory
+        } else {
+            categoryEntity = TrackerCategoryEntity(context: context)
+            categoryEntity.id = category.id
+            categoryEntity.title = category.title
         }
+
+        let trackerEntity = TrackerEntity(context: context)
         trackerEntity.id = tracker.id
         trackerEntity.title = tracker.title
         trackerEntity.color = tracker.color.hexString
@@ -45,17 +52,8 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
         trackerEntity.schedule = scheduleStrings as NSArray
         trackerEntity.isHabit = tracker.isHabit
 
-        let categoryFetchRequest = TrackerCategoryEntity.fetchRequest()
-        categoryFetchRequest.predicate = NSPredicate(format: "id == %@", category.id as CVarArg)
+        trackerEntity.categoryr = categoryEntity
 
-        if let existingCategory = try context.fetch(categoryFetchRequest).first {
-            trackerEntity.categoryr = existingCategory
-        } else {
-            let categoryEntity = TrackerCategoryEntity(context: context)
-            categoryEntity.id = category.id
-            categoryEntity.title = category.title
-            trackerEntity.categoryr = categoryEntity
-        }
         Dependencies.shared.coreDataStack.saveContext()
     }
 

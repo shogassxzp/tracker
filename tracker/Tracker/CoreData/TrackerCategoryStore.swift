@@ -32,10 +32,19 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
     }
 
     func addCategory(_ category: TrackerCategory) throws {
+        let fetchRequest = TrackerCategoryEntity.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", category.id as CVarArg)
+        
+        let existingCategories = try context.fetch(fetchRequest)
+        guard existingCategories.isEmpty else {
+            return
+        }
+        
         let categoryEntity = TrackerCategoryEntity(context: context)
         categoryEntity.id = category.id
         categoryEntity.title = category.title
-        try context.save()
+        
+        Dependencies.shared.coreDataStack.saveContext()
     }
 
     func updateCategory(_ category: TrackerCategory) throws {

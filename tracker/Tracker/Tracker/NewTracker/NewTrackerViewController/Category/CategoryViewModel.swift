@@ -55,9 +55,7 @@ final class CategoriesViewModel {
 
     func selectCategory(at indexPath: IndexPath) {
         let category = categories[indexPath.row]
-        selectedCategory = category
         onCategorySelect?(category)
-        onCategoriesUpdate?()
     }
 
     func addNewCategory(_ title: String) {

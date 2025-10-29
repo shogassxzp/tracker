@@ -446,8 +446,7 @@ class NewTrackerViewController: UIViewController, UIScrollViewDelegate {
         )
 
         do {
-            let trackerStore = Dependencies.shared.trackerStore
-            try trackerStore.addTracker(tracker, to: selectedCategory)
+            try Dependencies.shared.trackerStore.addTracker(tracker, to: selectedCategory)
             dismiss(animated: true)
         } catch {
             dismiss(animated: true)
