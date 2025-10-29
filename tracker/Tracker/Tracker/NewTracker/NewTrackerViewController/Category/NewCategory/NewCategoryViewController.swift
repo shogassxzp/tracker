@@ -32,7 +32,7 @@ final class NewCategoryViewController: UIViewController {
         button.setTitle(Localizable.done, for: .normal)
         button.backgroundColor = .ypGray
         button.tintColor = .ypWhite
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = 16
         button.isEnabled = false
         button.addTarget(nil, action: #selector(createCategory), for: .touchUpInside)
