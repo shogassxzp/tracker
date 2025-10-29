@@ -190,7 +190,6 @@ final class TrackerViewController: UIViewController {
 
     private func applyCurrentFilter() {
         loadCompletedTrackers()
-
         do {
             let allTrackers = try Dependencies.shared.trackerStore.fetchTrackers()
 
@@ -199,7 +198,16 @@ final class TrackerViewController: UIViewController {
             switch currentFilter {
             case .all:
 
-                filteredTrackers = allTrackers
+                filteredTrackers = allTrackers.filter { tracker in
+                    if tracker.isHabit {
+                        if let weekday = currentDate.weekday() {
+                            return tracker.schedule.contains(weekday)
+                        }
+                        return false
+                    } else {
+                        return true
+                    }
+                }
 
             case .today:
 
@@ -218,7 +226,6 @@ final class TrackerViewController: UIViewController {
             case .completed:
 
                 filteredTrackers = allTrackers.filter { tracker in
-
                     let isActiveOnSelectedDate: Bool
                     if tracker.isHabit {
                         if let weekday = currentDate.weekday() {
@@ -229,16 +236,13 @@ final class TrackerViewController: UIViewController {
                     } else {
                         isActiveOnSelectedDate = true
                     }
-
                     let isCompleted = completedTrackers.contains(tracker.id)
-
                     return isActiveOnSelectedDate && isCompleted
                 }
 
             case .uncompleted:
 
                 filteredTrackers = allTrackers.filter { tracker in
-
                     let isActiveOnSelectedDate: Bool
                     if tracker.isHabit {
                         if let weekday = currentDate.weekday() {
@@ -249,9 +253,7 @@ final class TrackerViewController: UIViewController {
                     } else {
                         isActiveOnSelectedDate = true
                     }
-
                     let isUncompleted = !completedTrackers.contains(tracker.id)
-
                     return isActiveOnSelectedDate && isUncompleted
                 }
             }
